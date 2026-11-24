@@ -1,0 +1,188 @@
+{
+  "version": "1.0.0",
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "similarity_metric": "cosine",
+  "recommended_threshold": 0.98,
+  "best_f1_threshold": 0.5,
+  "high_precision_threshold": 0.98,
+  "dedup_window_seconds": 300,
+  "guardrails": {
+    "block_if_numbers_differ": true,
+    "number_regex": "\\d+(?:[.,]\\d+)?",
+    "block_if_opposite_states": true,
+    "opposite_state_pairs": [
+      [
+        "down",
+        "recovered"
+      ],
+      [
+        "offline",
+        "online"
+      ],
+      [
+        "failed",
+        "passed"
+      ],
+      [
+        "failed",
+        "succeeded"
+      ],
+      [
+        "failed",
+        "completed"
+      ],
+      [
+        "fail",
+        "successful"
+      ],
+      [
+        "debited",
+        "credited"
+      ],
+      [
+        "blocked",
+        "unblocked"
+      ],
+      [
+        "blocked",
+        "approved"
+      ],
+      [
+        "cancelled",
+        "confirmed"
+      ],
+      [
+        "band",
+        "chalu"
+      ]
+    ]
+  },
+  "benchmark_comparison": [
+    {
+      "Method": "Exact Match (Normalized)",
+      "Threshold": 1.0,
+      "Precision": 1.0,
+      "Recall": 0.2222,
+      "F1": 0.3636,
+      "PR-AUC": 0.5722,
+      "Tricky FP Rate": 0.0
+    },
+    {
+      "Method": "TF-IDF Cosine (Best F1)",
+      "Threshold": 0.83,
+      "Precision": 0.8333,
+      "Recall": 0.4444,
+      "F1": 0.5797,
+      "PR-AUC": 0.7084,
+      "Tricky FP Rate": 0.1333
+    },
+    {
+      "Method": "Embeddings MiniLM (Best F1)",
+      "Threshold": 0.5,
+      "Precision": 0.5695,
+      "Recall": 0.9556,
+      "F1": 0.7137,
+      "PR-AUC": 0.714,
+      "Tricky FP Rate": 1.0
+    },
+    {
+      "Method": "Embeddings MiniLM (Recommended High-Prec F0.5)",
+      "Threshold": 0.98,
+      "Precision": 0.9775,
+      "Recall": 0.3222,
+      "F1": 0.4847,
+      "PR-AUC": 0.714,
+      "Tricky FP Rate": 0.0111
+    }
+  ],
+  "threshold_sweep": [
+    {
+      "threshold": 0.5,
+      "precision": 0.5695,
+      "recall": 0.9556,
+      "f1": 0.7137,
+      "f05": 0.6196,
+      "tricky_fp_rate": 1.0
+    },
+    {
+      "threshold": 0.6,
+      "precision": 0.5577,
+      "recall": 0.8593,
+      "f1": 0.6764,
+      "f05": 0.5998,
+      "tricky_fp_rate": 1.0
+    },
+    {
+      "threshold": 0.7,
+      "precision": 0.5239,
+      "recall": 0.7296,
+      "f1": 0.6099,
+      "f05": 0.5552,
+      "tricky_fp_rate": 0.9944
+    },
+    {
+      "threshold": 0.75,
+      "precision": 0.5097,
+      "recall": 0.6778,
+      "f1": 0.5819,
+      "f05": 0.5363,
+      "tricky_fp_rate": 0.9778
+    },
+    {
+      "threshold": 0.8,
+      "precision": 0.5228,
+      "recall": 0.637,
+      "f1": 0.5743,
+      "f05": 0.5422,
+      "tricky_fp_rate": 0.8722
+    },
+    {
+      "threshold": 0.85,
+      "precision": 0.5531,
+      "recall": 0.5593,
+      "f1": 0.5562,
+      "f05": 0.5543,
+      "tricky_fp_rate": 0.6778
+    },
+    {
+      "threshold": 0.88,
+      "precision": 0.5458,
+      "recall": 0.4852,
+      "f1": 0.5137,
+      "f05": 0.5325,
+      "tricky_fp_rate": 0.6056
+    },
+    {
+      "threshold": 0.9,
+      "precision": 0.5721,
+      "recall": 0.4407,
+      "f1": 0.4979,
+      "f05": 0.5399,
+      "tricky_fp_rate": 0.4944
+    },
+    {
+      "threshold": 0.92,
+      "precision": 0.6517,
+      "recall": 0.4296,
+      "f1": 0.5179,
+      "f05": 0.5906,
+      "tricky_fp_rate": 0.3444
+    },
+    {
+      "threshold": 0.95,
+      "precision": 0.768,
+      "recall": 0.3556,
+      "f1": 0.4861,
+      "f05": 0.6234,
+      "tricky_fp_rate": 0.1611
+    },
+    {
+      "threshold": 0.98,
+      "precision": 0.9775,
+      "recall": 0.3222,
+      "f1": 0.4847,
+      "f05": 0.6949,
+      "tricky_fp_rate": 0.0111
+    }
+  ]
+}

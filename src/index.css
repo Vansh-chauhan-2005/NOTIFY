@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-display {
+    font-family: 'Fraunces', Georgia, serif;
+  }
+  .font-mono-tech {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+:root {
+  --color-cream: #FAF6F0;
+  --color-cream-elevated: #FFFDF9;
+  --color-cream-inset: #F2ECE2;
+  --color-ink: #16161D;
+  --color-ink-soft: #464451;
+  --color-ink-muted: #6F6C7A;
+  --color-orchid: #D9468F;
+  --color-orchid-deep: #B52A70;
+  --color-orchid-blush: #FCECF4;
+  --color-orchid-border: #F2C4DC;
+  --color-border-hairline: #E5DDD0;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Warm Cream canvas with subtle Orchid Pink atmospheric tint */
+.bg-mesh-subtle {
+  background-color: #FAF6F0;
+  background-image:
+    radial-gradient(at 12% 10%, rgba(217, 70, 143, 0.08) 0px, transparent 48%),
+    radial-gradient(at 88% 12%, rgba(22, 22, 29, 0.035) 0px, transparent 45%),
+    radial-gradient(at 55% 92%, rgba(217, 70, 143, 0.06) 0px, transparent 52%);
+}
+
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(22, 22, 29, 0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Porcelain Cream elevated surface panels */
+.glass-panel {
+  background: rgba(255, 253, 249, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid #E5DDD0;
+  box-shadow: 0 2px 10px -2px rgba(22, 22, 29, 0.04);
+}
+
+.glass-panel-hover {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-hover:hover {
+  background: #FFFDF9;
+  border-color: #D8B4C8;
+  box-shadow: 0 12px 28px -8px rgba(22, 22, 29, 0.08), 0 0 0 1px rgba(217, 70, 143, 0.12);
+}
+
+/* Refined Cream & Ink Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F2ECE2;
+}
+::-webkit-scrollbar-thumb {
+  background: #C9BFB0;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D9468F;
+}

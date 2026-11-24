@@ -1,0 +1,147 @@
+{
+  "version": "1.0.0-logreg",
+  "trainedAt": "2026-11-22T08:12:24.412335+00:00",
+  "datasetSize": 3000,
+  "trainSize": 2400,
+  "testSize": 600,
+  "bias": -2.2053,
+  "weights": {
+    "textScore": 1.5472,
+    "keywordUrgency": 1.1969,
+    "senderTrust": 1.1993,
+    "sourceReliability": 0.8928,
+    "category_security": 1.1573,
+    "category_finance": 0.9675,
+    "category_work": 0.3523,
+    "category_social": -1.088,
+    "category_promo": -1.9493,
+    "ageFactor": 0.7843,
+    "userContext": 0.6101,
+    "repetition": 0.1474,
+    "userAffinity": 0.9229,
+    "senderClaimedPriority": -0.0997
+  },
+  "thresholds": {
+    "critical": 0.85,
+    "high": 0.65,
+    "normal": 0.35,
+    "hysteresis": 0.04
+  },
+  "hyperparams": {
+    "learningRate": 0.05,
+    "l2Regularization": 0.01,
+    "gradientClip": 1.0,
+    "weightMin": -4.0,
+    "weightMax": 4.0,
+    "coldStartFeedbackThreshold": 20,
+    "ageTauSeconds": 120,
+    "ageMaxBoost": 0.25,
+    "ageMaxCeiling": 0.99,
+    "decayHalfLifeSeconds": 3600,
+    "securityFloorMinWeight": 1.0,
+    "driftL2WarningThreshold": 1.8
+  },
+  "metrics": {
+    "cv5AucMean": 0.9248,
+    "cv5AucStd": 0.0116,
+    "cv5AccuracyMean": 0.8646,
+    "testAccuracy": 0.895,
+    "testPrecision": 0.9256,
+    "testRecall": 0.9187,
+    "testF1": 0.9221,
+    "testRocAuc": 0.9467,
+    "confusionMatrix": [
+      [
+        164,
+        30
+      ],
+      [
+        33,
+        373
+      ]
+    ],
+    "calibrationBins": [
+      {
+        "binStart": 0.0,
+        "binEnd": 0.1,
+        "predictedMean": 0.0729,
+        "observedFraction": 0.0455,
+        "count": 66
+      },
+      {
+        "binStart": 0.1,
+        "binEnd": 0.2,
+        "predictedMean": 0.1422,
+        "observedFraction": 0.0962,
+        "count": 52
+      },
+      {
+        "binStart": 0.2,
+        "binEnd": 0.3,
+        "predictedMean": 0.2411,
+        "observedFraction": 0.1818,
+        "count": 22
+      },
+      {
+        "binStart": 0.3,
+        "binEnd": 0.4,
+        "predictedMean": 0.3581,
+        "observedFraction": 0.4231,
+        "count": 26
+      },
+      {
+        "binStart": 0.4,
+        "binEnd": 0.5,
+        "predictedMean": 0.4583,
+        "observedFraction": 0.3226,
+        "count": 31
+      },
+      {
+        "binStart": 0.5,
+        "binEnd": 0.6,
+        "predictedMean": 0.5601,
+        "observedFraction": 0.7241,
+        "count": 29
+      },
+      {
+        "binStart": 0.6,
+        "binEnd": 0.7,
+        "predictedMean": 0.6397,
+        "observedFraction": 0.6786,
+        "count": 28
+      },
+      {
+        "binStart": 0.7,
+        "binEnd": 0.8,
+        "predictedMean": 0.7574,
+        "observedFraction": 0.9444,
+        "count": 18
+      },
+      {
+        "binStart": 0.8,
+        "binEnd": 0.9,
+        "predictedMean": 0.8631,
+        "observedFraction": 0.9157,
+        "count": 83
+      },
+      {
+        "binStart": 0.9,
+        "binEnd": 1.0,
+        "predictedMean": 0.9563,
+        "observedFraction": 0.9796,
+        "count": 245
+      }
+    ]
+  },
+  "modelCard": {
+    "modelType": "Transparent L2-Regularized Logistic Regression (Online SGD Personalization)",
+    "isDeepLearning": false,
+    "intendedUse": "Continuous priority scoring p in [0,1] for encrypted notifications without storing raw text.",
+    "trainingData": "3,000 synthetic privacy-safe feature vectors across security, finance, work, social, and promo categories.",
+    "limitations": [
+      "Not a neural network or deep language model; assumes linear log-odds additivity plus explicit safety rules.",
+      "Subject to user feedback bias; mitigated with cold-start threshold (20 feedbacks), L2 decay, weight clamping [-4,4], and security floor lock.",
+      "Privacy rule: only numeric textScore is scored/stored; raw plaintext never enters the model store."
+    ]
+  }
+}

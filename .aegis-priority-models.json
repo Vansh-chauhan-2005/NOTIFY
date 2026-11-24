@@ -1,0 +1,280 @@
+{
+  "users": {
+    "usr_1795336007983": {
+      "userId": "usr_1795336007983",
+      "version": 3,
+      "personalizationEnabled": true,
+      "feedbackCount": 0,
+      "bias": -2.2053,
+      "weights": {
+        "textScore": 1.5472,
+        "keywordUrgency": 1.1969,
+        "senderTrust": 1.1993,
+        "sourceReliability": 0.8928,
+        "category_security": 1.1573,
+        "category_finance": 0.9675,
+        "category_work": 0.3523,
+        "category_social": -1.088,
+        "category_promo": -1.9493,
+        "ageFactor": 0.7843,
+        "userContext": 0.6101,
+        "repetition": 0.1474,
+        "userAffinity": 0.9229,
+        "senderClaimedPriority": -0.0997
+      },
+      "thresholds": {
+        "critical": 0.85,
+        "high": 0.65,
+        "normal": 0.35,
+        "hysteresis": 0.04
+      },
+      "urgentKeywords": [
+        "otp",
+        "outage"
+      ],
+      "quietHours": {
+        "enabled": false,
+        "startHourUtc": 22,
+        "endHourUtc": 7,
+        "dndActive": false
+      },
+      "sourceReliability": {
+        "direct": 0.9,
+        "security": 0.98,
+        "app-github": 0.85,
+        "app-slack": 0.8,
+        "app-discord": 0.65,
+        "app-telegram": 0.72,
+        "webhook": 0.75,
+        "marketing": 0.2
+      },
+      "driftWarning": false,
+      "driftL2Distance": 0,
+      "updatedAt": "2026-11-22T08:26:48.174Z",
+      "weightHistory": [],
+      "lastResetAt": "2026-11-22T08:26:48.174Z"
+    },
+    "verify-user-ingest": {
+      "userId": "verify-user-ingest",
+      "version": 1,
+      "personalizationEnabled": true,
+      "feedbackCount": 0,
+      "bias": -2.2053,
+      "weights": {
+        "textScore": 1.5472,
+        "keywordUrgency": 1.1969,
+        "senderTrust": 1.1993,
+        "sourceReliability": 0.8928,
+        "category_security": 1.1573,
+        "category_finance": 0.9675,
+        "category_work": 0.3523,
+        "category_social": -1.088,
+        "category_promo": -1.9493,
+        "ageFactor": 0.7843,
+        "userContext": 0.6101,
+        "repetition": 0.1474,
+        "userAffinity": 0.9229,
+        "senderClaimedPriority": -0.0997
+      },
+      "thresholds": {
+        "critical": 0.85,
+        "high": 0.65,
+        "normal": 0.35,
+        "hysteresis": 0.04
+      },
+      "urgentKeywords": [
+        "otp",
+        "2fa",
+        "breach",
+        "unauthorized",
+        "outage",
+        "incident",
+        "wire"
+      ],
+      "quietHours": {
+        "enabled": false,
+        "startHourUtc": 22,
+        "endHourUtc": 7,
+        "dndActive": false
+      },
+      "sourceReliability": {
+        "direct": 0.9,
+        "security": 0.98,
+        "app-github": 0.85,
+        "app-slack": 0.8,
+        "app-discord": 0.65,
+        "app-telegram": 0.72,
+        "webhook": 0.75,
+        "marketing": 0.2
+      },
+      "driftWarning": false,
+      "driftL2Distance": 0,
+      "updatedAt": "2026-11-22T08:27:13.847Z",
+      "weightHistory": []
+    },
+    "usr_sec_admin_01": {
+      "userId": "usr_sec_admin_01",
+      "version": 1,
+      "personalizationEnabled": true,
+      "feedbackCount": 0,
+      "bias": -2.2053,
+      "weights": {
+        "textScore": 1.5472,
+        "keywordUrgency": 1.1969,
+        "senderTrust": 1.1993,
+        "sourceReliability": 0.8928,
+        "category_security": 1.1573,
+        "category_finance": 0.9675,
+        "category_work": 0.3523,
+        "category_social": -1.088,
+        "category_promo": -1.9493,
+        "ageFactor": 0.7843,
+        "userContext": 0.6101,
+        "repetition": 0.1474,
+        "userAffinity": 0.9229,
+        "senderClaimedPriority": -0.0997
+      },
+      "thresholds": {
+        "critical": 0.85,
+        "high": 0.65,
+        "normal": 0.35,
+        "hysteresis": 0.04
+      },
+      "urgentKeywords": [
+        "otp",
+        "2fa",
+        "breach",
+        "unauthorized",
+        "outage",
+        "incident",
+        "wire"
+      ],
+      "quietHours": {
+        "enabled": false,
+        "startHourUtc": 22,
+        "endHourUtc": 7,
+        "dndActive": false
+      },
+      "sourceReliability": {
+        "direct": 0.9,
+        "security": 0.98,
+        "app-github": 0.85,
+        "app-slack": 0.8,
+        "app-discord": 0.65,
+        "app-telegram": 0.72,
+        "webhook": 0.75,
+        "marketing": 0.2
+      },
+      "driftWarning": false,
+      "driftL2Distance": 0,
+      "updatedAt": "2026-11-23T08:34:05.314Z",
+      "weightHistory": []
+    },
+    "usr_root_admin": {
+      "userId": "usr_root_admin",
+      "version": 1,
+      "personalizationEnabled": true,
+      "feedbackCount": 0,
+      "bias": -2.2053,
+      "weights": {
+        "textScore": 1.5472,
+        "keywordUrgency": 1.1969,
+        "senderTrust": 1.1993,
+        "sourceReliability": 0.8928,
+        "category_security": 1.1573,
+        "category_finance": 0.9675,
+        "category_work": 0.3523,
+        "category_social": -1.088,
+        "category_promo": -1.9493,
+        "ageFactor": 0.7843,
+        "userContext": 0.6101,
+        "repetition": 0.1474,
+        "userAffinity": 0.9229,
+        "senderClaimedPriority": -0.0997
+      },
+      "thresholds": {
+        "critical": 0.85,
+        "high": 0.65,
+        "normal": 0.35,
+        "hysteresis": 0.04
+      },
+      "urgentKeywords": [
+        "otp",
+        "2fa",
+        "breach",
+        "unauthorized",
+        "outage",
+        "incident",
+        "wire"
+      ],
+      "quietHours": {
+        "enabled": false,
+        "startHourUtc": 22,
+        "endHourUtc": 7,
+        "dndActive": false
+      },
+      "sourceReliability": {
+        "direct": 0.9,
+        "security": 0.98,
+        "app-github": 0.85,
+        "app-slack": 0.8,
+        "app-discord": 0.65,
+        "app-telegram": 0.72,
+        "webhook": 0.75,
+        "marketing": 0.2
+      },
+      "driftWarning": false,
+      "driftL2Distance": 0,
+      "updatedAt": "2026-11-23T08:34:08.729Z",
+      "weightHistory": []
+    }
+  },
+  "stats": {
+    "totalScored": 7,
+    "totalFeedback": 1,
+    "escalationCount": 0,
+    "sumP": 5.9192,
+    "labelCounts": {
+      "CRITICAL": 4,
+      "HIGH": 3,
+      "NORMAL": 0,
+      "LOW": 0
+    },
+    "ruleCounts": {
+      "SECURITY_FLOOR": 0,
+      "UNSIGNED_PROMO_CAP": 0,
+      "SENDER_CLAIM_WEAK": 0,
+      "HOURLY_CRITICAL_BUDGET": 0
+    },
+    "scoreHistogram": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      1,
+      3
+    ]
+  },
+  "hourlyCriticalBudgets": {
+    "usr_1795336007983::direct": {
+      "hourKey": "2026-11-22T08",
+      "count": 1
+    },
+    "verify-user-ingest::github": {
+      "hourKey": "2026-11-22T08",
+      "count": 1
+    },
+    "usr_root_admin::direct": {
+      "hourKey": "2026-11-23T08",
+      "count": 1
+    },
+    "usr_root_admin::slack": {
+      "hourKey": "2026-11-23T08",
+      "count": 1
+    }
+  }
+}

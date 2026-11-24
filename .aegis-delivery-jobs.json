@@ -1,0 +1,5632 @@
+[
+  {
+    "id": "dlv_mwulepjf_4c233b90",
+    "notificationId": "sim_dlv_1795518588363",
+    "userId": "sim_dedup_1795518588353",
+    "priority": "HIGH",
+    "state": "QUEUED",
+    "channel": "push",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 0,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-24T11:09:48.363Z",
+    "expiresAt": "2026-11-24T12:09:48.363Z",
+    "history": [
+      {
+        "timestamp": "2026-11-24T11:09:48.363Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-24T11:09:48.365Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795518588365 merged into thr_sim_dlv_1795518588363, 94% sim)"
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795518588353:sim_dlv_1795518588363",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-24T11:09:48.363Z",
+    "updatedAt": "2026-11-24T11:09:48.365Z"
+  },
+  {
+    "id": "dlv_mwukkify_0bd0ab70",
+    "notificationId": "sim_dlv_1795517179484",
+    "userId": "sim_dedup_1795517179469",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-24T11:07:40.042Z",
+    "expiresAt": "2026-11-24T11:46:19.486Z",
+    "history": [
+      {
+        "timestamp": "2026-11-24T10:46:19.486Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-24T10:46:19.490Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795517179490 merged into thr_sim_dlv_1795517179484, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-24T11:03:40.005Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-24T11:03:40.008Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T11:05:40.043Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push timed out after 2m -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-24T11:05:40.044Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Fallback attempt #1 initiated on email."
+      },
+      {
+        "timestamp": "2026-11-24T11:05:40.046Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T11:07:40.172Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2m with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795517179469:sim_dlv_1795517179484",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-24T10:46:19.486Z",
+    "updatedAt": "2026-11-24T11:07:40.172Z"
+  },
+  {
+    "id": "dlv_mwukh2ro_6c1d84e4",
+    "notificationId": "sim_dlv_1795517019203",
+    "userId": "sim_dedup_1795517019190",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-24T11:05:40.010Z",
+    "expiresAt": "2026-11-24T11:43:39.203Z",
+    "history": [
+      {
+        "timestamp": "2026-11-24T10:43:39.203Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-24T10:43:39.238Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795517019238 merged into thr_sim_dlv_1795517019203, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-24T10:45:36.996Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-24T10:45:37.000Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T11:03:40.010Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push timed out after 2m -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-24T11:03:40.013Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Fallback attempt #1 initiated on email."
+      },
+      {
+        "timestamp": "2026-11-24T11:03:40.015Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T11:05:40.048Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2m with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795517019190:sim_dlv_1795517019203",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-24T10:43:39.203Z",
+    "updatedAt": "2026-11-24T11:05:40.048Z"
+  },
+  {
+    "id": "dlv_mwukf6do_d8d502a4",
+    "notificationId": "sim_dlv_1795516930571",
+    "userId": "sim_dedup_1795516930558",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-24T11:05:40.018Z",
+    "expiresAt": "2026-11-24T11:42:10.571Z",
+    "history": [
+      {
+        "timestamp": "2026-11-24T10:42:10.571Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-24T10:42:10.574Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795516930574 merged into thr_sim_dlv_1795516930571, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-24T10:45:37.003Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-24T10:45:37.039Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T11:03:40.018Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push timed out after 2m -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-24T11:03:40.020Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Fallback attempt #1 initiated on email."
+      },
+      {
+        "timestamp": "2026-11-24T11:03:40.022Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T11:05:40.050Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2m with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795516930558:sim_dlv_1795516930571",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-24T10:42:10.571Z",
+    "updatedAt": "2026-11-24T11:05:40.050Z"
+  },
+  {
+    "id": "dlv_mwuka6is_48090d41",
+    "notificationId": "sim_dlv_1795516697475",
+    "userId": "sim_dedup_1795516697464",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-24T10:44:09.362Z",
+    "expiresAt": "2026-11-24T11:38:17.476Z",
+    "history": [
+      {
+        "timestamp": "2026-11-24T10:38:17.476Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-24T10:38:17.478Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795516697478 merged into thr_sim_dlv_1795516697475, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-24T10:40:09.346Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-24T10:40:09.348Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T10:42:09.362Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push timed out after 2m -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-24T10:42:09.364Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Fallback attempt #1 initiated on email."
+      },
+      {
+        "timestamp": "2026-11-24T10:42:09.367Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T10:45:37.042Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2m with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795516697464:sim_dlv_1795516697475",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-24T10:38:17.476Z",
+    "updatedAt": "2026-11-24T10:45:37.042Z"
+  },
+  {
+    "id": "dlv_mwuckz7p_81bdc439",
+    "notificationId": "sim_dlv_1795503764292",
+    "userId": "sim_dedup_1795503764279",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-24T07:05:29.595Z",
+    "expiresAt": "2026-11-24T08:02:44.292Z",
+    "history": [
+      {
+        "timestamp": "2026-11-24T07:02:44.292Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-24T07:02:44.295Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795503764295 merged into thr_sim_dlv_1795503764292, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-24T07:03:29.595Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-24T07:03:29.602Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T10:34:51.821Z",
+        "from": "AWAITING_ACK",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795503764279:sim_dlv_1795503764292",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-24T07:02:44.292Z",
+    "updatedAt": "2026-11-24T10:34:51.821Z"
+  },
+  {
+    "id": "dlv_mwuch7jt_5202e9d9",
+    "notificationId": "sim_dlv_1795503588473",
+    "userId": "sim_dedup_1795503588457",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-24T07:05:29.604Z",
+    "expiresAt": "2026-11-24T07:59:48.473Z",
+    "history": [
+      {
+        "timestamp": "2026-11-24T06:59:48.473Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-24T06:59:48.476Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795503588476 merged into thr_sim_dlv_1795503588473, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-24T07:03:29.604Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-24T07:03:29.606Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T10:34:51.825Z",
+        "from": "AWAITING_ACK",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795503588457:sim_dlv_1795503588473",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-24T06:59:48.473Z",
+    "updatedAt": "2026-11-24T10:34:51.825Z"
+  },
+  {
+    "id": "dlv_mwt10pbj_19e4cf15",
+    "notificationId": "sim_dlv_1795423876399",
+    "userId": "sim_dedup_1795423876369",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 0,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:51:16.399Z",
+    "expiresAt": "2026-11-23T09:51:16.399Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:51:16.399Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.401Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795423876401 merged into thr_sim_dlv_1795423876399, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-24T06:50:26.997Z",
+        "from": "QUEUED",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795423876369:sim_dlv_1795423876399",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:51:16.399Z",
+    "updatedAt": "2026-11-24T06:50:26.997Z"
+  },
+  {
+    "id": "dlv_mwt10p3b_816501b5",
+    "notificationId": "sim_g_1795423876103",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "sms",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:51:17.852Z",
+    "expiresAt": "2026-11-23T09:21:16.103Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:51:16.103Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.104Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.105Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 80ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.200Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.202Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.297Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.299Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.332Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.335Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "sms",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.339Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "sms",
+        "result": "Acknowledged via post-restart-resume-ack. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:g:1795423876103:b38e1d",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forcePushFail": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:51:16.339Z",
+    "acknowledgedVia": "post-restart-resume-ack",
+    "createdAt": "2026-11-23T08:51:16.103Z",
+    "updatedAt": "2026-11-23T08:51:16.339Z"
+  },
+  {
+    "id": "dlv_mwt10p32_dcd59763",
+    "notificationId": "sim_f_1795423876094",
+    "userId": "usr_demo_simulator_only",
+    "priority": "NORMAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "push",
+    "channelChain": [
+      "push",
+      "in_app"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": false,
+    "ackTimeoutMs": 0,
+    "maxRetriesPerChannel": 0,
+    "nextAttemptAt": "2026-11-23T08:51:16.097Z",
+    "expiresAt": "2026-11-24T08:51:16.094Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:51:16.094Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> in_app"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.097Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.099Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "DELIVERED_ACKED",
+        "channel": "push",
+        "result": "mock-delivered"
+      }
+    ],
+    "idempotencyKey": "sim:f:1795423876094:4c7964",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:51:16.099Z",
+    "acknowledgedVia": "DELIVERED_ACKED",
+    "createdAt": "2026-11-23T08:51:16.094Z",
+    "updatedAt": "2026-11-23T08:51:16.099Z"
+  },
+  {
+    "id": "dlv_mwt10p2x_2fe45d5d",
+    "notificationId": "sim_e_1795423876089",
+    "userId": "usr_demo_simulator_only",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 0,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:51:16.089Z",
+    "expiresAt": "2026-11-23T09:51:16.089Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:51:16.089Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-24T06:50:27.000Z",
+        "from": "QUEUED",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "sim:e:idem:1795423876089:0e49ee",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:51:16.089Z",
+    "updatedAt": "2026-11-24T06:50:27.000Z"
+  },
+  {
+    "id": "dlv_mwt10oks_f0e06448",
+    "notificationId": "sim_d_1795423875435",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 2,
+    "attempt": 3,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:51:16.103Z",
+    "expiresAt": "2026-11-23T09:21:15.436Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:51:15.436Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.437Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.438Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.533Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.535Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.629Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.631Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.665Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.667Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.761Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.763Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.856Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.858Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.892Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Starting fallback attempt on email."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.898Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.988Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Retry timer fired for email (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.991Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.084Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Retry timer fired for email (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:16.086Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> all channels exhausted"
+      }
+    ],
+    "idempotencyKey": "sim:d:1795423875435:31a578",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forceAllDown": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:51:15.436Z",
+    "updatedAt": "2026-11-23T08:51:16.086Z"
+  },
+  {
+    "id": "dlv_mwt10o7p_40d0dee7",
+    "notificationId": "sim_c_1795423874965",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "email",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 2,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:51:16.941Z",
+    "expiresAt": "2026-11-23T09:21:14.965Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:51:14.965Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:14.966Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:14.968Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.062Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.064Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.157Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.159Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.193Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.196Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.290Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.292Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.385Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.388Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.421Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Starting fallback attempt on email."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.431Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:15.434Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "email",
+        "result": "Acknowledged via email-signed-link. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:c:1795423874965:39d181",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forcePushFail": true,
+      "forceSmsFail": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:51:15.434Z",
+    "acknowledgedVia": "email-signed-link",
+    "createdAt": "2026-11-23T08:51:14.965Z",
+    "updatedAt": "2026-11-23T08:51:15.434Z"
+  },
+  {
+    "id": "dlv_mwt10n1c_7fea758b",
+    "notificationId": "sim_b_1795423873440",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "sms",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:51:16.477Z",
+    "expiresAt": "2026-11-23T09:21:13.440Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:51:13.440Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:13.441Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:13.443Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:14.958Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push timed out after 2s -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:14.959Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Fallback attempt #1 initiated on sms."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:14.961Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "sms",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:14.964Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "sms",
+        "result": "Acknowledged via sms-signed-link. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:b:1795423873440:677ddc",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:51:14.964Z",
+    "acknowledgedVia": "sms-signed-link",
+    "createdAt": "2026-11-23T08:51:13.440Z",
+    "updatedAt": "2026-11-23T08:51:14.964Z"
+  },
+  {
+    "id": "dlv_mwt10n14_29276dac",
+    "notificationId": "sim_a_1795423873431",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "push",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:51:14.934Z",
+    "expiresAt": "2026-11-23T09:21:13.432Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:51:13.432Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:13.435Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:51:13.437Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:51:13.439Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "push",
+        "result": "Acknowledged via in-app-push-ack. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:a:1795423873431:aee7c0",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:51:13.439Z",
+    "acknowledgedVia": "in-app-push-ack",
+    "createdAt": "2026-11-23T08:51:13.432Z",
+    "updatedAt": "2026-11-23T08:51:13.439Z"
+  },
+  {
+    "id": "dlv_mwt0zwbr_75f51b96",
+    "notificationId": "sim_dlv_1795423838823",
+    "userId": "sim_dedup_1795423838798",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 0,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:50:38.823Z",
+    "expiresAt": "2026-11-23T09:50:38.823Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:50:38.823Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.825Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795423838824 merged into thr_sim_dlv_1795423838823, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-24T06:50:27.002Z",
+        "from": "QUEUED",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795423838798:sim_dlv_1795423838823",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:50:38.823Z",
+    "updatedAt": "2026-11-24T06:50:27.002Z"
+  },
+  {
+    "id": "dlv_mwt0zw3t_da0d18cb",
+    "notificationId": "sim_g_1795423838537",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "sms",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:50:40.285Z",
+    "expiresAt": "2026-11-23T09:20:38.537Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:50:38.537Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.537Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.538Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 80ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.633Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.635Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.729Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.731Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.766Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.767Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "sms",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.769Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "sms",
+        "result": "Acknowledged via post-restart-resume-ack. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:g:1795423838537:cd2367",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forcePushFail": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:50:38.769Z",
+    "acknowledgedVia": "post-restart-resume-ack",
+    "createdAt": "2026-11-23T08:50:38.537Z",
+    "updatedAt": "2026-11-23T08:50:38.769Z"
+  },
+  {
+    "id": "dlv_mwt0zw3p_a1706893",
+    "notificationId": "sim_f_1795423838533",
+    "userId": "usr_demo_simulator_only",
+    "priority": "NORMAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "push",
+    "channelChain": [
+      "push",
+      "in_app"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": false,
+    "ackTimeoutMs": 0,
+    "maxRetriesPerChannel": 0,
+    "nextAttemptAt": "2026-11-23T08:50:38.534Z",
+    "expiresAt": "2026-11-24T08:50:38.533Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:50:38.533Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> in_app"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.534Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.535Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "DELIVERED_ACKED",
+        "channel": "push",
+        "result": "mock-delivered"
+      }
+    ],
+    "idempotencyKey": "sim:f:1795423838533:ae2388",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:50:38.535Z",
+    "acknowledgedVia": "DELIVERED_ACKED",
+    "createdAt": "2026-11-23T08:50:38.533Z",
+    "updatedAt": "2026-11-23T08:50:38.535Z"
+  },
+  {
+    "id": "dlv_mwt0zw3o_8fc59697",
+    "notificationId": "sim_e_1795423838532",
+    "userId": "usr_demo_simulator_only",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 0,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:50:38.532Z",
+    "expiresAt": "2026-11-23T09:50:38.532Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:50:38.532Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-24T06:50:27.004Z",
+        "from": "QUEUED",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "sim:e:idem:1795423838532:8d68bf",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:50:38.532Z",
+    "updatedAt": "2026-11-24T06:50:27.004Z"
+  },
+  {
+    "id": "dlv_mwt0zvlm_d9a7bcc6",
+    "notificationId": "sim_d_1795423837882",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 2,
+    "attempt": 3,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:50:38.548Z",
+    "expiresAt": "2026-11-23T09:20:37.882Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:50:37.882Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.883Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.884Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.979Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.981Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.074Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.076Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.110Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.113Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.205Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.207Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.301Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.304Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.336Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Starting fallback attempt on email."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.338Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.432Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Retry timer fired for email (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.434Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.528Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Retry timer fired for email (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:38.530Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> all channels exhausted"
+      }
+    ],
+    "idempotencyKey": "sim:d:1795423837882:a22983",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forceAllDown": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:50:37.882Z",
+    "updatedAt": "2026-11-23T08:50:38.530Z"
+  },
+  {
+    "id": "dlv_mwt0zv8t_5f2dd2db",
+    "notificationId": "sim_c_1795423837421",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "email",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 2,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:50:39.396Z",
+    "expiresAt": "2026-11-23T09:20:37.421Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:50:37.421Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.422Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.423Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.518Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.520Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.613Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.615Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.649Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.652Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.745Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.747Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.841Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.843Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.876Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Starting fallback attempt on email."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.879Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.881Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "email",
+        "result": "Acknowledged via email-signed-link. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:c:1795423837421:259cdc",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forcePushFail": true,
+      "forceSmsFail": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:50:37.881Z",
+    "acknowledgedVia": "email-signed-link",
+    "createdAt": "2026-11-23T08:50:37.421Z",
+    "updatedAt": "2026-11-23T08:50:37.881Z"
+  },
+  {
+    "id": "dlv_mwt0zu2i_01c91573",
+    "notificationId": "sim_b_1795423835898",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "sms",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:50:38.935Z",
+    "expiresAt": "2026-11-23T09:20:35.898Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:50:35.898Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:35.899Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:35.901Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.416Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push timed out after 2s -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.417Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Fallback attempt #1 initiated on sms."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.418Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "sms",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:37.420Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "sms",
+        "result": "Acknowledged via sms-signed-link. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:b:1795423835898:09bcfe",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:50:37.420Z",
+    "acknowledgedVia": "sms-signed-link",
+    "createdAt": "2026-11-23T08:50:35.898Z",
+    "updatedAt": "2026-11-23T08:50:37.420Z"
+  },
+  {
+    "id": "dlv_mwt0zu2b_588588d0",
+    "notificationId": "sim_a_1795423835890",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "push",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:50:37.393Z",
+    "expiresAt": "2026-11-23T09:20:35.890Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:50:35.890Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:35.893Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:35.895Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:35.897Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "push",
+        "result": "Acknowledged via in-app-push-ack. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:a:1795423835890:7b0cd1",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:50:35.897Z",
+    "acknowledgedVia": "in-app-push-ack",
+    "createdAt": "2026-11-23T08:50:35.890Z",
+    "updatedAt": "2026-11-23T08:50:35.897Z"
+  },
+  {
+    "id": "dlv_mwt0xx8r_ac8d2cac",
+    "notificationId": "sim_dlv_1795423746697",
+    "userId": "sim_dedup_1795423746668",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:52:03.038Z",
+    "expiresAt": "2026-11-23T09:49:06.698Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:49:06.698Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:49:06.701Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795423746701 merged into thr_sim_dlv_1795423746697, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:03.039Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:03.054Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T06:50:27.005Z",
+        "from": "AWAITING_ACK",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795423746668:sim_dlv_1795423746697",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:49:06.698Z",
+    "updatedAt": "2026-11-24T06:50:27.005Z"
+  },
+  {
+    "id": "dlv_mwt0v9as_b86959f9",
+    "notificationId": "sim_dlv_1795423622356",
+    "userId": "sim_dedup_1795423622338",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:52:03.056Z",
+    "expiresAt": "2026-11-23T09:47:02.356Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:47:02.356Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:47:02.358Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795423622358 merged into thr_sim_dlv_1795423622356, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:03.056Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:03.057Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T06:50:27.007Z",
+        "from": "AWAITING_ACK",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795423622338:sim_dlv_1795423622356",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:47:02.356Z",
+    "updatedAt": "2026-11-24T06:50:27.007Z"
+  },
+  {
+    "id": "dlv_mwt0fi2o_572d84e6",
+    "notificationId": "sim_g_1795422887232",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "sms",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:34:48.980Z",
+    "expiresAt": "2026-11-23T09:04:47.232Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:34:47.232Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.233Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.234Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 80ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.329Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.333Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.424Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.426Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.460Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.462Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "sms",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.463Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "sms",
+        "result": "Acknowledged via post-restart-resume-ack. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:g:1795422887232:822254",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forcePushFail": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:34:47.463Z",
+    "acknowledgedVia": "post-restart-resume-ack",
+    "createdAt": "2026-11-23T08:34:47.232Z",
+    "updatedAt": "2026-11-23T08:34:47.463Z"
+  },
+  {
+    "id": "dlv_mwt0fi2l_b5820a33",
+    "notificationId": "sim_f_1795422887229",
+    "userId": "usr_demo_simulator_only",
+    "priority": "NORMAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "push",
+    "channelChain": [
+      "push",
+      "in_app"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": false,
+    "ackTimeoutMs": 0,
+    "maxRetriesPerChannel": 0,
+    "nextAttemptAt": "2026-11-23T08:34:47.230Z",
+    "expiresAt": "2026-11-24T08:34:47.229Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:34:47.229Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> in_app"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.230Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.231Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "DELIVERED_ACKED",
+        "channel": "push",
+        "result": "mock-delivered"
+      }
+    ],
+    "idempotencyKey": "sim:f:1795422887229:ae127f",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:34:47.231Z",
+    "acknowledgedVia": "DELIVERED_ACKED",
+    "createdAt": "2026-11-23T08:34:47.229Z",
+    "updatedAt": "2026-11-23T08:34:47.231Z"
+  },
+  {
+    "id": "dlv_mwt0fi2k_22b5a9e7",
+    "notificationId": "sim_e_1795422887228",
+    "userId": "usr_demo_simulator_only",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:50:06.535Z",
+    "expiresAt": "2026-11-23T09:34:47.228Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:34:47.228Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:03.058Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:03.059Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:05.036Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push timed out after 2s -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:05.038Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Fallback attempt #1 initiated on email."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:05.040Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:07.036Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2s with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "sim:e:idem:1795422887228:74d74f",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:34:47.228Z",
+    "updatedAt": "2026-11-23T08:50:07.036Z"
+  },
+  {
+    "id": "dlv_mwt0fhkf_666e9954",
+    "notificationId": "sim_d_1795422886575",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 2,
+    "attempt": 3,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:34:47.244Z",
+    "expiresAt": "2026-11-23T09:04:46.575Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:34:46.575Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.576Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.577Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.672Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.674Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.768Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.770Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.803Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.805Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.899Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.901Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.995Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.997Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.032Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Starting fallback attempt on email."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.034Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.128Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Retry timer fired for email (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.130Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.225Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Retry timer fired for email (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:47.226Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> all channels exhausted"
+      }
+    ],
+    "idempotencyKey": "sim:d:1795422886575:0ce282",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forceAllDown": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:34:46.575Z",
+    "updatedAt": "2026-11-23T08:34:47.226Z"
+  },
+  {
+    "id": "dlv_mwt0fh7m_bb7eb03a",
+    "notificationId": "sim_c_1795422886114",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "email",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 2,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:34:48.091Z",
+    "expiresAt": "2026-11-23T09:04:46.114Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:34:46.114Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.115Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.116Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.212Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.213Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.307Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.309Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.343Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.345Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.440Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.441Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.535Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.537Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.571Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Starting fallback attempt on email."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.573Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.574Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "email",
+        "result": "Acknowledged via email-signed-link. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:c:1795422886114:2e566f",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forcePushFail": true,
+      "forceSmsFail": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:34:46.574Z",
+    "acknowledgedVia": "email-signed-link",
+    "createdAt": "2026-11-23T08:34:46.114Z",
+    "updatedAt": "2026-11-23T08:34:46.574Z"
+  },
+  {
+    "id": "dlv_mwt0fg1b_daf75fe3",
+    "notificationId": "sim_b_1795422884591",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "sms",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:34:47.629Z",
+    "expiresAt": "2026-11-23T09:04:44.591Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:34:44.591Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:44.592Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:44.593Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.109Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push timed out after 2s -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.110Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Fallback attempt #1 initiated on sms."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.112Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "sms",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:46.114Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "sms",
+        "result": "Acknowledged via sms-signed-link. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:b:1795422884591:4abe4d",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:34:46.114Z",
+    "acknowledgedVia": "sms-signed-link",
+    "createdAt": "2026-11-23T08:34:44.591Z",
+    "updatedAt": "2026-11-23T08:34:46.114Z"
+  },
+  {
+    "id": "dlv_mwt0fg14_c3868dae",
+    "notificationId": "sim_a_1795422884584",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "push",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-23T08:34:46.086Z",
+    "expiresAt": "2026-11-23T09:04:44.584Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:34:44.584Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:44.587Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:34:44.589Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:44.591Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "push",
+        "result": "Acknowledged via in-app-push-ack. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:a:1795422884584:873800",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-23T08:34:44.591Z",
+    "acknowledgedVia": "in-app-push-ack",
+    "createdAt": "2026-11-23T08:34:44.584Z",
+    "updatedAt": "2026-11-23T08:34:44.591Z"
+  },
+  {
+    "id": "dlv_mwt0ffx7_8b7ac63a",
+    "notificationId": "sim_dlv_1795422884441",
+    "userId": "sim_dedup_1795422884417",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:52:03.062Z",
+    "expiresAt": "2026-11-23T09:34:44.443Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:34:44.443Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:34:44.445Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795422884444 merged into thr_sim_dlv_1795422884441, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:03.062Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:03.063Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T06:50:27.009Z",
+        "from": "AWAITING_ACK",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795422884417:sim_dlv_1795422884441",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:34:44.443Z",
+    "updatedAt": "2026-11-24T06:50:27.009Z"
+  },
+  {
+    "id": "dlv_mwt0dtgf_2d5ae70e",
+    "notificationId": "sim_dlv_1795422808671",
+    "userId": "sim_dedup_1795422808658",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:52:03.065Z",
+    "expiresAt": "2026-11-23T09:33:28.671Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:33:28.671Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:33:28.673Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795422808673 merged into thr_sim_dlv_1795422808671, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-23T08:50:03.065Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:50:03.066Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-24T06:50:27.012Z",
+        "from": "AWAITING_ACK",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795422808658:sim_dlv_1795422808671",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:33:28.671Z",
+    "updatedAt": "2026-11-24T06:50:27.012Z"
+  },
+  {
+    "id": "dlv_mwt02iec_2d57d9da",
+    "notificationId": "sim_dlv_1795422281123",
+    "userId": "sim_dedup_1795422281110",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:32:09.506Z",
+    "expiresAt": "2026-11-23T09:24:41.124Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:24:41.124Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:24:41.126Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795422281126 merged into thr_sim_dlv_1795422281123, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-23T08:28:09.484Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:28:09.487Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:30:09.507Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push timed out after 2m -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-23T08:30:09.508Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Fallback attempt #1 initiated on email."
+      },
+      {
+        "timestamp": "2026-11-23T08:30:09.510Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:32:09.545Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2m with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795422281110:sim_dlv_1795422281123",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:24:41.124Z",
+    "updatedAt": "2026-11-23T08:32:09.545Z"
+  },
+  {
+    "id": "dlv_mwt01wte_53145e9b",
+    "notificationId": "sim_dlv_1795422253154",
+    "userId": "sim_dedup_1795422253139",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:32:09.511Z",
+    "expiresAt": "2026-11-23T09:24:13.154Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:24:13.154Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:24:13.156Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795422253156 merged into thr_sim_dlv_1795422253154, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-23T08:28:09.488Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:28:09.489Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:30:09.511Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push timed out after 2m -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-23T08:30:09.512Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Fallback attempt #1 initiated on email."
+      },
+      {
+        "timestamp": "2026-11-23T08:30:09.513Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:32:09.547Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2m with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795422253139:sim_dlv_1795422253154",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:24:13.154Z",
+    "updatedAt": "2026-11-23T08:32:09.547Z"
+  },
+  {
+    "id": "dlv_mwszwoyo_b8155ede",
+    "notificationId": "sim_dlv_1795422009695",
+    "userId": "sim_dedup_1795422009679",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:30:09.490Z",
+    "expiresAt": "2026-11-23T09:20:09.696Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:20:09.696Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:20:09.698Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795422009698 merged into thr_sim_dlv_1795422009695, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-23T08:24:02.172Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:24:02.175Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:28:09.490Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push timed out after 2m -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-23T08:28:09.491Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Fallback attempt #1 initiated on email."
+      },
+      {
+        "timestamp": "2026-11-23T08:28:09.492Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:30:09.515Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2m with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795422009679:sim_dlv_1795422009695",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:20:09.696Z",
+    "updatedAt": "2026-11-23T08:30:09.515Z"
+  },
+  {
+    "id": "dlv_mwsztvur_3b88be3a",
+    "notificationId": "sim_dlv_1795421878657",
+    "userId": "sim_dedup_1795421878604",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:26:02.176Z",
+    "expiresAt": "2026-11-23T09:17:58.658Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:17:58.658Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:17:58.661Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795421878661 merged into thr_sim_dlv_1795421878657, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-23T08:18:58.788Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:18:58.798Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:24:02.176Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push timed out after 2m -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-23T08:24:02.176Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Fallback attempt #1 initiated on email."
+      },
+      {
+        "timestamp": "2026-11-23T08:24:02.177Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:28:09.493Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2m with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795421878604:sim_dlv_1795421878657",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:17:58.658Z",
+    "updatedAt": "2026-11-23T08:28:09.493Z"
+  },
+  {
+    "id": "dlv_mwszioev_447dd38c",
+    "notificationId": "sim_dlv_1795421355798",
+    "userId": "sim_dedup_1795421355786",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:16:10.414Z",
+    "expiresAt": "2026-11-23T09:09:15.798Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:09:15.798Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:09:15.800Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795421355800 merged into thr_sim_dlv_1795421355798, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-23T08:12:10.390Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:12:10.392Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:14:10.414Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push timed out after 2m -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-23T08:14:10.416Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Fallback attempt #1 initiated on email."
+      },
+      {
+        "timestamp": "2026-11-23T08:14:10.418Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:16:10.444Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2m with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795421355786:sim_dlv_1795421355798",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:09:15.798Z",
+    "updatedAt": "2026-11-23T08:16:10.444Z"
+  },
+  {
+    "id": "dlv_mwszcb80_f95e216a",
+    "notificationId": "sim_dlv_1795421058766",
+    "userId": "sim_dedup_1795421058746",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-23T08:09:28.586Z",
+    "expiresAt": "2026-11-23T09:04:18.767Z",
+    "history": [
+      {
+        "timestamp": "2026-11-23T08:04:18.767Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-23T08:04:18.770Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795421058770 merged into thr_sim_dlv_1795421058766, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-23T08:05:28.491Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-23T08:05:28.498Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:07:28.586Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push timed out after 2m -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-23T08:07:28.587Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Fallback attempt #1 initiated on email."
+      },
+      {
+        "timestamp": "2026-11-23T08:07:28.589Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:12:10.394Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2m with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795421058746:sim_dlv_1795421058766",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-23T08:04:18.767Z",
+    "updatedAt": "2026-11-23T08:12:10.394Z"
+  },
+  {
+    "id": "dlv_mwrlue8v_98eb8fe5",
+    "notificationId": "sim_dlv_1795337921694",
+    "userId": "sim_dedup_1795337921681",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 0,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-22T08:58:41.694Z",
+    "expiresAt": "2026-11-22T09:58:41.694Z",
+    "history": [
+      {
+        "timestamp": "2026-11-22T08:58:41.694Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-22T08:58:41.697Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795337921697 merged into thr_sim_dlv_1795337921694, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-23T08:03:55.808Z",
+        "from": "QUEUED",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795337921681:sim_dlv_1795337921694",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-22T08:58:41.694Z",
+    "updatedAt": "2026-11-23T08:03:55.808Z"
+  },
+  {
+    "id": "dlv_mwrls294_65355e93",
+    "notificationId": "sim_dlv_1795337812839",
+    "userId": "sim_dedup_1795337812824",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-22T08:58:54.531Z",
+    "expiresAt": "2026-11-22T09:56:52.839Z",
+    "history": [
+      {
+        "timestamp": "2026-11-22T08:56:52.839Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-22T08:56:52.842Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795337812842 merged into thr_sim_dlv_1795337812839, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-22T08:56:54.532Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-22T08:56:54.542Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:03:55.809Z",
+        "from": "AWAITING_ACK",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795337812824:sim_dlv_1795337812839",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-22T08:56:52.839Z",
+    "updatedAt": "2026-11-23T08:03:55.809Z"
+  },
+  {
+    "id": "dlv_mwrlnksc_de889f82",
+    "notificationId": "sim_dlv_1795337603578",
+    "userId": "sim_dedup_1795337603566",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-22T08:58:54.543Z",
+    "expiresAt": "2026-11-22T09:53:23.579Z",
+    "history": [
+      {
+        "timestamp": "2026-11-22T08:53:23.579Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-22T08:53:23.582Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795337603582 merged into thr_sim_dlv_1795337603578, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-22T08:56:54.543Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-22T08:56:54.544Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:03:55.810Z",
+        "from": "AWAITING_ACK",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795337603566:sim_dlv_1795337603578",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-22T08:53:23.579Z",
+    "updatedAt": "2026-11-23T08:03:55.810Z"
+  },
+  {
+    "id": "dlv_mwrln112_9130b616",
+    "notificationId": "sim_dlv_1795337577974",
+    "userId": "sim_dedup_1795337577960",
+    "priority": "HIGH",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-22T08:58:54.545Z",
+    "expiresAt": "2026-11-22T09:52:57.974Z",
+    "history": [
+      {
+        "timestamp": "2026-11-22T08:52:57.974Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-22T08:52:57.976Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795337577976 merged into thr_sim_dlv_1795337577974, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-22T08:56:54.545Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-22T08:56:54.546Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-23T08:03:55.811Z",
+        "from": "AWAITING_ACK",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795337577960:sim_dlv_1795337577974",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-22T08:52:57.974Z",
+    "updatedAt": "2026-11-23T08:03:55.811Z"
+  },
+  {
+    "id": "dlv_mwqg8qb4_9992925c",
+    "notificationId": "notif_1795268043254",
+    "userId": "usr_1795268043372",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "push",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 30000,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-21T13:34:36.641Z",
+    "expiresAt": "2026-11-21T14:04:06.640Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:34:06.640Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.641Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.643Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "Queued to in-app push channel (awaiting user acknowledgement)"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.664Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "push",
+        "result": "Acknowledged via in-app-ack. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "idem_verify_1795268043254",
+    "recipientEmail": "verify_a_1795268043254@example.com",
+    "baseUrl": "http://localhost:3000",
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-21T13:34:06.664Z",
+    "acknowledgedVia": "in-app-ack",
+    "createdAt": "2026-11-21T13:34:06.640Z",
+    "updatedAt": "2026-11-21T13:34:06.664Z"
+  },
+  {
+    "id": "dlv_mwqg8q4f_9f89a543",
+    "notificationId": "sim_g_1795268046399",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "sms",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-21T13:34:08.148Z",
+    "expiresAt": "2026-11-21T14:04:06.399Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:34:06.399Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.399Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.400Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 80ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.495Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.496Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.591Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.592Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.628Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.629Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "sms",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.630Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "sms",
+        "result": "Acknowledged via post-restart-resume-ack. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:g:1795268046399:9e68c3",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forcePushFail": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-21T13:34:06.630Z",
+    "acknowledgedVia": "post-restart-resume-ack",
+    "createdAt": "2026-11-21T13:34:06.399Z",
+    "updatedAt": "2026-11-21T13:34:06.630Z"
+  },
+  {
+    "id": "dlv_mwqg8q4c_f5fabe97",
+    "notificationId": "sim_f_1795268046396",
+    "userId": "usr_demo_simulator_only",
+    "priority": "NORMAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "push",
+    "channelChain": [
+      "push",
+      "in_app"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": false,
+    "ackTimeoutMs": 0,
+    "maxRetriesPerChannel": 0,
+    "nextAttemptAt": "2026-11-21T13:34:06.397Z",
+    "expiresAt": "2026-11-22T13:34:06.396Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:34:06.396Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> in_app"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.397Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.398Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "DELIVERED_ACKED",
+        "channel": "push",
+        "result": "mock-delivered"
+      }
+    ],
+    "idempotencyKey": "sim:f:1795268046396:b317d6",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-21T13:34:06.398Z",
+    "acknowledgedVia": "DELIVERED_ACKED",
+    "createdAt": "2026-11-21T13:34:06.396Z",
+    "updatedAt": "2026-11-21T13:34:06.398Z"
+  },
+  {
+    "id": "dlv_mwqg8q4b_5e2df525",
+    "notificationId": "sim_e_1795268046395",
+    "userId": "usr_demo_simulator_only",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-21T13:43:23.722Z",
+    "expiresAt": "2026-11-21T14:34:06.395Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:34:06.395Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.666Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.667Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push circuit OPEN (60s remaining) -> skipping straight to email"
+      },
+      {
+        "timestamp": "2026-11-21T13:43:22.223Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Starting fallback attempt on email."
+      },
+      {
+        "timestamp": "2026-11-21T13:43:22.229Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-21T13:43:24.221Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2s with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "sim:e:idem:1795268046395:b86677",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-21T13:34:06.395Z",
+    "updatedAt": "2026-11-21T13:43:24.221Z"
+  },
+  {
+    "id": "dlv_mwqg8pmb_0b50ed4d",
+    "notificationId": "sim_d_1795268045747",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 2,
+    "attempt": 3,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-21T13:34:06.413Z",
+    "expiresAt": "2026-11-21T14:04:05.747Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:34:05.747Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.748Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.748Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.844Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.846Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.941Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.942Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.975Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.976Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.071Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.072Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.166Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.167Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.200Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Starting fallback attempt on email."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.202Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.296Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Retry timer fired for email (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.298Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.393Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Retry timer fired for email (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:06.394Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> all channels exhausted"
+      }
+    ],
+    "idempotencyKey": "sim:d:1795268045747:6406ad",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forceAllDown": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-21T13:34:05.747Z",
+    "updatedAt": "2026-11-21T13:34:06.394Z"
+  },
+  {
+    "id": "dlv_mwqg8p9j_aff52863",
+    "notificationId": "sim_c_1795268045287",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "email",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 2,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-21T13:34:07.264Z",
+    "expiresAt": "2026-11-21T14:04:05.287Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:34:05.287Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.287Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.289Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.383Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.384Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.479Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.481Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.516Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.517Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.611Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.613Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.707Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.708Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.744Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Starting fallback attempt on email."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.746Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.746Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "email",
+        "result": "Acknowledged via email-signed-link. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:c:1795268045287:615218",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forcePushFail": true,
+      "forceSmsFail": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-21T13:34:05.746Z",
+    "acknowledgedVia": "email-signed-link",
+    "createdAt": "2026-11-21T13:34:05.287Z",
+    "updatedAt": "2026-11-21T13:34:05.746Z"
+  },
+  {
+    "id": "dlv_mwqg8o3a_baeedf61",
+    "notificationId": "sim_b_1795268043766",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "sms",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-21T13:34:06.804Z",
+    "expiresAt": "2026-11-21T14:04:03.766Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:34:03.766Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:03.768Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:03.768Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.284Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push timed out after 2s -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.285Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Fallback attempt #1 initiated on sms."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.286Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "sms",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:05.286Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "sms",
+        "result": "Acknowledged via sms-signed-link. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:b:1795268043766:68342c",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-21T13:34:05.286Z",
+    "acknowledgedVia": "sms-signed-link",
+    "createdAt": "2026-11-21T13:34:03.766Z",
+    "updatedAt": "2026-11-21T13:34:05.286Z"
+  },
+  {
+    "id": "dlv_mwqg8o37_c0e05615",
+    "notificationId": "sim_a_1795268043763",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "push",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-21T13:34:05.264Z",
+    "expiresAt": "2026-11-21T14:04:03.763Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:34:03.763Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:03.764Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:34:03.765Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-21T13:34:03.765Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "push",
+        "result": "Acknowledged via in-app-push-ack. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:a:1795268043763:c08bc7",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-21T13:34:03.765Z",
+    "acknowledgedVia": "in-app-push-ack",
+    "createdAt": "2026-11-21T13:34:03.763Z",
+    "updatedAt": "2026-11-21T13:34:03.765Z"
+  },
+  {
+    "id": "dlv_mwqg82n4_bb66c5f1",
+    "notificationId": "sim_g_1795268015968",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "sms",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-21T13:33:37.715Z",
+    "expiresAt": "2026-11-21T14:03:35.968Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:33:35.968Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.968Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.969Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 80ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:36.064Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:36.065Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:36.159Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:36.161Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:36.195Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:36.196Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "sms",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:36.197Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "sms",
+        "result": "Acknowledged via post-restart-resume-ack. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:g:1795268015968:faaa78",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forcePushFail": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-21T13:33:36.197Z",
+    "acknowledgedVia": "post-restart-resume-ack",
+    "createdAt": "2026-11-21T13:33:35.968Z",
+    "updatedAt": "2026-11-21T13:33:36.197Z"
+  },
+  {
+    "id": "dlv_mwqg82n0_83422baa",
+    "notificationId": "sim_f_1795268015964",
+    "userId": "usr_demo_simulator_only",
+    "priority": "NORMAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "push",
+    "channelChain": [
+      "push",
+      "in_app"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": false,
+    "ackTimeoutMs": 0,
+    "maxRetriesPerChannel": 0,
+    "nextAttemptAt": "2026-11-21T13:33:35.965Z",
+    "expiresAt": "2026-11-22T13:33:35.964Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:33:35.964Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> in_app"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.966Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.966Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "DELIVERED_ACKED",
+        "channel": "push",
+        "result": "mock-delivered"
+      }
+    ],
+    "idempotencyKey": "sim:f:1795268015964:362736",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-21T13:33:35.966Z",
+    "acknowledgedVia": "DELIVERED_ACKED",
+    "createdAt": "2026-11-21T13:33:35.964Z",
+    "updatedAt": "2026-11-21T13:33:35.966Z"
+  },
+  {
+    "id": "dlv_mwqg82mz_3f32eb13",
+    "notificationId": "sim_e_1795268015963",
+    "userId": "usr_demo_simulator_only",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-21T13:33:40.149Z",
+    "expiresAt": "2026-11-21T14:33:35.963Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:33:35.963Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:36.649Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:36.649Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push circuit OPEN (60s remaining) -> skipping straight to email"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:38.650Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Starting fallback attempt on email."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:38.651Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:40.652Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2s with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "sim:e:idem:1795268015963:ab25e6",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-21T13:33:35.963Z",
+    "updatedAt": "2026-11-21T13:33:40.652Z"
+  },
+  {
+    "id": "dlv_mwqg824y_652fc344",
+    "notificationId": "sim_d_1795268015314",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 2,
+    "attempt": 3,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-21T13:33:35.981Z",
+    "expiresAt": "2026-11-21T14:03:35.314Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:33:35.314Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.314Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.315Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.411Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.412Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.505Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.507Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.542Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.543Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.637Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.639Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.734Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.735Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.769Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Starting fallback attempt on email."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.770Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.865Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Retry timer fired for email (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.866Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.961Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Retry timer fired for email (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.962Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email failed (Simulated SMTP email failure (Demo Mode).) -> all channels exhausted"
+      }
+    ],
+    "idempotencyKey": "sim:d:1795268015314:6b8884",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forceAllDown": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-21T13:33:35.314Z",
+    "updatedAt": "2026-11-21T13:33:35.962Z"
+  },
+  {
+    "id": "dlv_mwqg81s7_53a3e234",
+    "notificationId": "sim_c_1795268014855",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "email",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 2,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-21T13:33:36.831Z",
+    "expiresAt": "2026-11-21T14:03:34.855Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:33:34.855Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:34.856Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:34.857Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:34.953Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:34.954Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "push",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.048Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Retry timer fired for push (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.049Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push failed (Simulated push transport failure (Demo Mode).) -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.084Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Starting fallback attempt on sms."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.086Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #1 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.180Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #2)."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.182Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "RETRY_WAIT",
+        "channel": "sms",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> retry #2 scheduled in 60ms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.276Z",
+        "from": "RETRY_WAIT",
+        "event": "RETRY_TIMER",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Retry timer fired for sms (attempt #3)."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.277Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_FAILED",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "sms failed (Simulated SMS gateway failure (Demo Mode).) -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.311Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Starting fallback attempt on email."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.312Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:35.313Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "email",
+        "result": "Acknowledged via email-signed-link. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:c:1795268014855:fd39f6",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "forcePushFail": true,
+      "forceSmsFail": true,
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-21T13:33:35.313Z",
+    "acknowledgedVia": "email-signed-link",
+    "createdAt": "2026-11-21T13:33:34.855Z",
+    "updatedAt": "2026-11-21T13:33:35.313Z"
+  },
+  {
+    "id": "dlv_mwqg80ly_d13fa1fe",
+    "notificationId": "sim_b_1795268013334",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "sms",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-21T13:33:36.370Z",
+    "expiresAt": "2026-11-21T14:03:33.334Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:33:33.334Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:33.335Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:33.336Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:34.851Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "sms",
+        "result": "push timed out after 2s -> falling back to sms"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:34.852Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "sms",
+        "result": "Fallback attempt #1 initiated on sms."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:34.853Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "sms",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:34.854Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "sms",
+        "result": "Acknowledged via sms-signed-link. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:b:1795268013334:947261",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-21T13:33:34.854Z",
+    "acknowledgedVia": "sms-signed-link",
+    "createdAt": "2026-11-21T13:33:33.334Z",
+    "updatedAt": "2026-11-21T13:33:34.854Z"
+  },
+  {
+    "id": "dlv_mwqg80lq_58717035",
+    "notificationId": "sim_a_1795268013325",
+    "userId": "usr_demo_simulator_only",
+    "priority": "CRITICAL",
+    "state": "DELIVERED_ACKED",
+    "channel": "push",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 1500,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-21T13:33:34.828Z",
+    "expiresAt": "2026-11-21T14:03:33.326Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T13:33:33.326Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:33.329Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-21T13:33:33.332Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-21T13:33:33.333Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_RECEIVED",
+        "to": "DELIVERED_ACKED",
+        "channel": "push",
+        "result": "Acknowledged via in-app-push-ack. Remaining timers and fallback steps cancelled."
+      }
+    ],
+    "idempotencyKey": "sim:a:1795268013325:3c5295",
+    "recipientEmail": "demo-simulator@aegis-test.invalid",
+    "recipientPhone": "+919000000099",
+    "isDemoJob": true,
+    "demoFaults": {
+      "shortTimeouts": true
+    },
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": "2026-11-21T13:33:33.333Z",
+    "acknowledgedVia": "in-app-push-ack",
+    "createdAt": "2026-11-21T13:33:33.326Z",
+    "updatedAt": "2026-11-21T13:33:33.333Z"
+  },
+  {
+    "id": "dlv_mwqcvpc0_0aa2cc27",
+    "notificationId": "unit_eph_ro_1795262400000",
+    "userId": "test_recipient_ro",
+    "priority": "CRITICAL",
+    "state": "EXPIRED",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "sms",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 0,
+    "requiresAck": true,
+    "ackTimeoutMs": 30000,
+    "maxRetriesPerChannel": 2,
+    "nextAttemptAt": "2026-11-21T12:00:00.000Z",
+    "expiresAt": "2026-11-21T12:05:00.000Z",
+    "history": [
+      {
+        "timestamp": "2026-11-21T12:00:00.000Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> sms -> email"
+      },
+      {
+        "timestamp": "2026-11-21T12:00:00.000Z",
+        "from": "QUEUED",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Ephemeral item unit_eph_ro_1795262400000 expired/consumed during read; delivery job expired."
+      }
+    ],
+    "idempotencyKey": "notif:test_recipient_ro:unit_eph_ro_1795262400000",
+    "isDemoJob": true,
+    "isEphemeral": true,
+    "ephemeralTtlSeconds": 300,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-21T12:00:00.000Z",
+    "updatedAt": "2026-11-21T12:00:00.000Z"
+  }
+]

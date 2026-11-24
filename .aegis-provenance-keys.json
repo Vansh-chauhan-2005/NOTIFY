@@ -1,0 +1,321 @@
+[
+  {
+    "kid": "c7aaba53aaabafd2",
+    "userId": "aegis-server-gateway",
+    "publicKey": "UqOcuXyYcgVU9zz9Q1Tid/FrQt1GjUQ5qQHTudO1nfE=",
+    "status": "ACTIVE",
+    "createdAt": "2026-11-22T08:24:47.978Z",
+    "fingerprintHex": "C7AA-BA53-AAAB-AFD2-25A9-1D7C-90BA-B80C",
+    "fingerprintWords": [
+      "helm",
+      "geyser",
+      "griffin",
+      "core",
+      "geyser",
+      "glacier"
+    ]
+  },
+  {
+    "kid": "a574920d2f759492",
+    "userId": "prov_sim_sender_mwt0ffxg",
+    "publicKey": "jGu2K1sOJcm9JxvGMp3602/M8+7v5OKe5hztfI6aDJA=",
+    "status": "ACTIVE",
+    "createdAt": "2026-11-23T08:34:44.457Z",
+    "fingerprintHex": "A574-920D-2F75-9492-5DE0-5A7E-62EE-D06A",
+    "fingerprintWords": [
+      "gate",
+      "dove",
+      "flare",
+      "banner",
+      "carbon",
+      "draft"
+    ]
+  },
+  {
+    "kid": "9badcd2c04959264",
+    "userId": "aegis-server-gateway",
+    "publicKey": "zL0XB8dTSCmA+WtrnRqPPKw93yecR2UlmnocYY4bHoI=",
+    "status": "ACTIVE",
+    "createdAt": "2026-11-23T08:33:44.482Z",
+    "fingerprintHex": "9BAD-CD2C-0495-9264-8AC9-4498-3B2E-DE7C",
+    "fingerprintWords": [
+      "fountain",
+      "glass",
+      "hound",
+      "canon",
+      "arch",
+      "flora"
+    ]
+  },
+  {
+    "kid": "cb7e5caa9fe60ee7",
+    "userId": "prov_sim_sender_mwt0ffxg_rev",
+    "publicKey": "iOWRSP16DmmDFNwlCJhLGS5JauRiNZefoq/E9AL3lJ8=",
+    "status": "REVOKED",
+    "createdAt": "2026-11-23T08:34:44.504Z",
+    "fingerprintHex": "CB7E-5CAA-9FE6-0EE7-35B1-22A2-F47E-17EB",
+    "fingerprintWords": [
+      "horizon",
+      "echo",
+      "crate",
+      "geyser",
+      "fuel",
+      "keel"
+    ],
+    "revokedAt": "2026-11-23T08:34:39.505Z",
+    "reason": "Simulator compromise drill"
+  },
+  {
+    "kid": "3456565aa0464054",
+    "userId": "prov_sim_sender_mwt0ffxg_rot",
+    "publicKey": "FsdGjtrbTLzyXqWaV2b+1gnEoxqyj3ROOOz9+2y2tqo=",
+    "status": "ROTATED",
+    "createdAt": "2026-11-23T08:34:44.510Z",
+    "fingerprintHex": "3456-565A-A046-4054-DB79-2855-0F40-3E30",
+    "fingerprintWords": [
+      "cedar",
+      "corona",
+      "corona",
+      "craft",
+      "gable",
+      "cloak"
+    ],
+    "rotatedAt": "2026-11-23T08:34:34.511Z",
+    "supersededByKid": "76bdab4ac7536e0e",
+    "reason": "Key rotation"
+  },
+  {
+    "kid": "76bdab4ac7536e0e",
+    "userId": "prov_sim_sender_mwt0ffxg_rot",
+    "publicKey": "KxiCzyTB3O+gt27ZF5S4EeKnk/lGxaFcFcveHBryDlA=",
+    "status": "ACTIVE",
+    "createdAt": "2026-11-23T08:34:34.511Z",
+    "fingerprintHex": "76BD-AB4A-C753-6E0E-2731-DCF1-DEAF-29C4",
+    "fingerprintWords": [
+      "dragon",
+      "guide",
+      "glacier",
+      "cobalt",
+      "helm",
+      "core"
+    ]
+  },
+  {
+    "kid": "6e5591a2d6b9377d",
+    "userId": "prov_sim_sender_mwt0ffxg",
+    "publicKey": "EVWRlqH0MDlO0ci6FJ5J/V7NgIsnAic4Iopxw+gBHWQ=",
+    "status": "ACTIVE",
+    "createdAt": "2026-11-23T08:34:44.516Z",
+    "fingerprintHex": "6E55-91A2-D6B9-377D-2E05-EF7F-B5C3-40CD",
+    "fingerprintWords": [
+      "dial",
+      "corner",
+      "flame",
+      "gale",
+      "ingot",
+      "grid"
+    ]
+  },
+  {
+    "kid": "8fc5a02b7a9e0cb2",
+    "userId": "prov_sim_sender_mwt0ztxl",
+    "publicKey": "ffyJVGmNOnyzyiR+mQBWT1qgHk/4OIGP/bKcnLzkcIM=",
+    "status": "ACTIVE",
+    "createdAt": "2026-11-23T08:50:35.727Z",
+    "fingerprintHex": "8FC5-A02B-7A9E-0CB2-4455-61DE-C7BD-9856",
+    "fingerprintWords": [
+      "finch",
+      "hearth",
+      "gable",
+      "candle",
+      "dusk",
+      "frost"
+    ]
+  },
+  {
+    "kid": "80b4ef4fabda49e4",
+    "userId": "aegis-server-gateway",
+    "publicKey": "XEDpqi7X63tvXuM/z5jqqOI6zNgbMgsqxVvRmS3yMgU=",
+    "status": "ACTIVE",
+    "createdAt": "2026-11-23T08:49:35.743Z",
+    "fingerprintHex": "80B4-EF4F-ABDA-49E4-1F5B-CE6A-C7AC-9AB7",
+    "fingerprintWords": [
+      "elder",
+      "gorge",
+      "knot",
+      "compass",
+      "glacier",
+      "iron"
+    ]
+  },
+  {
+    "kid": "e58942871375e666",
+    "userId": "prov_sim_sender_mwt0ztxl_rev",
+    "publicKey": "4hqx7Rone+ZD8y74iHXqCfvArEvJX7Z4Szlmcnd/1MA=",
+    "status": "REVOKED",
+    "createdAt": "2026-11-23T08:50:35.765Z",
+    "fingerprintHex": "E589-4287-1375-E666-3E71-76A7-286B-EC5E",
+    "fingerprintWords": [
+      "kaolin",
+      "fable",
+      "citadel",
+      "ether",
+      "berry",
+      "draft"
+    ],
+    "revokedAt": "2026-11-23T08:50:30.766Z",
+    "reason": "Simulator compromise drill"
+  },
+  {
+    "kid": "dfeaa92e9fb3b363",
+    "userId": "prov_sim_sender_mwt0ztxl_rot",
+    "publicKey": "vOvhdMs1Vz3XDjFlGb1iIiB1FIcL6vdO4jKVKuF3fYY=",
+    "status": "ROTATED",
+    "createdAt": "2026-11-23T08:50:35.792Z",
+    "fingerprintHex": "DFEA-A92E-9FB3-B363-4EFB-EE5C-EDBA-0656",
+    "fingerprintWords": [
+      "javelin",
+      "key",
+      "gem",
+      "cape",
+      "fuel",
+      "gold"
+    ],
+    "rotatedAt": "2026-11-23T08:50:25.793Z",
+    "supersededByKid": "4ccede351807e7a2",
+    "reason": "Key rotation"
+  },
+  {
+    "kid": "4ccede351807e7a2",
+    "userId": "prov_sim_sender_mwt0ztxl_rot",
+    "publicKey": "ZDB0buJqPgwfHF/haZQIH0MDSpGwtmNMYqb0mukbVSw=",
+    "status": "ACTIVE",
+    "createdAt": "2026-11-23T08:50:25.793Z",
+    "fingerprintHex": "4CCE-DE35-1807-E7A2-98E4-579E-E89D-78E7",
+    "fingerprintWords": [
+      "coil",
+      "hue",
+      "jasper",
+      "cell",
+      "bolt",
+      "atlas"
+    ]
+  },
+  {
+    "kid": "cdeadbde1f9b0b80",
+    "userId": "prov_sim_sender_mwt0ztxl",
+    "publicKey": "hTskTJI3mEc4kupBd0dCgWin2LBKtjt0RqnS7hLC7Gs=",
+    "status": "ACTIVE",
+    "createdAt": "2026-11-23T08:50:35.800Z",
+    "fingerprintHex": "CDEA-DBDE-1F9B-0B80-72A9-D76F-2C67-65E0",
+    "fingerprintWords": [
+      "hound",
+      "key",
+      "island",
+      "jasper",
+      "brass",
+      "fountain"
+    ]
+  },
+  {
+    "kid": "900083eb893a47bb",
+    "userId": "prov_sim_sender_mwt10mw5",
+    "publicKey": "h0pOfzF3E6Plj34Gc6oFRSV2tFTURLYcHZRG+OVQtHw=",
+    "status": "ACTIVE",
+    "createdAt": "2026-11-23T08:51:13.258Z",
+    "fingerprintHex": "9000-83EB-893A-47BB-7F8B-28A5-A770-95F9",
+    "fingerprintWords": [
+      "fjord",
+      "amber",
+      "engine",
+      "kiln",
+      "fable",
+      "charm"
+    ]
+  },
+  {
+    "kid": "49f0533ff5cce994",
+    "userId": "aegis-server-gateway",
+    "publicKey": "l16B7PlayRpFIaARbVYTWLYkEha0vJDK51mXdqGuxAE=",
+    "status": "ACTIVE",
+    "createdAt": "2026-11-23T08:50:13.276Z",
+    "fingerprintHex": "49F0-533F-F5CC-E994-9763-292E-0650-FCD8",
+    "fingerprintWords": [
+      "clover",
+      "amber",
+      "core",
+      "chord",
+      "arrow",
+      "horn"
+    ]
+  },
+  {
+    "kid": "f5c51552d72f51d7",
+    "userId": "prov_sim_sender_mwt10mw5_rev",
+    "publicKey": "Y3vWaTrWHzXmw7vLAveuu1UER6E77mpzzxrvcejNzOw=",
+    "status": "REVOKED",
+    "createdAt": "2026-11-23T08:51:13.300Z",
+    "fingerprintHex": "F5C5-1552-D72F-51D7-B9B0-D2E7-8A2B-D2DF",
+    "fingerprintWords": [
+      "arrow",
+      "hearth",
+      "blade",
+      "cord",
+      "ink",
+      "carbon"
+    ],
+    "revokedAt": "2026-11-23T08:51:08.300Z",
+    "reason": "Simulator compromise drill"
+  },
+  {
+    "kid": "474235974713dd0b",
+    "userId": "prov_sim_sender_mwt10mw5_rot",
+    "publicKey": "nsU/lHsMMDwgAmm6XultdyjzB8LgJnSF+6t64HB6SeA=",
+    "status": "ROTATED",
+    "createdAt": "2026-11-23T08:51:13.303Z",
+    "fingerprintHex": "4742-3597-4713-DD0B-D9D6-CF0F-0A7F-F16F",
+    "fingerprintWords": [
+      "clock",
+      "citadel",
+      "cell",
+      "focus",
+      "clock",
+      "berry"
+    ],
+    "rotatedAt": "2026-11-23T08:51:03.304Z",
+    "supersededByKid": "dc7dbb460c57e7a1",
+    "reason": "Key rotation"
+  },
+  {
+    "kid": "dc7dbb460c57e7a1",
+    "userId": "prov_sim_sender_mwt10mw5_rot",
+    "publicKey": "tQ+zo5GGJcNUHAyH8Qiv1Z7eCtLU5v7S/vnX0uyFv3M=",
+    "status": "ACTIVE",
+    "createdAt": "2026-11-23T08:51:03.304Z",
+    "fingerprintHex": "DC7D-BB46-0C57-E7A1-A44F-98EE-AE6F-E0EB",
+    "fingerprintWords": [
+      "ivory",
+      "earth",
+      "grove",
+      "cloak",
+      "bamboo",
+      "cosmo"
+    ]
+  },
+  {
+    "kid": "45b2e2b2d62a4567",
+    "userId": "prov_sim_sender_mwt10mw5",
+    "publicKey": "EWHrVfGaHmNOjXnCBKL5e+bD4/i2EJ7xYdeBzJCTNSU=",
+    "status": "ACTIVE",
+    "createdAt": "2026-11-23T08:51:13.308Z",
+    "fingerprintHex": "45B2-E2B2-D62A-4567-B736-155E-04BE-FB5B",
+    "fingerprintWords": [
+      "cliff",
+      "glyph",
+      "jolt",
+      "glyph",
+      "ingot",
+      "canal"
+    ]
+  }
+]

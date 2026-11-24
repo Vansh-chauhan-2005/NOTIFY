@@ -1,0 +1,109 @@
+{
+  "userSettings": {
+    "guest": {
+      "userId": "guest",
+      "dedupEnabled": true,
+      "mergeThreshold": 0.98,
+      "reviewThreshold": 0.5,
+      "personalThresholdOffset": 0,
+      "effectiveMergeThreshold": 0.98,
+      "windowMinutes": 5,
+      "neverMergeCategories": [
+        "security",
+        "otp",
+        "auth",
+        "provenance"
+      ],
+      "feedbackCount": 0,
+      "updatedAt": "2026-11-23T08:19:04.915Z"
+    },
+    "sim_dedup_1795422884417": {
+      "userId": "sim_dedup_1795422884417",
+      "dedupEnabled": true,
+      "mergeThreshold": 0.98,
+      "reviewThreshold": 0.5,
+      "personalThresholdOffset": 0,
+      "effectiveMergeThreshold": 0.98,
+      "windowMinutes": 5,
+      "neverMergeCategories": [
+        "security",
+        "otp",
+        "auth",
+        "provenance"
+      ],
+      "feedbackCount": 2,
+      "updatedAt": "2026-11-23T08:34:44.448Z"
+    },
+    "sim_dedup_1795423838798": {
+      "userId": "sim_dedup_1795423838798",
+      "dedupEnabled": true,
+      "mergeThreshold": 0.98,
+      "reviewThreshold": 0.5,
+      "personalThresholdOffset": 0,
+      "effectiveMergeThreshold": 0.98,
+      "windowMinutes": 5,
+      "neverMergeCategories": [
+        "security",
+        "otp",
+        "auth",
+        "provenance"
+      ],
+      "feedbackCount": 2,
+      "updatedAt": "2026-11-23T08:50:38.828Z"
+    },
+    "sim_dedup_1795423876369": {
+      "userId": "sim_dedup_1795423876369",
+      "dedupEnabled": true,
+      "mergeThreshold": 0.98,
+      "reviewThreshold": 0.5,
+      "personalThresholdOffset": 0,
+      "effectiveMergeThreshold": 0.98,
+      "windowMinutes": 5,
+      "neverMergeCategories": [
+        "security",
+        "otp",
+        "auth",
+        "provenance"
+      ],
+      "feedbackCount": 2,
+      "updatedAt": "2026-11-23T08:51:16.406Z"
+    }
+  },
+  "threads": {},
+  "counters": {
+    "itemsReceived": 0,
+    "itemsGrouped": 0,
+    "suggestionsCount": 0,
+    "ungroupCount": 3,
+    "notDuplicateFeedbackCount": 3,
+    "confirmedMergeCount": 0,
+    "perSourceCapHits": 0,
+    "guardsBlockedByType": {
+      "CRITICAL_SECURITY_EXCLUSION": 0,
+      "ENTITY_CONFLICT": 0,
+      "NEGATION_STATE_CONFLICT": 0,
+      "PROVENANCE_TRUST": 0,
+      "PER_SOURCE_CAP": 0
+    },
+    "stageCounts": {
+      "EXACT": 0,
+      "MINHASH": 0,
+      "SEMANTIC_ONNX": 0,
+      "TFIDF_FALLBACK": 0,
+      "NONE": 0
+    },
+    "similarityHistogram": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "recentEvents": []
+}

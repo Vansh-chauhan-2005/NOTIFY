@@ -1,0 +1,6 @@
+{
+  "name": "AegisNotify Engine",
+  "description": "Smart, user-friendly notification control hub that connects with your apps, filters repetitive noise, verifies authentic alerts, and routes urgent messages to your devices.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

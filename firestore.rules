@@ -1,0 +1,1219 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global safety net: deny everything by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedIdentity() {
+      return isSignedIn() && (
+        request.auth.token.email_verified == true ||
+        request.auth.token.firebase.sign_in_provider == 'phone'
+      );
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function hasUserProfile(userId) {
+      return exists(/databases/$(database)/documents/users/$(userId)) &&
+        get(/databases/$(database)/documents/users/$(userId)).data.uid == request.auth.uid;
+    }
+
+    function hasChatThread(userId, threadId) {
+      return exists(/databases/$(database)/documents/users/$(userId)/chatThreads/$(threadId)) &&
+        get(/databases/$(database)/documents/users/$(userId)/chatThreads/$(threadId)).data.uid == request.auth.uid;
+    }
+
+    function isValidUserAuthProfile(data) {
+      return data.keys().hasAll(['uid', 'role', 'authProvider', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'uid',
+          'phoneNumber',
+          'phoneVerified',
+          'maskedPhone',
+          'phoneHash',
+          'email',
+          'displayName',
+          'photoURL',
+          'role',
+          'authProvider',
+          'authMethods',
+          'emailVerified',
+          'keySetupCompleted',
+          'inactivityTimeoutDays',
+          'sessionVersion',
+          'lastLoginAt',
+          'onboardingCompleted',
+          'consentGranted',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.uid is string
+        && data.uid.size() >= 1
+        && data.uid.size() <= 128
+        && data.uid.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.uid == request.auth.uid
+        && (!('phoneNumber' in data) || (data.phoneNumber is string && data.phoneNumber.size() >= 8 && data.phoneNumber.size() <= 24 && data.phoneNumber.matches('^\\+?[0-9]{8,20}$')))
+        && (!('phoneVerified' in data) || data.phoneVerified is bool)
+        && (!('maskedPhone' in data) || (data.maskedPhone is string && data.maskedPhone.size() >= 6 && data.maskedPhone.size() <= 24))
+        && (!('phoneHash' in data) || (data.phoneHash is string && data.phoneHash.size() == 64 && data.phoneHash.matches('^[a-f0-9]{64}$')))
+        && (!('email' in data) || (data.email is string && data.email.size() >= 3 && data.email.size() <= 254))
+        && (!('displayName' in data) || (data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 120))
+        && (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() >= 1 && data.photoURL.size() <= 500))
+        && (!('authMethods' in data) || (data.authMethods is list && data.authMethods.size() <= 8))
+        && (!('emailVerified' in data) || data.emailVerified is bool)
+        && (!('keySetupCompleted' in data) || data.keySetupCompleted is bool)
+        && (!('inactivityTimeoutDays' in data) || (data.inactivityTimeoutDays is int && data.inactivityTimeoutDays >= 1 && data.inactivityTimeoutDays <= 90))
+        && (!('sessionVersion' in data) || (data.sessionVersion is int && data.sessionVersion >= 1 && data.sessionVersion <= 1000000))
+        && (!('lastLoginAt' in data) || (data.lastLoginAt is string && data.lastLoginAt.size() >= 10 && data.lastLoginAt.size() <= 64))
+        && (!('onboardingCompleted' in data) || data.onboardingCompleted is bool)
+        && (!('consentGranted' in data) || data.consentGranted is bool)
+        && data.role in ['USER']
+        && data.authProvider in ['google', 'phone', 'email_otp', 'password_2fa', 'password']
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidUserKeyBackup(data) {
+      return data.keys().hasAll([
+          'uid',
+          'v',
+          'kdf',
+          'iterations',
+          'cipher',
+          'salt',
+          'iv',
+          'encryptedPrivateKeysBundle',
+          'ed25519PublicKey',
+          'ed25519Kid',
+          'ecdhPublicJwkJson',
+          'ecdsaPublicJwkJson',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid',
+          'v',
+          'kdf',
+          'iterations',
+          'cipher',
+          'salt',
+          'iv',
+          'encryptedPrivateKeysBundle',
+          'ed25519PublicKey',
+          'ed25519Kid',
+          'fingerprintHex',
+          'fingerprintWords',
+          'ecdhPublicJwkJson',
+          'ecdsaPublicJwkJson',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.uid is string
+        && data.uid == request.auth.uid
+        && data.v == 1
+        && data.kdf == 'PBKDF2-HMAC-SHA256'
+        && data.iterations is int
+        && data.iterations >= 100000
+        && data.iterations <= 1000000
+        && data.cipher == 'AES-256-GCM'
+        && data.salt is string && data.salt.size() >= 16 && data.salt.size() <= 128
+        && data.iv is string && data.iv.size() >= 12 && data.iv.size() <= 128
+        && data.encryptedPrivateKeysBundle is string && data.encryptedPrivateKeysBundle.size() >= 32 && data.encryptedPrivateKeysBundle.size() <= 16384
+        && data.ed25519PublicKey is string && data.ed25519PublicKey.size() >= 32 && data.ed25519PublicKey.size() <= 128
+        && data.ed25519Kid is string && data.ed25519Kid.size() >= 4 && data.ed25519Kid.size() <= 128
+        && (!('fingerprintHex' in data) || (data.fingerprintHex is string && data.fingerprintHex.size() <= 128))
+        && (!('fingerprintWords' in data) || (data.fingerprintWords is list && data.fingerprintWords.size() <= 12))
+        && data.ecdhPublicJwkJson is string && data.ecdhPublicJwkJson.size() >= 2 && data.ecdhPublicJwkJson.size() <= 2048
+        && data.ecdsaPublicJwkJson is string && data.ecdsaPublicJwkJson.size() >= 2 && data.ecdsaPublicJwkJson.size() <= 2048
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidLoginAudit(data) {
+      return data.keys().hasAll([
+          'uid',
+          'timestamp',
+          'deviceType',
+          'browserSummary',
+          'ipPrefixHash',
+          'deviceIdHash',
+          'method',
+          'isNewDevice',
+          'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'uid',
+          'timestamp',
+          'deviceType',
+          'browserSummary',
+          'ipPrefixHash',
+          'deviceIdHash',
+          'method',
+          'isNewDevice',
+          'createdAt'
+        ])
+        && data.uid is string
+        && data.uid == request.auth.uid
+        && data.timestamp is string && data.timestamp.size() >= 10 && data.timestamp.size() <= 64
+        && data.deviceType is string && data.deviceType.size() >= 3 && data.deviceType.size() <= 32
+        && data.browserSummary is string && data.browserSummary.size() >= 3 && data.browserSummary.size() <= 64
+        && data.ipPrefixHash is string && data.ipPrefixHash.size() >= 8 && data.ipPrefixHash.size() <= 64
+        && data.deviceIdHash is string && data.deviceIdHash.size() >= 8 && data.deviceIdHash.size() <= 64
+        && data.method is string && data.method.size() >= 2 && data.method.size() <= 40
+        && data.isNewDevice is bool
+        && data.createdAt is timestamp;
+    }
+
+    function isValidUserPreferences(data) {
+      return data.keys().hasAll(['uid', 'dndEnabled', 'quietHoursStart', 'quietHoursEnd', 'preferredChannel', 'minPriorityThreshold', 'audioAlertsEnabled', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'uid',
+          'dndEnabled',
+          'quietHoursStart',
+          'quietHoursEnd',
+          'preferredChannel',
+          'minPriorityThreshold',
+          'audioAlertsEnabled',
+          'allowCriticalBypassQuietHours',
+          'optOutPush',
+          'optOutSms',
+          'optOutEmail',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.uid is string
+        && data.uid.size() >= 1
+        && data.uid.size() <= 128
+        && data.uid.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.uid == request.auth.uid
+        && data.dndEnabled is bool
+        && data.quietHoursStart is string
+        && data.quietHoursStart.size() == 5
+        && data.quietHoursStart.matches('^([01]\\d|2[0-3]):[0-5]\\d$')
+        && data.quietHoursEnd is string
+        && data.quietHoursEnd.size() == 5
+        && data.quietHoursEnd.matches('^([01]\\d|2[0-3]):[0-5]\\d$')
+        && data.preferredChannel in ['WEBSOCKET', 'EMAIL', 'SMS', 'WEBPUSH']
+        && data.minPriorityThreshold in ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']
+        && data.audioAlertsEnabled is bool
+        && (!('allowCriticalBypassQuietHours' in data) || data.allowCriticalBypassQuietHours is bool)
+        && (!('optOutPush' in data) || data.optOutPush is bool)
+        && (!('optOutSms' in data) || data.optOutSms is bool)
+        && (!('optOutEmail' in data) || data.optOutEmail is bool)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidUserConsentRecord(data) {
+      return data.keys().hasAll([
+          'uid',
+          'policyVersion',
+          'consentVersion',
+          'allowCatalogAndConnections',
+          'allowEncryptedConnectionStorage',
+          'browserNotificationsChoice',
+          'revoked',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid',
+          'policyVersion',
+          'consentVersion',
+          'allowCatalogAndConnections',
+          'allowEncryptedConnectionStorage',
+          'browserNotificationsChoice',
+          'revoked',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.uid is string
+        && data.uid.size() >= 1
+        && data.uid.size() <= 128
+        && data.uid.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.uid == request.auth.uid
+        && data.policyVersion is string
+        && data.policyVersion.size() >= 1
+        && data.policyVersion.size() <= 32
+        && data.consentVersion is string
+        && data.consentVersion.size() >= 1
+        && data.consentVersion.size() <= 32
+        && data.allowCatalogAndConnections is bool
+        && data.allowEncryptedConnectionStorage is bool
+        && data.browserNotificationsChoice in ['granted', 'denied', 'default', 'skipped', 'unsupported']
+        && data.revoked is bool
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidUserAppDetectionState(data, expectedAppId) {
+      return data.keys().hasAll([
+          'uid',
+          'appId',
+          'status',
+          'markedByUser',
+          'deepLinkConfirmed',
+          'relatedAppDetected',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid',
+          'appId',
+          'status',
+          'markedByUser',
+          'deepLinkConfirmed',
+          'relatedAppDetected',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.uid is string
+        && data.uid.size() >= 1
+        && data.uid.size() <= 128
+        && data.uid.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.uid == request.auth.uid
+        && data.appId is string
+        && data.appId == expectedAppId
+        && data.appId.size() >= 1
+        && data.appId.size() <= 64
+        && data.appId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.status in ['Detected', 'Launchable', 'Marked by you', 'Unknown']
+        && data.markedByUser is bool
+        && data.deepLinkConfirmed in ['yes', 'no', 'untested']
+        && data.relatedAppDetected is bool
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidChatThread(data) {
+      return data.keys().hasAll(['uid', 'title', 'rolePreset', 'systemInstruction', 'model', 'messageCount', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'title', 'rolePreset', 'systemInstruction', 'model', 'messageCount', 'createdAt', 'updatedAt'])
+        && data.uid is string
+        && data.uid.size() >= 1
+        && data.uid.size() <= 128
+        && data.uid.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.uid == request.auth.uid
+        && data.title is string
+        && data.title.size() >= 1
+        && data.title.size() <= 120
+        && data.rolePreset in ['sentinel_analyst', 'incident_responder', 'policy_advisor', 'fast_triage', 'custom']
+        && data.systemInstruction is string
+        && data.systemInstruction.size() >= 1
+        && data.systemInstruction.size() <= 2000
+        && data.model in ['gemini-4-hydrogen', 'gemini-3.1-flash-lite']
+        && data.messageCount is int
+        && data.messageCount >= 0
+        && data.messageCount <= 500
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidChatMessage(data, expectedThreadId) {
+      return data.keys().hasAll(['uid', 'threadId', 'role', 'text', 'model', 'createdAt'])
+        && data.keys().hasOnly(['uid', 'threadId', 'role', 'text', 'model', 'createdAt'])
+        && data.uid is string
+        && data.uid.size() >= 1
+        && data.uid.size() <= 128
+        && data.uid.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.uid == request.auth.uid
+        && data.threadId is string
+        && data.threadId == expectedThreadId
+        && data.threadId.size() >= 1
+        && data.threadId.size() <= 128
+        && data.threadId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.role in ['user', 'model']
+        && data.text is string
+        && data.text.size() >= 1
+        && data.text.size() <= 20000
+        && data.model in ['gemini-4-hydrogen', 'gemini-3.1-flash-lite']
+        && data.createdAt is timestamp;
+    }
+
+    function isValidDeliveryJob(data, expectedJobId) {
+      return data.keys().hasAll([
+          'id',
+          'uid',
+          'notificationId',
+          'priority',
+          'state',
+          'channel',
+          'attempt',
+          'nextAttemptAt',
+          'history',
+          'idempotencyKey',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id',
+          'uid',
+          'notificationId',
+          'priority',
+          'state',
+          'channel',
+          'attempt',
+          'nextAttemptAt',
+          'history',
+          'idempotencyKey',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.id is string
+        && data.id == expectedJobId
+        && data.id.size() >= 1
+        && data.id.size() <= 128
+        && data.id.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.uid is string
+        && data.uid.size() >= 1
+        && data.uid.size() <= 128
+        && data.uid.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.uid == request.auth.uid
+        && data.notificationId is string
+        && data.notificationId.size() >= 1
+        && data.notificationId.size() <= 128
+        && data.notificationId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.priority in ['CRITICAL', 'HIGH', 'NORMAL', 'LOW']
+        && data.state in [
+          'QUEUED',
+          'ATTEMPTING',
+          'AWAITING_ACK',
+          'RETRY_WAIT',
+          'FALLBACK',
+          'DELIVERED_ACKED',
+          'FAILED_ALL_CHANNELS',
+          'CANCELLED',
+          'EXPIRED'
+        ]
+        && data.channel in ['push', 'sms', 'email', 'in_app', 'none']
+        && data.attempt is int
+        && data.attempt >= 0
+        && data.attempt <= 20
+        && data.nextAttemptAt is string
+        && data.nextAttemptAt.size() >= 1
+        && data.nextAttemptAt.size() <= 64
+        && data.history is list
+        && data.history.size() <= 50
+        && (data.history.size() == 0 || data.history[0] is map)
+        && data.idempotencyKey is string
+        && data.idempotencyKey.size() >= 1
+        && data.idempotencyKey.size() <= 160
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isNonTerminalDeliveryState(state) {
+      return !(state in ['DELIVERED_ACKED', 'FAILED_ALL_CHANNELS', 'CANCELLED', 'EXPIRED']);
+    }
+
+    function isValidEphemeralMessage(data, expectedId) {
+      return data.keys().hasAll([
+          'id',
+          'senderId',
+          'recipientId',
+          'ciphertext',
+          'iv',
+          'signature',
+          'priority',
+          'createdAt',
+          'expiresAt',
+          'expireAt',
+          'status',
+          'readOnce'
+        ])
+        && data.keys().hasOnly([
+          'id',
+          'senderId',
+          'recipientId',
+          'ciphertext',
+          'iv',
+          'signature',
+          'priority',
+          'createdAt',
+          'expiresAt',
+          'expireAt',
+          'status',
+          'readOnce'
+        ])
+        && data.id is string
+        && data.id == expectedId
+        && data.id.size() >= 1
+        && data.id.size() <= 128
+        && data.id.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.senderId is string
+        && data.senderId.size() >= 1
+        && data.senderId.size() <= 128
+        && data.senderId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.recipientId is string
+        && data.recipientId.size() >= 1
+        && data.recipientId.size() <= 128
+        && data.recipientId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.ciphertext is string
+        && data.ciphertext.size() >= 1
+        && data.ciphertext.size() <= 64000
+        && data.iv is string
+        && data.iv.size() >= 1
+        && data.iv.size() <= 128
+        && data.signature is string
+        && data.signature.size() >= 1
+        && data.signature.size() <= 512
+        && data.priority in ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']
+        && data.status in ['ACTIVE', 'READ', 'BURNED', 'EXPIRED']
+        && data.readOnce is bool
+        && data.createdAt is timestamp
+        && data.expiresAt is timestamp
+        && data.expireAt is timestamp;
+    }
+
+    function isValidProvenanceKey(data, expectedKid) {
+      return data.keys().hasAll([
+          'kid',
+          'userId',
+          'publicKey',
+          'status',
+          'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'kid',
+          'userId',
+          'publicKey',
+          'status',
+          'createdAt',
+          'rotatedAt',
+          'revokedAt',
+          'reason'
+        ])
+        && data.kid is string
+        && data.kid == expectedKid
+        && data.kid.size() >= 16
+        && data.kid.size() <= 32
+        && data.kid.matches('^[a-f0-9]+$')
+        && data.userId is string
+        && data.userId.size() >= 1
+        && data.userId.size() <= 128
+        && data.userId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.publicKey is string
+        && data.publicKey.size() >= 32
+        && data.publicKey.size() <= 128
+        && data.status in ['ACTIVE', 'ROTATED', 'REVOKED']
+        && data.createdAt is timestamp;
+    }
+
+    function isValidUserPriorityModel(data) {
+      return data.keys().hasAll([
+          'uid',
+          'version',
+          'personalizationEnabled',
+          'feedbackCount',
+          'bias',
+          'weights',
+          'thresholds',
+          'driftWarning',
+          'driftL2Distance',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid',
+          'version',
+          'personalizationEnabled',
+          'feedbackCount',
+          'bias',
+          'weights',
+          'thresholds',
+          'urgentKeywords',
+          'quietHours',
+          'sourceReliability',
+          'driftWarning',
+          'driftL2Distance',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.uid is string
+        && data.uid.size() >= 1
+        && data.uid.size() <= 128
+        && data.uid.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.uid == request.auth.uid
+        && data.version is int
+        && data.version >= 1
+        && data.version <= 100000
+        && data.personalizationEnabled is bool
+        && data.feedbackCount is int
+        && data.feedbackCount >= 0
+        && data.feedbackCount <= 1000000
+        && data.bias is number
+        && data.bias >= -10
+        && data.bias <= 10
+        && data.weights is map
+        && data.thresholds is map
+        && data.driftWarning is bool
+        && data.driftL2Distance is number
+        && data.driftL2Distance >= 0
+        && data.driftL2Distance <= 100
+        && (!('urgentKeywords' in data) || (data.urgentKeywords is list && data.urgentKeywords.size() <= 30))
+        && (!('quietHours' in data) || data.quietHours is map)
+        && (!('sourceReliability' in data) || data.sourceReliability is map)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidUserDedupThread(data, expectedThreadId) {
+      return data.keys().hasAll([
+          'uid',
+          'threadId',
+          'lastMemberAt',
+          'memberCount',
+          'memberIds',
+          'sourceId',
+          'senderId',
+          'category',
+          'topPriority',
+          'lowestTrust',
+          'status',
+          'stageMatched',
+          'lastSimilarity',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid',
+          'threadId',
+          'lastMemberAt',
+          'memberCount',
+          'memberIds',
+          'sourceId',
+          'senderId',
+          'category',
+          'topPriority',
+          'lowestTrust',
+          'status',
+          'stageMatched',
+          'lastSimilarity',
+          'containsEphemeral',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.uid is string
+        && data.uid.size() >= 1
+        && data.uid.size() <= 128
+        && data.uid.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.uid == request.auth.uid
+        && data.threadId is string
+        && data.threadId == expectedThreadId
+        && data.threadId.size() >= 1
+        && data.threadId.size() <= 128
+        && data.threadId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.lastMemberAt is string
+        && data.lastMemberAt.size() >= 1
+        && data.lastMemberAt.size() <= 64
+        && data.memberCount is int
+        && data.memberCount >= 1
+        && data.memberCount <= 500
+        && data.memberIds is list
+        && data.memberIds.size() >= 1
+        && data.memberIds.size() <= 50
+        && data.memberIds[0] is string
+        && data.sourceId is string
+        && data.sourceId.size() >= 1
+        && data.sourceId.size() <= 64
+        && data.senderId is string
+        && data.senderId.size() >= 1
+        && data.senderId.size() <= 128
+        && data.category is string
+        && data.category.size() >= 1
+        && data.category.size() <= 32
+        && data.topPriority in ['LOW', 'MEDIUM', 'NORMAL', 'HIGH', 'CRITICAL']
+        && data.lowestTrust in ['VERIFIED', 'GATEWAY_ATTESTED', 'UNVERIFIED']
+        && data.status in ['ACTIVE', 'RESOLVED', 'MUTED']
+        && data.stageMatched in ['EXACT', 'MINHASH', 'SEMANTIC_ONNX', 'TFIDF_FALLBACK', 'NONE']
+        && data.lastSimilarity is number
+        && data.lastSimilarity >= 0
+        && data.lastSimilarity <= 1
+        && (!('containsEphemeral' in data) || data.containsEphemeral is bool)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidUserDedupSettings(data) {
+      return data.keys().hasAll([
+          'uid',
+          'dedupEnabled',
+          'mergeThreshold',
+          'reviewThreshold',
+          'effectiveMergeThreshold',
+          'windowMinutes',
+          'neverMergeCategories',
+          'feedbackCount',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid',
+          'dedupEnabled',
+          'mergeThreshold',
+          'reviewThreshold',
+          'effectiveMergeThreshold',
+          'windowMinutes',
+          'neverMergeCategories',
+          'feedbackCount',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.uid is string
+        && data.uid.size() >= 1
+        && data.uid.size() <= 128
+        && data.uid.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.uid == request.auth.uid
+        && data.dedupEnabled is bool
+        && data.mergeThreshold is number
+        && data.mergeThreshold >= 0.5
+        && data.mergeThreshold <= 0.99
+        && data.reviewThreshold is number
+        && data.reviewThreshold >= 0.5
+        && data.reviewThreshold <= 0.99
+        && data.effectiveMergeThreshold is number
+        && data.effectiveMergeThreshold >= 0.8
+        && data.effectiveMergeThreshold <= 0.98
+        && data.windowMinutes is int
+        && data.windowMinutes >= 5
+        && data.windowMinutes <= 180
+        && data.neverMergeCategories is list
+        && data.neverMergeCategories.size() >= 1
+        && data.neverMergeCategories.size() <= 12
+        && data.neverMergeCategories[0] is string
+        && data.feedbackCount is int
+        && data.feedbackCount >= 0
+        && data.feedbackCount <= 1000000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Health check connection probe document (read-only)
+    match /test/connection {
+      allow get: if true;
+    }
+
+    // Strict PII isolation: users can only read/write their own profile document
+    match /users/{userId} {
+      allow get: if isValidId(userId) && isOwner(userId);
+      allow list: if false;
+
+      allow create: if isValidId(userId)
+        && isSignedIn()
+        && isOwner(userId)
+        && isValidUserAuthProfile(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      allow update: if isValidId(userId)
+        && isSignedIn()
+        && isOwner(userId)
+        && isValidUserAuthProfile(incoming())
+        && incoming().uid == existing().uid
+        && incoming().role == existing().role
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'phoneNumber',
+          'phoneVerified',
+          'maskedPhone',
+          'phoneHash',
+          'email',
+          'displayName',
+          'photoURL',
+          'authProvider',
+          'authMethods',
+          'emailVerified',
+          'keySetupCompleted',
+          'inactivityTimeoutDays',
+          'sessionVersion',
+          'lastLoginAt',
+          'onboardingCompleted',
+          'consentGranted',
+          'updatedAt'
+        ]);
+
+      allow delete: if isValidId(userId) && isVerifiedIdentity() && isOwner(userId);
+
+      // Encrypted PBKDF2 Private-Key Backup (client-encrypted only; server/Firestore never sees passphrase)
+      match /keyBackups/{backupId} {
+        allow get: if isValidId(userId) && backupId == 'default' && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && resource.data.uid == request.auth.uid;
+
+        allow create: if isValidId(userId)
+          && backupId == 'default'
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserKeyBackup(incoming())
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time;
+
+        allow update: if isValidId(userId)
+          && backupId == 'default'
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserKeyBackup(incoming())
+          && incoming().uid == existing().uid
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time;
+
+        allow delete: if isValidId(userId) && isVerifiedIdentity() && isOwner(userId);
+      }
+
+      // Per-User Recent Sign-In Audits
+      match /loginAudits/{auditId} {
+        allow get: if isValidId(userId) && isValidId(auditId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && resource.data.uid == request.auth.uid;
+
+        allow create: if isValidId(userId)
+          && isValidId(auditId)
+          && isSignedIn()
+          && isOwner(userId)
+          && isValidLoginAudit(incoming())
+          && incoming().createdAt == request.time;
+
+        allow update: if false;
+        allow delete: if isValidId(userId) && isOwner(userId);
+      }
+
+      // User Notification & Alert Filtering Preferences
+      match /preferences/{prefId} {
+        allow get: if isValidId(userId) && isValidId(prefId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && resource.data.uid == request.auth.uid;
+
+        allow create: if isValidId(userId)
+          && isValidId(prefId)
+          && prefId == 'settings'
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserPreferences(incoming())
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && hasUserProfile(userId);
+
+        allow update: if isValidId(userId)
+          && isValidId(prefId)
+          && prefId == 'settings'
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserPreferences(incoming())
+          && incoming().uid == existing().uid
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly([
+            'dndEnabled',
+            'quietHoursStart',
+            'quietHoursEnd',
+            'preferredChannel',
+            'minPriorityThreshold',
+            'audioAlertsEnabled',
+            'allowCriticalBypassQuietHours',
+            'optOutPush',
+            'optOutSms',
+            'optOutEmail',
+            'updatedAt'
+          ])
+          && hasUserProfile(userId);
+
+        allow delete: if false;
+      }
+
+      // User Privacy & Connection Consents
+      match /consents/{consentId} {
+        allow get: if isValidId(userId) && isValidId(consentId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && resource.data.uid == request.auth.uid;
+
+        allow create: if isValidId(userId)
+          && isValidId(consentId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserConsentRecord(incoming())
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && hasUserProfile(userId);
+
+        allow update: if isValidId(userId)
+          && isValidId(consentId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserConsentRecord(incoming())
+          && incoming().uid == existing().uid
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly([
+            'policyVersion',
+            'consentVersion',
+            'allowCatalogAndConnections',
+            'allowEncryptedConnectionStorage',
+            'browserNotificationsChoice',
+            'revoked',
+            'updatedAt'
+          ])
+          && hasUserProfile(userId);
+
+        allow delete: if isValidId(userId)
+          && isValidId(consentId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && hasUserProfile(userId);
+      }
+
+      // Per-user App Catalog Detection & Deep-Link Confirmation States
+      match /appCatalogStates/{appId} {
+        allow get: if isValidId(userId) && isValidId(appId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && resource.data.uid == request.auth.uid;
+
+        allow create: if isValidId(userId)
+          && isValidId(appId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserAppDetectionState(incoming(), appId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && hasUserProfile(userId);
+
+        allow update: if isValidId(userId)
+          && isValidId(appId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserAppDetectionState(incoming(), appId)
+          && incoming().uid == existing().uid
+          && incoming().appId == existing().appId
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly([
+            'status',
+            'markedByUser',
+            'deepLinkConfirmed',
+            'relatedAppDetected',
+            'updatedAt'
+          ])
+          && hasUserProfile(userId);
+
+        allow delete: if isValidId(userId)
+          && isValidId(appId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && hasUserProfile(userId);
+      }
+
+      // Per-user Multi-Channel Fallback Delivery Jobs (no message plaintext)
+      match /deliveryJobs/{jobId} {
+        allow get: if isValidId(userId) && isValidId(jobId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && resource.data.uid == request.auth.uid;
+
+        allow create: if isValidId(userId)
+          && isValidId(jobId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidDeliveryJob(incoming(), jobId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && hasUserProfile(userId);
+
+        allow update: if isValidId(userId)
+          && isValidId(jobId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidDeliveryJob(incoming(), jobId)
+          && isNonTerminalDeliveryState(existing().state)
+          && incoming().id == existing().id
+          && incoming().uid == existing().uid
+          && incoming().notificationId == existing().notificationId
+          && incoming().idempotencyKey == existing().idempotencyKey
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly([
+            'state',
+            'channel',
+            'attempt',
+            'nextAttemptAt',
+            'history',
+            'updatedAt'
+          ])
+          && hasUserProfile(userId);
+
+        allow delete: if isValidId(userId)
+          && isValidId(jobId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && hasUserProfile(userId);
+      }
+
+      // Per-user Dynamic Sigmoid Priority Weights & Preferences (zero plaintext messages)
+      match /priorityModel/{modelId} {
+        allow get: if isValidId(userId) && isValidId(modelId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && resource.data.uid == request.auth.uid;
+
+        allow create: if isValidId(userId)
+          && isValidId(modelId)
+          && modelId == 'default'
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserPriorityModel(incoming())
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && hasUserProfile(userId);
+
+        allow update: if isValidId(userId)
+          && isValidId(modelId)
+          && modelId == 'default'
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserPriorityModel(incoming())
+          && incoming().uid == existing().uid
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly([
+            'version',
+            'personalizationEnabled',
+            'feedbackCount',
+            'bias',
+            'weights',
+            'thresholds',
+            'urgentKeywords',
+            'quietHours',
+            'sourceReliability',
+            'driftWarning',
+            'driftL2Distance',
+            'updatedAt'
+          ])
+          && hasUserProfile(userId);
+
+        allow delete: if isValidId(userId)
+          && isValidId(modelId)
+          && modelId == 'default'
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && hasUserProfile(userId);
+      }
+
+      // Semantic Deduplication Metadata-Only Threads (ZERO plaintext, ZERO vectors)
+      match /threads/{threadId} {
+        allow get: if isValidId(userId) && isValidId(threadId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && resource.data.uid == request.auth.uid;
+
+        allow create: if isValidId(userId)
+          && isValidId(threadId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserDedupThread(incoming(), threadId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && hasUserProfile(userId);
+
+        allow update: if isValidId(userId)
+          && isValidId(threadId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserDedupThread(incoming(), threadId)
+          && incoming().uid == existing().uid
+          && incoming().threadId == existing().threadId
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly([
+            'lastMemberAt',
+            'memberCount',
+            'memberIds',
+            'topPriority',
+            'lowestTrust',
+            'status',
+            'stageMatched',
+            'lastSimilarity',
+            'containsEphemeral',
+            'updatedAt'
+          ])
+          && hasUserProfile(userId);
+
+        allow delete: if isValidId(userId)
+          && isValidId(threadId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && hasUserProfile(userId);
+      }
+
+      // Per-user Semantic Deduplication Threshold & Exclusion Settings
+      match /dedupSettings/{settingId} {
+        allow get: if isValidId(userId) && isValidId(settingId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && resource.data.uid == request.auth.uid;
+
+        allow create: if isValidId(userId)
+          && isValidId(settingId)
+          && settingId == 'default'
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserDedupSettings(incoming())
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && hasUserProfile(userId);
+
+        allow update: if isValidId(userId)
+          && isValidId(settingId)
+          && settingId == 'default'
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidUserDedupSettings(incoming())
+          && incoming().uid == existing().uid
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly([
+            'dedupEnabled',
+            'mergeThreshold',
+            'reviewThreshold',
+            'effectiveMergeThreshold',
+            'windowMinutes',
+            'neverMergeCategories',
+            'feedbackCount',
+            'updatedAt'
+          ])
+          && hasUserProfile(userId);
+
+        allow delete: if isValidId(userId)
+          && isValidId(settingId)
+          && settingId == 'default'
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && hasUserProfile(userId);
+      }
+
+      // Gemini Multi-Turn Chat Threads
+      match /chatThreads/{threadId} {
+        allow get: if isValidId(userId) && isValidId(threadId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && resource.data.uid == request.auth.uid;
+
+        allow create: if isValidId(userId)
+          && isValidId(threadId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidChatThread(incoming())
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && hasUserProfile(userId);
+
+        allow update: if isValidId(userId)
+          && isValidId(threadId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && isValidChatThread(incoming())
+          && incoming().uid == existing().uid
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'rolePreset', 'systemInstruction', 'model', 'messageCount', 'updatedAt'])
+          && hasUserProfile(userId);
+
+        allow delete: if isValidId(userId)
+          && isValidId(threadId)
+          && isVerifiedIdentity()
+          && isOwner(userId)
+          && hasUserProfile(userId);
+
+        // Chat Messages inside a Thread
+        match /messages/{messageId} {
+          allow get: if isValidId(userId) && isValidId(threadId) && isValidId(messageId) && isOwner(userId);
+          allow list: if isValidId(userId) && isValidId(threadId) && isOwner(userId) && resource.data.uid == request.auth.uid;
+
+          allow create: if isValidId(userId)
+            && isValidId(threadId)
+            && isValidId(messageId)
+            && isVerifiedIdentity()
+            && isOwner(userId)
+            && isValidChatMessage(incoming(), threadId)
+            && incoming().createdAt == request.time
+            && hasUserProfile(userId)
+            && hasChatThread(userId, threadId);
+
+          allow update: if false;
+          allow delete: if isValidId(userId)
+            && isValidId(threadId)
+            && isValidId(messageId)
+            && isVerifiedIdentity()
+            && isOwner(userId);
+        }
+      }
+    }
+
+    // Isolated Ephemeral Data (300s default TTL, max 900s, expireAt for Firestore TTL policy)
+    match /ephemeralMessages/{messageId} {
+      allow get: if isValidId(messageId)
+        && isSignedIn()
+        && request.time < existing().expiresAt
+        && (existing().senderId == request.auth.uid || existing().recipientId == request.auth.uid)
+        && existing().status in ['ACTIVE', 'READ'];
+
+      allow list: if isSignedIn()
+        && request.time < resource.data.expiresAt
+        && (resource.data.senderId == request.auth.uid || resource.data.recipientId == request.auth.uid)
+        && resource.data.status in ['ACTIVE', 'READ'];
+
+      allow create: if isValidId(messageId)
+        && isVerifiedIdentity()
+        && isValidEphemeralMessage(incoming(), messageId)
+        && incoming().senderId == request.auth.uid
+        && incoming().status == 'ACTIVE'
+        && incoming().createdAt == request.time
+        && incoming().expiresAt > request.time
+        && incoming().expiresAt <= request.time + duration.value(900, 's')
+        && incoming().expireAt == incoming().expiresAt;
+
+      // Clients may NEVER mutate status, expiresAt, expireAt, or ciphertext after creation
+      allow update, delete: if false;
+    }
+
+    // Server-only wrapped DEK store: all client reads and writes strictly denied
+    match /ephemeralKeys/{keyId} {
+      allow read, write: if false;
+    }
+
+    // Server-only metadata tombstones after crypto-shredding
+    match /ephemeralTombstones/{tombstoneId} {
+      allow read, write: if false;
+    }
+
+    // Zero-Trust Ed25519 Provenance Public Key Registry
+    match /provenanceKeys/{kid} {
+      allow get: if isValidId(kid) && isSignedIn();
+      allow list: if isSignedIn();
+
+      allow create: if isValidId(kid)
+        && isVerifiedIdentity()
+        && isValidProvenanceKey(incoming(), kid)
+        && incoming().userId == request.auth.uid
+        && incoming().status == 'ACTIVE'
+        && incoming().createdAt == request.time;
+
+      // Key rotation/revocation status transitions are server-managed only
+      allow update, delete: if false;
+    }
+
+    // Append-only Hash-Chained Key Transparency Log (server-written only)
+    match /keyLog/{entryId} {
+      allow get: if isValidId(entryId) && isSignedIn();
+      allow list: if isSignedIn();
+      allow create, update, delete: if false;
+    }
+
+    // Metadata-only Provenance Quarantine (server-only access)
+    match /provenanceQuarantine/{qId} {
+      allow read, write: if false;
+    }
+  }
+}

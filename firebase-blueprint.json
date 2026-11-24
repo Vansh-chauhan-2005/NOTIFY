@@ -1,0 +1,815 @@
+{
+  "entities": {
+    "UserAuthProfile": {
+      "title": "UserAuthProfile",
+      "description": "Authenticated user identity and delivery channel profile verified via Firebase Google Sign-In, Firebase Phone Auth, or node_auth.js.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Authentication UID matching the document ID."
+        },
+        "phoneNumber": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 24,
+          "pattern": "^\\+?[0-9]{8,20}$",
+          "description": "Verified E.164 mobile phone number."
+        },
+        "phoneVerified": {
+          "type": "boolean",
+          "description": "Whether the user's phone has been verified via SMS OTP."
+        },
+        "maskedPhone": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 24,
+          "description": "Masked phone number for display (e.g. +91******1234)."
+        },
+        "phoneHash": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 hash of verified E.164 phone number for lookup."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254,
+          "description": "User email address."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "User display name."
+        },
+        "photoURL": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Profile avatar URL."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["USER"],
+          "description": "Assigned client role."
+        },
+        "authProvider": {
+          "type": "string",
+          "enum": ["google", "phone", "email_otp", "password_2fa", "password"],
+          "description": "Authentication method used."
+        },
+        "authMethods": {
+          "type": "array",
+          "description": "Linked sign-in providers on this account."
+        },
+        "emailVerified": {
+          "type": "boolean",
+          "description": "Whether email ownership has been verified."
+        },
+        "keySetupCompleted": {
+          "type": "boolean",
+          "description": "Whether encrypted backup keys have been generated and stored."
+        },
+        "inactivityTimeoutDays": {
+          "type": "integer",
+          "description": "Inactivity auto-signout days (1..90, default 14)."
+        },
+        "sessionVersion": {
+          "type": "integer",
+          "description": "Monotonic session version incremented on Sign out of all devices."
+        },
+        "lastLoginAt": {
+          "type": "string",
+          "description": "Last sign-in ISO timestamp."
+        },
+        "onboardingCompleted": {
+          "type": "boolean",
+          "description": "Whether the first-run permission onboarding flow was completed."
+        },
+        "consentGranted": {
+          "type": "boolean",
+          "description": "Whether the user granted catalog and encrypted connection storage consent."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp."
+        }
+      },
+      "required": ["uid", "role", "authProvider", "createdAt", "updatedAt"]
+    },
+    "UserPreferences": {
+      "title": "UserPreferences",
+      "description": "Per-user notification preferences and quiet-hour settings persisted in Firestore.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner Firebase UID."
+        },
+        "dndEnabled": {
+          "type": "boolean",
+          "description": "Do Not Disturb toggle."
+        },
+        "quietHoursStart": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 5,
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+          "description": "Quiet hours start HH:MM."
+        },
+        "quietHoursEnd": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 5,
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+          "description": "Quiet hours end HH:MM."
+        },
+        "preferredChannel": {
+          "type": "string",
+          "enum": ["WEBSOCKET", "EMAIL", "SMS", "WEBPUSH"],
+          "description": "Preferred alert delivery channel."
+        },
+        "minPriorityThreshold": {
+          "type": "string",
+          "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+          "description": "Minimum notification severity threshold."
+        },
+        "audioAlertsEnabled": {
+          "type": "boolean",
+          "description": "Whether critical audio alert chimes are enabled."
+        },
+        "allowCriticalBypassQuietHours": {
+          "type": "boolean",
+          "description": "Whether CRITICAL alerts may bypass quiet hours / DND."
+        },
+        "optOutPush": {
+          "type": "boolean",
+          "description": "Whether user opted out of push delivery channel."
+        },
+        "optOutSms": {
+          "type": "boolean",
+          "description": "Whether user opted out of SMS delivery channel."
+        },
+        "optOutEmail": {
+          "type": "boolean",
+          "description": "Whether user opted out of email delivery channel."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "dndEnabled", "quietHoursStart", "quietHoursEnd", "preferredChannel", "minPriorityThreshold", "audioAlertsEnabled", "createdAt", "updatedAt"]
+    },
+    "UserConsentRecord": {
+      "title": "UserConsentRecord",
+      "description": "Explicit privacy and permission consent choices captured during onboarding or updated in Settings.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "policyVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "consentVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "allowCatalogAndConnections": {
+          "type": "boolean"
+        },
+        "allowEncryptedConnectionStorage": {
+          "type": "boolean"
+        },
+        "browserNotificationsChoice": {
+          "type": "string",
+          "enum": ["granted", "denied", "default", "skipped", "unsupported"]
+        },
+        "revoked": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "uid",
+        "policyVersion",
+        "consentVersion",
+        "allowCatalogAndConnections",
+        "allowEncryptedConnectionStorage",
+        "browserNotificationsChoice",
+        "revoked",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "UserAppDetectionState": {
+      "title": "UserAppDetectionState",
+      "description": "Best-effort detection and user confirmation status for an app inside the Aegis App Catalog.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "appId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Detected", "Launchable", "Marked by you", "Unknown"]
+        },
+        "markedByUser": {
+          "type": "boolean"
+        },
+        "deepLinkConfirmed": {
+          "type": "string",
+          "enum": ["yes", "no", "untested"]
+        },
+        "relatedAppDetected": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "appId", "status", "markedByUser", "deepLinkConfirmed", "relatedAppDetected", "createdAt", "updatedAt"]
+    },
+    "ChatThread": {
+      "title": "ChatThread",
+      "description": "A user's multi-turn Gemini chatbot session metadata.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "rolePreset": {
+          "type": "string",
+          "enum": ["sentinel_analyst", "incident_responder", "policy_advisor", "fast_triage", "custom"]
+        },
+        "systemInstruction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "model": {
+          "type": "string",
+          "enum": ["gemini-4-hydrogen", "gemini-3.1-flash-lite"]
+        },
+        "messageCount": {
+          "type": "integer",
+          "description": "Number of messages in thread (0..500)."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "title", "rolePreset", "systemInstruction", "model", "messageCount", "createdAt", "updatedAt"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "A single message turn inside a user's Gemini chat thread.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "threadId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["user", "model"]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20000
+        },
+        "model": {
+          "type": "string",
+          "enum": ["gemini-4-hydrogen", "gemini-3.1-flash-lite"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "threadId", "role", "text", "model", "createdAt"]
+    },
+    "DeliveryJob": {
+      "title": "DeliveryJob",
+      "description": "Durable state-machine delivery record tracking multi-channel notification dispatch, retries, fallback transitions, and acknowledgements (without storing plaintext message body).",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "notificationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["CRITICAL", "HIGH", "NORMAL", "LOW"]
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "QUEUED",
+            "ATTEMPTING",
+            "AWAITING_ACK",
+            "RETRY_WAIT",
+            "FALLBACK",
+            "DELIVERED_ACKED",
+            "FAILED_ALL_CHANNELS",
+            "CANCELLED",
+            "EXPIRED"
+          ]
+        },
+        "channel": {
+          "type": "string",
+          "enum": ["push", "sms", "email", "in_app", "none"]
+        },
+        "attempt": {
+          "type": "integer",
+          "description": "Current attempt counter for the active channel."
+        },
+        "nextAttemptAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Next scheduled transition/worker execution timestamp."
+        },
+        "history": {
+          "type": "array",
+          "description": "Bounded transition audit history for this delivery job (no message plaintext)."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "uid",
+        "notificationId",
+        "priority",
+        "state",
+        "channel",
+        "attempt",
+        "nextAttemptAt",
+        "history",
+        "idempotencyKey",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "EphemeralMessage": {
+      "title": "EphemeralMessage",
+      "description": "Isolated self-destructing ciphertext envelope stored exclusively in ephemeralMessages with TTL enforcement via expiresAt and Firestore TTL policy field expireAt.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "senderId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "recipientId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ciphertext": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64000
+        },
+        "iv": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expireAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp field targeted by Google Cloud Firestore TTL policy."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["ACTIVE", "READ", "BURNED", "EXPIRED"]
+        },
+        "readOnce": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "senderId",
+        "recipientId",
+        "ciphertext",
+        "iv",
+        "signature",
+        "priority",
+        "createdAt",
+        "expiresAt",
+        "expireAt",
+        "status",
+        "readOnce"
+      ]
+    },
+    "EphemeralKey": {
+      "title": "EphemeralKey",
+      "description": "Server-only wrapped DEK key material isolated in ephemeralKeys. Destroyed FIRST during crypto-shredding. All client access denied.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "wrappedDek": { "type": "string" },
+        "wrapIv": { "type": "string" },
+        "expiresAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "wrappedDek", "wrapIv", "expiresAt"]
+    },
+    "EphemeralTombstone": {
+      "title": "EphemeralTombstone",
+      "description": "Metadata-only audit tombstone after ephemeral destruction. Never contains plaintext, ciphertext, IV, signature, or keys.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "senderId": { "type": "string" },
+        "recipientId": { "type": "string" },
+        "priority": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "expiredAt": { "type": "string", "format": "date-time" },
+        "reason": { "type": "string", "enum": ["EXPIRED", "BURNED", "READ_ONCE"] }
+      },
+      "required": ["id", "senderId", "recipientId", "priority", "createdAt", "expiredAt", "reason"]
+    },
+    "ProvenanceKey": {
+      "title": "ProvenanceKey",
+      "description": "Public Ed25519 signing key record stored by kid in provenanceKeys. Private keys NEVER exist here.",
+      "type": "object",
+      "properties": {
+        "kid": { "type": "string", "minLength": 16, "maxLength": 32 },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "publicKey": { "type": "string", "minLength": 32, "maxLength": 128 },
+        "status": { "type": "string", "enum": ["ACTIVE", "ROTATED", "REVOKED"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "rotatedAt": { "type": "string", "format": "date-time" },
+        "revokedAt": { "type": "string", "format": "date-time" },
+        "reason": { "type": "string", "maxLength": 200 }
+      },
+      "required": ["kid", "userId", "publicKey", "status", "createdAt"]
+    },
+    "KeyLogEntry": {
+      "title": "KeyLogEntry",
+      "description": "Append-only hash-chained, server-signed Key Transparency Log entry. Server-written only; all client writes strictly denied.",
+      "type": "object",
+      "properties": {
+        "index": { "type": "integer" },
+        "type": { "type": "string", "enum": ["REGISTER", "ROTATE", "REVOKE"] },
+        "kid": { "type": "string" },
+        "userId": { "type": "string" },
+        "publicKey": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "prevHash": { "type": "string" },
+        "entryHash": { "type": "string" },
+        "serverKid": { "type": "string" },
+        "serverSignature": { "type": "string" }
+      },
+      "required": ["index", "type", "kid", "userId", "publicKey", "timestamp", "prevHash", "entryHash", "serverKid", "serverSignature"]
+    },
+    "ProvenanceQuarantine": {
+      "title": "ProvenanceQuarantine",
+      "description": "Metadata-only provenance quarantine record for rejected/tampered envelopes (never stores plaintext or secrets).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "verificationResult": { "type": "string" },
+        "reason": { "type": "string" }
+      },
+      "required": ["id", "timestamp", "verificationResult", "reason"]
+    },
+    "UserPriorityModel": {
+      "title": "UserPriorityModel",
+      "description": "Per-user Dynamic Sigmoid Priority logistic regression weights, thresholds, quiet hours, and urgent keywords (never stores raw message text).",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "version": { "type": "integer" },
+        "personalizationEnabled": { "type": "boolean" },
+        "feedbackCount": { "type": "integer" },
+        "bias": { "type": "number" },
+        "weights": { "type": "object" },
+        "thresholds": { "type": "object" },
+        "urgentKeywords": { "type": "array" },
+        "quietHours": { "type": "object" },
+        "sourceReliability": { "type": "object" },
+        "driftWarning": { "type": "boolean" },
+        "driftL2Distance": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "version", "personalizationEnabled", "feedbackCount", "bias", "weights", "thresholds", "driftWarning", "driftL2Distance", "createdAt", "updatedAt"]
+    },
+    "UserDedupThread": {
+      "title": "UserDedupThread",
+      "description": "Metadata-only semantic deduplication thread owned by user (STRICT ZERO-TEXT, ZERO-VECTOR).",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "threadId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "lastMemberAt": { "type": "string", "format": "date-time" },
+        "memberCount": { "type": "integer" },
+        "memberIds": { "type": "array" },
+        "sourceId": { "type": "string", "maxLength": 64 },
+        "senderId": { "type": "string", "maxLength": 128 },
+        "category": { "type": "string", "maxLength": 32 },
+        "topPriority": { "type": "string", "enum": ["LOW", "MEDIUM", "NORMAL", "HIGH", "CRITICAL"] },
+        "lowestTrust": { "type": "string", "enum": ["VERIFIED", "GATEWAY_ATTESTED", "UNVERIFIED"] },
+        "status": { "type": "string", "enum": ["ACTIVE", "RESOLVED", "MUTED"] },
+        "stageMatched": { "type": "string", "enum": ["EXACT", "MINHASH", "SEMANTIC_ONNX", "TFIDF_FALLBACK", "NONE"] },
+        "lastSimilarity": { "type": "number" },
+        "containsEphemeral": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "threadId", "lastMemberAt", "memberCount", "memberIds", "sourceId", "senderId", "category", "topPriority", "lowestTrust", "status", "stageMatched", "lastSimilarity", "createdAt", "updatedAt"]
+    },
+    "UserDedupSettings": {
+      "title": "UserDedupSettings",
+      "description": "Per-user semantic deduplication thresholds and preferences (never stores message text or vectors).",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "dedupEnabled": { "type": "boolean" },
+        "mergeThreshold": { "type": "number" },
+        "reviewThreshold": { "type": "number" },
+        "effectiveMergeThreshold": { "type": "number" },
+        "windowMinutes": { "type": "integer" },
+        "neverMergeCategories": { "type": "array" },
+        "feedbackCount": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "dedupEnabled", "mergeThreshold", "reviewThreshold", "effectiveMergeThreshold", "windowMinutes", "neverMergeCategories", "feedbackCount", "createdAt", "updatedAt"]
+    },
+    "UserKeyBackup": {
+      "title": "UserKeyBackup",
+      "description": "PBKDF2 + AES-256-GCM encrypted user private key backup plus public verification keys (never contains plaintext private keys or passphrase).",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "v": { "type": "integer" },
+        "kdf": { "type": "string", "enum": ["PBKDF2-HMAC-SHA256"] },
+        "iterations": { "type": "integer" },
+        "cipher": { "type": "string", "enum": ["AES-256-GCM"] },
+        "salt": { "type": "string" },
+        "iv": { "type": "string" },
+        "encryptedPrivateKeysBundle": { "type": "string" },
+        "ed25519PublicKey": { "type": "string" },
+        "ed25519Kid": { "type": "string" },
+        "fingerprintHex": { "type": "string" },
+        "fingerprintWords": { "type": "array" },
+        "ecdhPublicJwkJson": { "type": "string" },
+        "ecdsaPublicJwkJson": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "v", "kdf", "iterations", "cipher", "salt", "iv", "encryptedPrivateKeysBundle", "ed25519PublicKey", "ed25519Kid", "ecdhPublicJwkJson", "ecdsaPublicJwkJson", "createdAt", "updatedAt"]
+    },
+    "LoginAudit": {
+      "title": "LoginAudit",
+      "description": "Per-user sign-in audit entry recording coarse device type, hashed IP prefix, and new-device flag.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "timestamp": { "type": "string" },
+        "deviceType": { "type": "string" },
+        "browserSummary": { "type": "string" },
+        "ipPrefixHash": { "type": "string" },
+        "deviceIdHash": { "type": "string" },
+        "method": { "type": "string" },
+        "isNewDevice": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "timestamp", "deviceType", "browserSummary", "ipPrefixHash", "deviceIdHash", "method", "isNewDevice", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserAuthProfile"
+      },
+      "description": "Private user authentication profile isolated per authenticated UID."
+    },
+    "/users/{userId}/preferences/{prefId}": {
+      "schema": {
+        "$ref": "#/entities/UserPreferences"
+      },
+      "description": "Per-user notification & alert filtering preferences."
+    },
+    "/users/{userId}/consents/{consentId}": {
+      "schema": {
+        "$ref": "#/entities/UserConsentRecord"
+      },
+      "description": "Explicit user consent records for App Catalog, encrypted storage, and notification permissions."
+    },
+    "/users/{userId}/appCatalogStates/{appId}": {
+      "schema": {
+        "$ref": "#/entities/UserAppDetectionState"
+      },
+      "description": "Per-user catalog app detection status and manual deep-link confirmations."
+    },
+    "/users/{userId}/chatThreads/{threadId}": {
+      "schema": {
+        "$ref": "#/entities/ChatThread"
+      },
+      "description": "Per-user Gemini AI chatbot conversation threads."
+    },
+    "/users/{userId}/chatThreads/{threadId}/messages/{messageId}": {
+      "schema": {
+        "$ref": "#/entities/ChatMessage"
+      },
+      "description": "Messages belonging to a user's Gemini AI chatbot thread."
+    },
+    "/users/{userId}/deliveryJobs/{jobId}": {
+      "schema": {
+        "$ref": "#/entities/DeliveryJob"
+      },
+      "description": "Durable state-machine delivery jobs owned by the user."
+    },
+    "/users/{userId}/priorityModel/{modelId}": {
+      "schema": {
+        "$ref": "#/entities/UserPriorityModel"
+      },
+      "description": "Per-user Dynamic Sigmoid Priority weights and preferences (no message plaintext)."
+    },
+    "/users/{userId}/threads/{threadId}": {
+      "schema": {
+        "$ref": "#/entities/UserDedupThread"
+      },
+      "description": "Metadata-only semantic deduplication threads owned by user (zero plaintext, zero vectors)."
+    },
+    "/users/{userId}/dedupSettings/{settingId}": {
+      "schema": {
+        "$ref": "#/entities/UserDedupSettings"
+      },
+      "description": "Per-user semantic deduplication threshold and exclusion settings."
+    },
+    "/users/{userId}/keyBackups/{backupId}": {
+      "schema": {
+        "$ref": "#/entities/UserKeyBackup"
+      },
+      "description": "PBKDF2-encrypted key backup owned strictly by the user."
+    },
+    "/users/{userId}/loginAudits/{auditId}": {
+      "schema": {
+        "$ref": "#/entities/LoginAudit"
+      },
+      "description": "Per-user sign-in audit records."
+    },
+    "/ephemeralMessages/{messageId}": {
+      "schema": {
+        "$ref": "#/entities/EphemeralMessage"
+      },
+      "description": "Isolated collection for active ephemeral encrypted messages (no client updates/deletes; reads allowed only before expiresAt)."
+    },
+    "/ephemeralKeys/{keyId}": {
+      "schema": {
+        "$ref": "#/entities/EphemeralKey"
+      },
+      "description": "Server-only wrapped DEK store; all client reads and writes strictly denied."
+    },
+    "/ephemeralTombstones/{tombstoneId}": {
+      "schema": {
+        "$ref": "#/entities/EphemeralTombstone"
+      },
+      "description": "Server-only metadata tombstones recorded after crypto-shredding."
+    },
+    "/provenanceKeys/{kid}": {
+      "schema": {
+        "$ref": "#/entities/ProvenanceKey"
+      },
+      "description": "Public Ed25519 signing keys readable by authenticated clients; server controls rotation/revocation."
+    },
+    "/keyLog/{entryId}": {
+      "schema": {
+        "$ref": "#/entities/KeyLogEntry"
+      },
+      "description": "Append-only hash-chained Key Transparency Log (public authenticated read, client writes forbidden)."
+    },
+    "/provenanceQuarantine/{qId}": {
+      "schema": {
+        "$ref": "#/entities/ProvenanceQuarantine"
+      },
+      "description": "Server-only metadata quarantine for provenance verification failures."
+    }
+  }
+}

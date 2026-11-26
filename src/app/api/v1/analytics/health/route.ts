@@ -1,6 +1,8 @@
 import { redis } from '../../../../../lib/db/redis.js';
 import { connectToDatabase } from '../../../../../lib/db/mongoose.js';
 import { getServerKeyPair } from '../../../../../lib/crypto/ed25519.js';
+import { isLiveSmtpConfigured } from '../../../../../lib/integrations/emailService.js';
+import { isWhatsappConfigured } from '../../../../../lib/delivery/channels/whatsappAdapter.js';
 
 export async function GET() {
   const startTime = Date.now();
@@ -77,6 +79,8 @@ export async function GET() {
       connectionEncryptionKeySet,
       deliveryAckSecretSet,
       gatewayIpSaltSet,
+      emailSmtpConfigured: isLiveSmtpConfigured(),
+      whatsappConfigured: isWhatsappConfigured(),
       allCryptoEnvConfigured:
         provenanceServerSigningKeySet &&
         aegisKeypairConfigured &&

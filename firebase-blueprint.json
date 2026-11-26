@@ -141,7 +141,7 @@
         },
         "preferredChannel": {
           "type": "string",
-          "enum": ["WEBSOCKET", "EMAIL", "SMS", "WEBPUSH"],
+          "enum": ["WEBSOCKET", "EMAIL", "SMS", "WEBPUSH", "WHATSAPP"],
           "description": "Preferred alert delivery channel."
         },
         "minPriorityThreshold": {
@@ -161,6 +161,10 @@
           "type": "boolean",
           "description": "Whether user opted out of push delivery channel."
         },
+        "optOutWhatsapp": {
+          "type": "boolean",
+          "description": "Whether user opted out of WhatsApp Business delivery channel."
+        },
         "optOutSms": {
           "type": "boolean",
           "description": "Whether user opted out of SMS delivery channel."
@@ -168,6 +172,12 @@
         "optOutEmail": {
           "type": "boolean",
           "description": "Whether user opted out of email delivery channel."
+        },
+        "whatsappPhone": {
+          "type": "string",
+          "maxLength": 16,
+          "pattern": "^(|\\+[1-9][0-9]{6,14})$",
+          "description": "Optional recipient WhatsApp Business phone in E.164 format."
         },
         "createdAt": {
           "type": "string",
@@ -401,7 +411,7 @@
         },
         "channel": {
           "type": "string",
-          "enum": ["push", "sms", "email", "in_app", "none"]
+          "enum": ["push", "whatsapp", "sms", "email", "in_app", "none"]
         },
         "attempt": {
           "type": "integer",

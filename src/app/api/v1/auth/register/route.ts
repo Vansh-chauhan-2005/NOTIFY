@@ -12,7 +12,7 @@ const RegisterSchema = z.object({
       dndEnabled: z.boolean().optional(),
       quietHoursStart: z.string().optional(),
       quietHoursEnd: z.string().optional(),
-      preferredChannel: z.enum(['WEBSOCKET', 'WEBPUSH', 'EMAIL']).optional(),
+      preferredChannel: z.enum(['WEBSOCKET', 'WEBPUSH', 'EMAIL', 'SMS', 'WHATSAPP']).optional(),
     })
     .optional(),
 });

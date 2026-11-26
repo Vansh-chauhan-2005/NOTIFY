@@ -1,13 +1,15 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export type UserRole = 'ADMIN' | 'SERVICE' | 'USER';
-export type PreferredChannel = 'WEBSOCKET' | 'WEBPUSH' | 'EMAIL';
+export type PreferredChannel = 'WEBSOCKET' | 'WEBPUSH' | 'EMAIL' | 'SMS' | 'WHATSAPP';
 
 export interface IUserPreferences {
   dndEnabled: boolean;
   quietHoursStart: string; // "HH:mm"
   quietHoursEnd: string;   // "HH:mm"
   preferredChannel: PreferredChannel;
+  whatsappPhone?: string;
+  optOutWhatsapp?: boolean;
 }
 
 export interface IUser extends Document {
@@ -27,9 +29,11 @@ export const UserPreferencesSchema = new Schema<IUserPreferences>(
     quietHoursEnd: { type: String, default: '07:00' },
     preferredChannel: {
       type: String,
-      enum: ['WEBSOCKET', 'WEBPUSH', 'EMAIL'],
+      enum: ['WEBSOCKET', 'WEBPUSH', 'EMAIL', 'SMS', 'WHATSAPP'],
       default: 'WEBSOCKET',
     },
+    whatsappPhone: { type: String, default: '' },
+    optOutWhatsapp: { type: Boolean, default: false },
   },
   { _id: false }
 );

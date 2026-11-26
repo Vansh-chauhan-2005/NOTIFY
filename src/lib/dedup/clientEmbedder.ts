@@ -215,6 +215,7 @@ function ensureWorker(): Worker | null {
     };
 
     workerInstance.onerror = (err) => {
+      err?.preventDefault?.();
       state = {
         ...state,
         status: 'lightweight_fallback',

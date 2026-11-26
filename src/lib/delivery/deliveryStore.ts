@@ -189,8 +189,11 @@ export interface CreateDeliveryJobInput {
   userId: string;
   priority?: string;
   idempotencyKey?: string;
+  title?: string;
+  sourceApp?: string;
   recipientEmail?: string;
   recipientPhone?: string;
+  recipientWhatsappPhone?: string;
   userPreferences?: DeliveryUserPreferences | null;
   baseUrl?: string;
   isDemoJob?: boolean;
@@ -275,8 +278,11 @@ export async function createDeliveryJob(input: CreateDeliveryJobInput): Promise<
         },
       ],
       idempotencyKey,
+      ...(!input.isEphemeral && input.title ? { title: String(input.title).slice(0, 180) } : {}),
+      ...(!input.isEphemeral && input.sourceApp ? { sourceApp: String(input.sourceApp).slice(0, 64) } : {}),
       ...(input.recipientEmail ? { recipientEmail: input.recipientEmail } : {}),
       ...(input.recipientPhone ? { recipientPhone: input.recipientPhone } : {}),
+      ...(input.recipientWhatsappPhone ? { recipientWhatsappPhone: input.recipientWhatsappPhone } : {}),
       ...(input.baseUrl ? { baseUrl: input.baseUrl } : {}),
       ...(input.isDemoJob ? { isDemoJob: true } : {}),
       ...(input.demoFaults ? { demoFaults: input.demoFaults } : {}),
@@ -704,6 +710,7 @@ export async function getDeliveryStats(options: {
 
   const perChannelStats: Record<BreakerChannel, { attempts: number; successes: number; failures: number }> = {
     push: { attempts: 0, successes: 0, failures: 0 },
+    whatsapp: { attempts: 0, successes: 0, failures: 0 },
     sms: { attempts: 0, successes: 0, failures: 0 },
     email: { attempts: 0, successes: 0, failures: 0 },
   };
@@ -726,7 +733,7 @@ export async function getDeliveryStats(options: {
         jobHadFallback = true;
       }
       const ch = h.channel as BreakerChannel;
-      if (ch === 'push' || ch === 'sms' || ch === 'email') {
+      if (ch === 'push' || ch === 'whatsapp' || ch === 'sms' || ch === 'email') {
         if (h.event === 'SEND_OK' || (h.event === 'ACK_RECEIVED' && h.from === 'AWAITING_ACK')) {
           if (h.event === 'SEND_OK') {
             perChannelStats[ch].attempts += 1;
@@ -747,7 +754,7 @@ export async function getDeliveryStats(options: {
   const breakers = getAllBreakerStatuses('live');
   const breakerMap = new Map(breakers.map((b) => [b.channel, b]));
 
-  const channelMetrics = (['push', 'sms', 'email'] as BreakerChannel[]).map((ch) => {
+  const channelMetrics = (['push', 'whatsapp', 'sms', 'email'] as BreakerChannel[]).map((ch) => {
     const raw = perChannelStats[ch];
     const br = breakerMap.get(ch);
     const successRatePercent =

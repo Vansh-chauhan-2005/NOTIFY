@@ -197,8 +197,10 @@ service cloud.firestore {
           'audioAlertsEnabled',
           'allowCriticalBypassQuietHours',
           'optOutPush',
+          'optOutWhatsapp',
           'optOutSms',
           'optOutEmail',
+          'whatsappPhone',
           'createdAt',
           'updatedAt'
         ])
@@ -214,13 +216,15 @@ service cloud.firestore {
         && data.quietHoursEnd is string
         && data.quietHoursEnd.size() == 5
         && data.quietHoursEnd.matches('^([01]\\d|2[0-3]):[0-5]\\d$')
-        && data.preferredChannel in ['WEBSOCKET', 'EMAIL', 'SMS', 'WEBPUSH']
+        && data.preferredChannel in ['WEBSOCKET', 'EMAIL', 'SMS', 'WEBPUSH', 'WHATSAPP']
         && data.minPriorityThreshold in ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']
         && data.audioAlertsEnabled is bool
         && (!('allowCriticalBypassQuietHours' in data) || data.allowCriticalBypassQuietHours is bool)
         && (!('optOutPush' in data) || data.optOutPush is bool)
+        && (!('optOutWhatsapp' in data) || data.optOutWhatsapp is bool)
         && (!('optOutSms' in data) || data.optOutSms is bool)
         && (!('optOutEmail' in data) || data.optOutEmail is bool)
+        && (!('whatsappPhone' in data) || data.whatsappPhone == '' || (data.whatsappPhone is string && data.whatsappPhone.size() >= 8 && data.whatsappPhone.size() <= 16 && data.whatsappPhone.matches('^\\+[1-9][0-9]{6,14}$')))
         && data.createdAt is timestamp
         && data.updatedAt is timestamp;
     }
@@ -405,7 +409,7 @@ service cloud.firestore {
           'CANCELLED',
           'EXPIRED'
         ]
-        && data.channel in ['push', 'sms', 'email', 'in_app', 'none']
+        && data.channel in ['push', 'whatsapp', 'sms', 'email', 'in_app', 'none']
         && data.attempt is int
         && data.attempt >= 0
         && data.attempt <= 20
@@ -829,8 +833,10 @@ service cloud.firestore {
             'audioAlertsEnabled',
             'allowCriticalBypassQuietHours',
             'optOutPush',
+            'optOutWhatsapp',
             'optOutSms',
             'optOutEmail',
+            'whatsappPhone',
             'updatedAt'
           ])
           && hasUserProfile(userId);

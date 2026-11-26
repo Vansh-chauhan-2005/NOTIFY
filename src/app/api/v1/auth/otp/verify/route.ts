@@ -6,7 +6,7 @@ import {
 import { inMemoryUsers, IUser } from '../../../../../../models/User.js';
 import { logSecurityEvent, extractRequestContext } from '../../../../../../lib/telemetry/securityLogger.js';
 
-const DEFAULT_ADMIN_EMAIL = (process.env.DEFAULT_ADMIN_EMAIL || 'rajputvanshc@gmail.com').toLowerCase();
+const DEFAULT_ADMIN_EMAIL = (process.env.DEFAULT_ADMIN_EMAIL || '').trim().toLowerCase();
 
 const FirebaseVerifySchema = z.object({
   firebaseIdToken: z.string().min(20, 'Invalid Firebase ID token'),
@@ -29,7 +29,7 @@ function extractAuditContext(request: Request) {
 
 function resolveOtpUserRole(destination: string): 'ADMIN' | 'USER' {
   const normalized = String(destination || '').trim().toLowerCase();
-  if (normalized && normalized === DEFAULT_ADMIN_EMAIL) {
+  if (DEFAULT_ADMIN_EMAIL && normalized && normalized === DEFAULT_ADMIN_EMAIL) {
     return 'ADMIN';
   }
   const existing = inMemoryUsers.get(normalized);

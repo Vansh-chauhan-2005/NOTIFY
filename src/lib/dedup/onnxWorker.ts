@@ -91,6 +91,8 @@ async function ensureModelLoaded(modelId: string, preferWebGpu = false): Promise
           });
         },
       });
+      // Prevent late rejection noise if timeoutPromise resolves first
+      void loadTask.catch(() => {});
 
       // Protect against silent network hang in offline/firewalled sandboxes
       const timeoutPromise = new Promise<null>((resolve) => {

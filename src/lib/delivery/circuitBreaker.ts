@@ -1,6 +1,6 @@
 import { logSecurityEvent } from '../telemetry/securityLogger.js';
 
-export type BreakerChannel = 'push' | 'sms' | 'email';
+export type BreakerChannel = 'push' | 'whatsapp' | 'sms' | 'email';
 export type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN';
 
 export interface ChannelBreakerStatus {
@@ -36,7 +36,7 @@ function getBreakerMap(namespace: 'live' | 'sim' = 'live'): Map<BreakerChannel, 
 function createInitialMap(): Map<BreakerChannel, ChannelBreakerStatus> {
   const map = new Map<BreakerChannel, ChannelBreakerStatus>();
   const nowIso = new Date().toISOString();
-  for (const ch of ['push', 'sms', 'email'] as BreakerChannel[]) {
+  for (const ch of ['push', 'whatsapp', 'sms', 'email'] as BreakerChannel[]) {
     map.set(ch, {
       channel: ch,
       state: 'CLOSED',
@@ -123,7 +123,7 @@ export function getAllBreakerStatuses(
   now: number = Date.now()
 ): ChannelBreakerStatus[] {
   const map = getBreakerMap(namespace);
-  return (['push', 'sms', 'email'] as BreakerChannel[]).map((ch) => {
+  return (['push', 'whatsapp', 'sms', 'email'] as BreakerChannel[]).map((ch) => {
     const entry = map.get(ch)!;
     if (entry.state === 'OPEN' && entry.openedUntil && now >= entry.openedUntil) {
       entry.state = 'HALF_OPEN';
@@ -138,7 +138,7 @@ export function resetBreaker(
   namespace: 'live' | 'sim' = 'live'
 ): void {
   const map = getBreakerMap(namespace);
-  const targets = channel ? [channel] : (['push', 'sms', 'email'] as BreakerChannel[]);
+  const targets = channel ? [channel] : (['push', 'whatsapp', 'sms', 'email'] as BreakerChannel[]);
   const nowIso = new Date().toISOString();
   for (const ch of targets) {
     map.set(ch, {

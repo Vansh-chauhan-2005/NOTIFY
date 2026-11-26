@@ -22,6 +22,8 @@ import {
   sanitizeNotificationText,
   classifyIngestedPriority,
   incrementConnectionReceived,
+  deriveWhatsappVerifyToken,
+  timingSafeHexOrStringEqual,
   MAX_INGEST_PAYLOAD_BYTES,
 } from '../../../../../lib/integrations/connectionsStore.js';
 import {
@@ -35,10 +37,67 @@ import {
 } from '../../../../../lib/priority/store.js';
 import { createServerAttestedEnvelope } from '../../../../../lib/provenance/serverCrypto.js';
 
+function stripHtmlTags(html: string): string {
+  return String(html || '')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function extractNormalizedContent(
   parsedBody: Record<string, any>,
   appName: string
-): { title: string; rawText: string; eventType: string; priorityHint?: string } {
+): {
+  title: string;
+  rawText: string;
+  eventType: string;
+  priorityHint?: string;
+  ignoredStatusOnly?: boolean;
+} {
+  // Meta WhatsApp Business Cloud API Webhook shape
+  if (
+    parsedBody.object === 'whatsapp_business_account' ||
+    (Array.isArray(parsedBody.entry) && parsedBody.entry[0]?.changes?.[0]?.value)
+  ) {
+    const value = parsedBody.entry?.[0]?.changes?.[0]?.value || {};
+    const messages = Array.isArray(value.messages) ? value.messages : [];
+    if (messages.length > 0) {
+      const msg = messages[0] || {};
+      const sender = sanitizeNotificationText(
+        value.contacts?.[0]?.profile?.name || msg.from || 'WhatsApp Contact',
+        60
+      );
+      const bodyText = sanitizeNotificationText(
+        msg.text?.body ||
+          msg.button?.text ||
+          msg.interactive?.button_reply?.title ||
+          msg.interactive?.list_reply?.title ||
+          msg.image?.caption ||
+          msg.document?.caption ||
+          msg.video?.caption ||
+          'WhatsApp Business message',
+        420
+      );
+      return {
+        title: `${appName} · ${sender}`,
+        rawText: bodyText,
+        eventType: 'WHATSAPP_CLOUD_MESSAGE',
+        priorityHint: parsedBody.priority ? String(parsedBody.priority) : undefined,
+      };
+    }
+
+    if (Array.isArray(value.statuses) && value.statuses.length > 0) {
+      return {
+        title: `${appName} · Delivery Status`,
+        rawText: '',
+        eventType: 'WHATSAPP_STATUS_UPDATE',
+        ignoredStatusOnly: true,
+      };
+    }
+  }
+
   // Telegram Bot API Update shape
   if (parsedBody.message && typeof parsedBody.message === 'object') {
     const msg = parsedBody.message;
@@ -71,6 +130,35 @@ function extractNormalizedContent(
     };
   }
 
+  // Inbound Email forwarding shape (Mailgun / SendGrid / Gmail Apps Script / Zapier)
+  if (
+    parsedBody.subject ||
+    parsedBody['body-plain'] ||
+    parsedBody.html ||
+    parsedBody.snippet ||
+    (parsedBody.from && (parsedBody.text || parsedBody.body))
+  ) {
+    const sender = sanitizeNotificationText(String(parsedBody.from || ''), 60);
+    const subject = sanitizeNotificationText(String(parsedBody.subject || `${appName} Email`), 110);
+    const emailBody =
+      parsedBody.rawText ||
+      parsedBody['body-plain'] ||
+      parsedBody.text ||
+      parsedBody.snippet ||
+      parsedBody.body ||
+      (parsedBody.html ? stripHtmlTags(String(parsedBody.html)) : '');
+    const rawText = sanitizeNotificationText(emailBody, 480);
+    return {
+      title: sender ? `${subject} (${sender})` : subject,
+      rawText,
+      eventType: sanitizeNotificationText(
+        String(parsedBody.eventType || 'INBOUND_EMAIL_ALERT'),
+        64
+      ).replace(/\s+/g, '_'),
+      priorityHint: parsedBody.priority ? String(parsedBody.priority) : undefined,
+    };
+  }
+
   // Standard Aegis Ingest shape
   const title = sanitizeNotificationText(
     parsedBody.title || parsedBody.subject || `${appName} Alert`,
@@ -95,6 +183,80 @@ function extractNormalizedContent(
     eventType: eventType || 'APP_INGEST_EVENT',
     priorityHint: parsedBody.priority ? String(parsedBody.priority) : undefined,
   };
+}
+
+export async function GET(
+  request: Request,
+  context?: { params?: Promise<{ connectionId?: string }> | { connectionId?: string } }
+) {
+  try {
+    const resolvedParams =
+      context?.params && 'then' in (context.params as any)
+        ? await (context.params as Promise<{ connectionId?: string }>)
+        : ((context?.params || {}) as { connectionId?: string });
+
+    let connectionId = resolvedParams?.connectionId?.trim();
+    const url = new URL(request.url);
+    if (!connectionId) {
+      const pathParts = url.pathname.split('/').filter(Boolean);
+      connectionId = pathParts[pathParts.length - 1];
+    }
+
+    if (!connectionId) {
+      return Response.json({ success: false, message: 'Missing connectionId parameter.' }, { status: 400 });
+    }
+
+    const connection = getConnectionById(connectionId);
+    if (!connection || !connection.enabled) {
+      return Response.json({ success: false, message: 'Unknown or disabled connection.' }, { status: 404 });
+    }
+
+    const mode = url.searchParams.get('hub.mode');
+    const verifyToken = url.searchParams.get('hub.verify_token') || '';
+    const challenge = url.searchParams.get('hub.challenge') || '';
+
+    if (mode !== 'subscribe' || !verifyToken || !challenge) {
+      return Response.json(
+        { success: false, message: 'Invalid webhook verification challenge parameters.' },
+        { status: 400 }
+      );
+    }
+
+    let signingSecret = '';
+    try {
+      signingSecret = decryptSecret(connection.encryptedSecret);
+    } catch {
+      return Response.json(
+        { success: false, message: 'Connection verification secret unavailable.' },
+        { status: 500 }
+      );
+    }
+
+    const envVerifyToken = process.env.WHATSAPP_VERIFY_TOKEN?.trim() || '';
+    const derivedToken = deriveWhatsappVerifyToken(signingSecret);
+
+    const matchedEnv = envVerifyToken
+      ? timingSafeHexOrStringEqual(envVerifyToken, verifyToken)
+      : false;
+    const matchedSecret = signingSecret
+      ? timingSafeHexOrStringEqual(signingSecret, verifyToken)
+      : false;
+    const matchedDerived = timingSafeHexOrStringEqual(derivedToken, verifyToken);
+
+    if (!matchedEnv && !matchedSecret && !matchedDerived) {
+      return Response.json({ success: false, message: 'Webhook verify token mismatch.' }, { status: 403 });
+    }
+
+    return new Response(challenge, {
+      status: 200,
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+    });
+  } catch (err: any) {
+    return Response.json(
+      { success: false, message: err?.message || 'Failed to verify webhook challenge.' },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(
@@ -367,6 +529,17 @@ export async function POST(
     }
 
     const normalized = extractNormalizedContent(parsedBody, connection.appName);
+    if (normalized.ignoredStatusOnly) {
+      return Response.json(
+        {
+          success: true,
+          ignored: true,
+          message: 'WhatsApp delivery status webhook acknowledged.',
+        },
+        { status: 200 }
+      );
+    }
+
     if (!normalized.rawText) {
       logSecurityEvent({
         eventType: 'INGEST_REJECTED',

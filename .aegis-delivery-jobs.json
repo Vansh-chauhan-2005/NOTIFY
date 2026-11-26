@@ -1,13 +1,14 @@
 [
   {
-    "id": "dlv_mwx5chmn_c018420f",
-    "notificationId": "sim_dlv_1795673009470",
-    "userId": "sim_dedup_1795673009459",
+    "id": "dlv_mwx6ooe6_1f04d541",
+    "notificationId": "sim_dlv_1795675257726",
+    "userId": "sim_dedup_1795675257674",
     "priority": "HIGH",
     "state": "QUEUED",
     "channel": "push",
     "channelChain": [
       "push",
+      "whatsapp",
       "email"
     ],
     "channelIndex": 0,
@@ -15,7 +16,52 @@
     "requiresAck": true,
     "ackTimeoutMs": 120000,
     "maxRetriesPerChannel": 1,
-    "nextAttemptAt": "2026-11-26T06:03:29.470Z",
+    "nextAttemptAt": "2026-11-26T06:40:57.726Z",
+    "expiresAt": "2026-11-26T07:40:57.726Z",
+    "history": [
+      {
+        "timestamp": "2026-11-26T06:40:57.726Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> whatsapp -> email"
+      },
+      {
+        "timestamp": "2026-11-26T06:40:57.728Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795675257728 merged into thr_sim_dlv_1795675257726, 94% sim)"
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795675257674:sim_dlv_1795675257726",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-26T06:40:57.726Z",
+    "updatedAt": "2026-11-26T06:40:57.728Z"
+  },
+  {
+    "id": "dlv_mwx5chmn_c018420f",
+    "notificationId": "sim_dlv_1795673009470",
+    "userId": "sim_dedup_1795673009459",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-26T06:28:57.047Z",
     "expiresAt": "2026-11-26T07:03:29.470Z",
     "history": [
       {
@@ -33,6 +79,54 @@
         "to": "QUEUED",
         "channel": "push",
         "result": "duplicate suppressed (sim_dlv_dup_1795673009473 merged into thr_sim_dlv_1795673009470, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-26T06:24:57.023Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-26T06:24:57.026Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-26T06:26:57.047Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push timed out after 2m -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-26T06:26:57.050Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Fallback attempt #1 initiated on email."
+      },
+      {
+        "timestamp": "2026-11-26T06:26:57.054Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-26T06:28:57.068Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2m with no remaining fallback channels."
       }
     ],
     "idempotencyKey": "notif:sim_dedup_1795673009459:sim_dlv_1795673009470",
@@ -42,7 +136,7 @@
     "acknowledgedAt": null,
     "acknowledgedVia": null,
     "createdAt": "2026-11-26T06:03:29.470Z",
-    "updatedAt": "2026-11-26T06:03:29.473Z"
+    "updatedAt": "2026-11-26T06:28:57.068Z"
   },
   {
     "id": "dlv_mwx3x0iy_9e39e506",

@@ -83,7 +83,7 @@ export interface DeliveryStatsData {
   averageTimeToAckMs: number;
   fallbackRatePercent: number;
   channelMetrics: Array<{
-    channel: 'push' | 'sms' | 'email';
+    channel: 'push' | 'whatsapp' | 'sms' | 'email';
     attempts: number;
     successes: number;
     failures: number;
@@ -92,7 +92,7 @@ export interface DeliveryStatsData {
     consecutiveFailures: number;
   }>;
   circuitBreakers: Array<{
-    channel: 'push' | 'sms' | 'email';
+    channel: 'push' | 'whatsapp' | 'sms' | 'email';
     state: 'CLOSED' | 'OPEN' | 'HALF_OPEN';
     consecutiveFailures: number;
     failureThreshold: number;
@@ -573,6 +573,7 @@ export default function DeliveryPipelineTab({ isAdmin, userId }: DeliveryPipelin
 
   const channelChartData = stats?.channelMetrics || [
     { channel: 'push', attempts: 0, successes: 0, failures: 0, successRatePercent: 100 },
+    { channel: 'whatsapp', attempts: 0, successes: 0, failures: 0, successRatePercent: 100 },
     { channel: 'sms', attempts: 0, successes: 0, failures: 0, successRatePercent: 100 },
     { channel: 'email', attempts: 0, successes: 0, failures: 0, successRatePercent: 100 },
   ];
@@ -593,7 +594,7 @@ export default function DeliveryPipelineTab({ isAdmin, userId }: DeliveryPipelin
             </h3>
           </div>
           <p className="text-xs text-[#6F6C7A]">
-            Push → SMS → Email fallback state machine · Privacy-safe alerts (no plaintext in SMS/Email)
+            Push → WhatsApp → SMS → Email fallback state machine · Zero plaintext on ephemeral alerts
           </p>
         </div>
 
@@ -808,7 +809,7 @@ export default function DeliveryPipelineTab({ isAdmin, userId }: DeliveryPipelin
                     Channel Success Rate (%)
                   </h4>
                   <p className="text-[11px] text-[#6F6C7A]">
-                    Live attempt outcome distribution across Push, SMS, and Email adapters
+                    Live attempt outcome distribution across Push, WhatsApp, SMS, and Email adapters
                   </p>
                 </div>
               </div>
@@ -848,6 +849,8 @@ export default function DeliveryPipelineTab({ isAdmin, userId }: DeliveryPipelin
                           fill={
                             entry.channel === 'push'
                               ? '#16161D'
+                              : entry.channel === 'whatsapp'
+                              ? '#25D366'
                               : entry.channel === 'sms'
                               ? '#D9468F'
                               : '#464451'
@@ -1291,6 +1294,10 @@ export default function DeliveryPipelineTab({ isAdmin, userId }: DeliveryPipelin
                         {
                           label: 'Force Push Fail',
                           faults: { forcePushFail: true },
+                        },
+                        {
+                          label: 'Force WhatsApp Fail',
+                          faults: { forceWhatsappFail: true },
                         },
                         {
                           label: 'Force SMS Fail',

@@ -4,7 +4,7 @@
  * and strict terminal-state rejection.
  */
 
-export type DeliveryChannel = 'push' | 'sms' | 'email' | 'in_app' | 'none';
+export type DeliveryChannel = 'push' | 'whatsapp' | 'sms' | 'email' | 'in_app' | 'none';
 
 export type DeliveryStateName =
   | 'QUEUED'

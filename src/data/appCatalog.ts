@@ -10,6 +10,7 @@ export type AppCategory =
 
 export type AppConnectionType =
   | 'webhook'
+  | 'whatsapp'
   | 'telegram'
   | 'discord'
   | 'slack'
@@ -76,8 +77,8 @@ export const APP_CATALOG: CatalogApp[] = [
     letterFallback: 'W',
     deepLink: 'whatsapp://send',
     webUrl: 'https://web.whatsapp.com',
-    connectionType: 'launch-only',
-    description: 'Open WhatsApp directly or run simulated alert tests into your inbox.',
+    connectionType: 'whatsapp',
+    description: 'Connect Meta WhatsApp Business Cloud API webhooks or dispatch verified WhatsApp fallback alerts.',
   },
   {
     id: 'telegram',
@@ -114,6 +115,18 @@ export const APP_CATALOG: CatalogApp[] = [
     webUrl: 'https://mail.google.com',
     connectionType: 'manual',
     description: 'Open Gmail on web/app and test inbox notification routing manually.',
+  },
+  {
+    id: 'email-alerts',
+    name: 'Email / Gmail Alerts',
+    category: 'Email',
+    brandColor: '#D9468F',
+    icon: 'SiGmail',
+    letterFallback: 'EM',
+    deepLink: 'googlegmail://',
+    webUrl: 'https://mail.google.com',
+    connectionType: 'webhook',
+    description: 'Forward Gmail Apps Script, Zapier, Mailgun, or SendGrid inbound emails over a signed Aegis webhook.',
   },
   {
     id: 'outlook',

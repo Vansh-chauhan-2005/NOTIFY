@@ -345,13 +345,15 @@ export interface PersistedUserPreferences {
   dndEnabled: boolean;
   quietHoursStart: string;
   quietHoursEnd: string;
-  preferredChannel: 'WEBSOCKET' | 'EMAIL' | 'SMS' | 'WEBPUSH';
+  preferredChannel: 'WEBSOCKET' | 'EMAIL' | 'SMS' | 'WEBPUSH' | 'WHATSAPP';
   minPriorityThreshold: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   audioAlertsEnabled: boolean;
   allowCriticalBypassQuietHours?: boolean;
   optOutPush?: boolean;
+  optOutWhatsapp?: boolean;
   optOutSms?: boolean;
   optOutEmail?: boolean;
+  whatsappPhone?: string;
 }
 
 const DEFAULT_PREFERENCES: PersistedUserPreferences = {
@@ -363,12 +365,20 @@ const DEFAULT_PREFERENCES: PersistedUserPreferences = {
   audioAlertsEnabled: true,
   allowCriticalBypassQuietHours: true,
   optOutPush: false,
+  optOutWhatsapp: false,
   optOutSms: false,
   optOutEmail: false,
+  whatsappPhone: '',
 };
 
 function sanitizeTimeHHMM(val: string, fallback: string): string {
   return /^([01]\d|2[0-3]):[0-5]\d$/.test(val) ? val : fallback;
+}
+
+function sanitizeWhatsappPhoneE164(val: unknown): string {
+  const clean = String(val || '').trim();
+  if (!clean) return '';
+  return /^\+[1-9][0-9]{6,14}$/.test(clean) ? clean : '';
 }
 
 export async function loadUserPreferencesFromFirestore(
@@ -384,7 +394,7 @@ export async function loadUserPreferencesFromFirestore(
       dndEnabled: Boolean(data.dndEnabled),
       quietHoursStart: sanitizeTimeHHMM(String(data.quietHoursStart || ''), '22:00'),
       quietHoursEnd: sanitizeTimeHHMM(String(data.quietHoursEnd || ''), '07:00'),
-      preferredChannel: ['WEBSOCKET', 'EMAIL', 'SMS', 'WEBPUSH'].includes(data.preferredChannel)
+      preferredChannel: ['WEBSOCKET', 'EMAIL', 'SMS', 'WEBPUSH', 'WHATSAPP'].includes(data.preferredChannel)
         ? data.preferredChannel
         : 'WEBSOCKET',
       minPriorityThreshold: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].includes(data.minPriorityThreshold)
@@ -396,8 +406,10 @@ export async function loadUserPreferencesFromFirestore(
           ? data.allowCriticalBypassQuietHours
           : true,
       optOutPush: Boolean(data.optOutPush),
+      optOutWhatsapp: Boolean(data.optOutWhatsapp),
       optOutSms: Boolean(data.optOutSms),
       optOutEmail: Boolean(data.optOutEmail),
+      whatsappPhone: sanitizeWhatsappPhoneE164(data.whatsappPhone),
     };
   } catch (error) {
     handleFirestoreError(error, OperationType.GET, path);
@@ -423,7 +435,7 @@ export async function saveUserPreferencesToFirestore(
       dndEnabled: Boolean(merged.dndEnabled),
       quietHoursStart: sanitizeTimeHHMM(merged.quietHoursStart, '22:00'),
       quietHoursEnd: sanitizeTimeHHMM(merged.quietHoursEnd, '07:00'),
-      preferredChannel: (['WEBSOCKET', 'EMAIL', 'SMS', 'WEBPUSH'].includes(merged.preferredChannel)
+      preferredChannel: (['WEBSOCKET', 'EMAIL', 'SMS', 'WEBPUSH', 'WHATSAPP'].includes(merged.preferredChannel)
         ? merged.preferredChannel
         : 'WEBSOCKET') as PersistedUserPreferences['preferredChannel'],
       minPriorityThreshold: (['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].includes(merged.minPriorityThreshold)
@@ -432,8 +444,10 @@ export async function saveUserPreferencesToFirestore(
       audioAlertsEnabled: Boolean(merged.audioAlertsEnabled),
       allowCriticalBypassQuietHours: Boolean(merged.allowCriticalBypassQuietHours),
       optOutPush: Boolean(merged.optOutPush),
+      optOutWhatsapp: Boolean(merged.optOutWhatsapp),
       optOutSms: Boolean(merged.optOutSms),
       optOutEmail: Boolean(merged.optOutEmail),
+      whatsappPhone: sanitizeWhatsappPhoneE164(merged.whatsappPhone),
     };
 
     if (existingSnap && existingSnap.exists()) {

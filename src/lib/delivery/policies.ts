@@ -20,8 +20,10 @@ export interface DeliveryUserPreferences {
   dndEnabled?: boolean;
   quietHoursStart?: string;
   quietHoursEnd?: string;
+  preferredChannel?: string;
   allowCriticalBypassQuietHours?: boolean;
   optOutPush?: boolean;
+  optOutWhatsapp?: boolean;
   optOutSms?: boolean;
   optOutEmail?: boolean;
 }
@@ -40,15 +42,15 @@ export interface EffectiveDeliveryPlan {
 
 /**
  * Editable Delivery Policies by Priority.
- * - CRITICAL: push -> sms -> email, 30s ack timeout, 2 retries/channel, 2s/4s backoff + jitter
- * - HIGH: push -> email, 2 min ack timeout, 1 retry/channel
+ * - CRITICAL: push -> whatsapp -> sms -> email, 30s ack timeout, 2 retries/channel, 2s/4s backoff + jitter
+ * - HIGH: push -> whatsapp -> email, 2 min ack timeout, 1 retry/channel
  * - NORMAL: push only, then in-app inbox, no ack required
  * - LOW: in-app inbox only (batched into digest)
  */
 export const DELIVERY_POLICIES: Record<DeliveryPriority, DeliveryPolicyConfig> = {
   CRITICAL: {
     priority: 'CRITICAL',
-    channels: ['push', 'sms', 'email'],
+    channels: ['push', 'whatsapp', 'sms', 'email'],
     ackTimeoutMs: 30_000,
     maxRetriesPerChannel: 2,
     baseBackoffMs: 2_000,
@@ -57,11 +59,11 @@ export const DELIVERY_POLICIES: Record<DeliveryPriority, DeliveryPolicyConfig> =
     canBypassQuietHoursIfAllowed: true,
     digestOnly: false,
     ttlMs: 30 * 60_000,
-    description: 'Push → SMS → Email · 30s ACK timeout · 2 retries/channel · 2s/4s backoff',
+    description: 'Push → WhatsApp → SMS → Email · 30s ACK timeout · 2 retries/channel · 2s/4s backoff',
   },
   HIGH: {
     priority: 'HIGH',
-    channels: ['push', 'email'],
+    channels: ['push', 'whatsapp', 'email'],
     ackTimeoutMs: 120_000,
     maxRetriesPerChannel: 1,
     baseBackoffMs: 2_000,
@@ -70,7 +72,7 @@ export const DELIVERY_POLICIES: Record<DeliveryPriority, DeliveryPolicyConfig> =
     canBypassQuietHoursIfAllowed: false,
     digestOnly: false,
     ttlMs: 60 * 60_000,
-    description: 'Push → Email · 2 min ACK timeout · 1 retry/channel',
+    description: 'Push → WhatsApp → Email · 2 min ACK timeout · 1 retry/channel',
   },
   NORMAL: {
     priority: 'NORMAL',
@@ -181,6 +183,10 @@ export function resolveEffectiveDeliveryPlan(
       skippedReasons.push('Push skipped (opted out in Settings)');
       return false;
     }
+    if (ch === 'whatsapp' && prefs?.optOutWhatsapp) {
+      skippedReasons.push('WhatsApp skipped (opted out in Settings)');
+      return false;
+    }
     if (ch === 'sms' && prefs?.optOutSms) {
       skippedReasons.push('SMS skipped (opted out in Settings)');
       return false;
@@ -191,6 +197,10 @@ export function resolveEffectiveDeliveryPlan(
     }
     return true;
   });
+
+  if (prefs?.preferredChannel === 'WHATSAPP' && channels.includes('whatsapp')) {
+    channels = ['whatsapp', ...channels.filter((ch) => ch !== 'whatsapp')];
+  }
 
   // Respect quiet hours unless CRITICAL bypass is explicitly allowed by user
   if (quietHoursActive && !quietHoursBypassed) {
@@ -238,6 +248,7 @@ export function resolveEffectiveDeliveryPlan(
 export function formatChannelPlanLabel(channels: DeliveryChannel[]): string {
   const labels: Record<DeliveryChannel, string> = {
     push: 'Push',
+    whatsapp: 'WhatsApp',
     sms: 'SMS',
     email: 'Email',
     in_app: 'In-App Inbox',

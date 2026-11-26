@@ -13,8 +13,9 @@ import {
 
 const DUMMY_PASSWORD_HASH = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
 
-const DEFAULT_ADMIN_EMAIL = (process.env.DEFAULT_ADMIN_EMAIL || 'rajputvanshc@gmail.com').toLowerCase();
-const DEFAULT_ADMIN_PASSWORD = process.env.DEFAULT_ADMIN_PASSWORD || 'Admin@Aegis2026!';
+const DEFAULT_ADMIN_EMAIL = (process.env.DEFAULT_ADMIN_EMAIL || '').trim().toLowerCase();
+const DEFAULT_ADMIN_PASSWORD = (process.env.DEFAULT_ADMIN_PASSWORD || '').trim();
+const isDefaultAdminConfigured = Boolean(DEFAULT_ADMIN_EMAIL && DEFAULT_ADMIN_PASSWORD);
 
 const MAX_FAILED_LOGIN_ATTEMPTS = 5;
 const LOGIN_LOCKOUT_MS = 15 * 60 * 1000;
@@ -24,6 +25,7 @@ const failedLoginAttempts = new Map<string, { count: number; lockedUntil: number
 const CredentialsSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
+  loginType: z.enum(['user', 'admin']).optional(),
 });
 
 let defaultAdminSeeded = false;
@@ -87,6 +89,10 @@ function clearFailedLoginAttempts(email: string, ip: string) {
 
 async function ensureDefaultAdminUser() {
   const mongooseConn = await connectToDatabase();
+  if (!isDefaultAdminConfigured) {
+    return { mongooseConn };
+  }
+
   if (mongooseConn) {
     if (!defaultAdminSeeded) {
       const existing = await User.findOne({ email: DEFAULT_ADMIN_EMAIL });
@@ -159,7 +165,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { email, password } = parsedCreds.data;
+    const { email, password, loginType } = parsedCreds.data;
     const normalizedEmail = email.trim().toLowerCase();
 
     const lockout = checkLoginLockout(normalizedEmail, auditContext.ip);
@@ -171,7 +177,7 @@ export async function POST(request: Request) {
         email: normalizedEmail,
         ipAddress: auditContext.ip,
         userAgent: auditContext.userAgent,
-        details: `Admin login temporarily locked after ${MAX_FAILED_LOGIN_ATTEMPTS} failed attempts.`,
+        details: `Password login temporarily locked after ${MAX_FAILED_LOGIN_ATTEMPTS} failed attempts.`,
       });
       const mins = Math.max(1, Math.ceil(lockout.lockoutSeconds / 60));
       return Response.json(
@@ -192,6 +198,18 @@ export async function POST(request: Request) {
       user = await User.findOne({ email: normalizedEmail });
     } else {
       user = inMemoryUsers.get(normalizedEmail);
+    }
+
+    if (!user && loginType === 'admin' && !isDefaultAdminConfigured) {
+      return Response.json(
+        {
+          success: false,
+          error: 'Service Unavailable',
+          message:
+            'Admin password login is not configured on this server. Set DEFAULT_ADMIN_EMAIL and DEFAULT_ADMIN_PASSWORD in Secrets, or sign in via Google / OTP.',
+        },
+        { status: 503 }
+      );
     }
 
     if (!user) {

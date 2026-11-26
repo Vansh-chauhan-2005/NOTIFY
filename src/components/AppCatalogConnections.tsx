@@ -1120,12 +1120,33 @@ export default function AppCatalogConnections({
                     </div>
                   )}
 
+                  {activeApp.connectionType === 'whatsapp' && (
+                    <div className="rounded-xl bg-[#FFFDF9] border border-[#E5DDD0] p-3 text-xs text-[#464451] space-y-1.5">
+                      <p className="font-semibold text-[#16161D]">
+                        Meta WhatsApp Business Cloud API Setup
+                      </p>
+                      <ol className="list-decimal list-inside space-y-0.5 text-[11px]">
+                        <li>Create the connection below to generate your Callback URL (<code className="font-mono-tech">/api/v1/ingest/:connectionId</code>) and Signing Secret.</li>
+                        <li>In Meta App Dashboard → WhatsApp → Configuration, paste the Callback URL and set Verify Token to your Signing Secret (or <code className="font-mono-tech">WHATSAPP_VERIFY_TOKEN</code>).</li>
+                        <li>Subscribe to the <code className="font-mono-tech">messages</code> webhook field (Aegis verifies <code className="font-mono-tech">X-Hub-Signature-256</code> via HMAC-SHA256).</li>
+                      </ol>
+                    </div>
+                  )}
+
                   {activeApp.connectionType === 'webhook' && (
-                    <div className="rounded-xl bg-[#FFFDF9] border border-[#E5DDD0] p-3 text-xs text-[#464451] space-y-1">
-                      <p className="font-semibold text-[#16161D]">Signed Webhook Endpoint</p>
+                    <div className="rounded-xl bg-[#FFFDF9] border border-[#E5DDD0] p-3 text-xs text-[#464451] space-y-1.5">
+                      <p className="font-semibold text-[#16161D]">
+                        {activeApp.id === 'email-alerts' ? 'Inbound Email Webhook Bridge' : 'Signed Webhook Endpoint'}
+                      </p>
                       <p className="text-[11px] leading-relaxed">
                         Creates a dedicated <code className="font-mono-tech">/api/v1/ingest/:connectionId</code> URL secured with HMAC-SHA256 (<code className="font-mono-tech">X-Aegis-Signature</code>) and a 5-minute replay window (<code className="font-mono-tech">X-Aegis-Timestamp</code>).
                       </p>
+                      {activeApp.id === 'email-alerts' && (
+                        <p className="text-[11px] leading-relaxed text-[#6F6C7A]">
+                          Forward from Gmail Apps Script, Zapier, Mailgun, or SendGrid using JSON fields{' '}
+                          <code className="font-mono-tech">{'{"subject", "from", "text", "priority"}'}</code>.
+                        </p>
+                      )}
                     </div>
                   )}
 

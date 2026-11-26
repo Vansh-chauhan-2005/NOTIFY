@@ -173,7 +173,10 @@ export async function processSingleDeliveryJob(
     if (current.state === 'ATTEMPTING') {
       const activeChannel = current.channel;
       const isBreakerChannel =
-        activeChannel === 'push' || activeChannel === 'sms' || activeChannel === 'email';
+        activeChannel === 'push' ||
+        activeChannel === 'whatsapp' ||
+        activeChannel === 'sms' ||
+        activeChannel === 'email';
 
       // Circuit breaker guard
       if (isBreakerChannel) {

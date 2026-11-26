@@ -673,7 +673,7 @@ export async function runGatewaySimulation(
 
         const t2 = Date.now();
         const wrongPassRes = await verifyEmailPasswordWithConstantTiming({
-          email: 'rajputvanshc@gmail.com',
+          email: 'demo-existing@aegis-notify.internal',
           password: 'DefinitelyWrongPassword!999',
           minDelayMs: 120,
         });

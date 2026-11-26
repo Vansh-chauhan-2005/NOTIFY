@@ -16,7 +16,14 @@ const PreferencesUpdateSchema = z.object({
     .string()
     .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Format must be HH:mm')
     .optional(),
-  preferredChannel: z.enum(['WEBSOCKET', 'WEBPUSH', 'EMAIL']).optional(),
+  preferredChannel: z.enum(['WEBSOCKET', 'WEBPUSH', 'EMAIL', 'SMS', 'WHATSAPP']).optional(),
+  whatsappPhone: z
+    .union([
+      z.literal(''),
+      z.string().regex(/^\+[1-9]\d{6,14}$/, 'WhatsApp number must use E.164 format (e.g. +919876543210)'),
+    ])
+    .optional(),
+  optOutWhatsapp: z.boolean().optional(),
 });
 
 export async function GET(request: Request) {
@@ -57,6 +64,8 @@ export async function GET(request: Request) {
         quietHoursStart: '22:00',
         quietHoursEnd: '07:00',
         preferredChannel: 'WEBSOCKET',
+        whatsappPhone: '',
+        optOutWhatsapp: false,
       };
     }
 
@@ -117,6 +126,12 @@ export async function PUT(request: Request) {
       if (prefUpdates.preferredChannel !== undefined) {
         setFields['preferences.preferredChannel'] = prefUpdates.preferredChannel;
       }
+      if (prefUpdates.whatsappPhone !== undefined) {
+        setFields['preferences.whatsappPhone'] = prefUpdates.whatsappPhone;
+      }
+      if (prefUpdates.optOutWhatsapp !== undefined) {
+        setFields['preferences.optOutWhatsapp'] = prefUpdates.optOutWhatsapp;
+      }
       if (phoneNumber && phoneNumber.trim()) {
         setFields.phoneNumber = phoneNumber.trim();
       }
@@ -148,6 +163,8 @@ export async function PUT(request: Request) {
             quietHoursStart: prefUpdates.quietHoursStart ?? '22:00',
             quietHoursEnd: prefUpdates.quietHoursEnd ?? '07:00',
             preferredChannel: prefUpdates.preferredChannel ?? 'WEBSOCKET',
+            whatsappPhone: prefUpdates.whatsappPhone ?? '',
+            optOutWhatsapp: prefUpdates.optOutWhatsapp ?? false,
           },
           createdAt: new Date(),
         } as any;

@@ -7,7 +7,7 @@ import { User, inMemoryUsers, IUser } from '../../../../../../models/User.js';
 import { connectToDatabase } from '../../../../../../lib/db/mongoose.js';
 import { logSecurityEvent, extractRequestContext } from '../../../../../../lib/telemetry/securityLogger.js';
 
-const DEFAULT_ADMIN_EMAIL = (process.env.DEFAULT_ADMIN_EMAIL || 'rajputvanshc@gmail.com').toLowerCase();
+const DEFAULT_ADMIN_EMAIL = (process.env.DEFAULT_ADMIN_EMAIL || '').trim().toLowerCase();
 
 const GoogleAuthSchema = z.object({
   firebaseIdToken: z.string().min(20, 'Invalid Firebase Google ID token'),
@@ -20,7 +20,7 @@ function extractAuditContext(request: Request) {
 
 async function resolveGoogleRole(email: string): Promise<'ADMIN' | 'USER'> {
   const normalized = email.trim().toLowerCase();
-  if (normalized === DEFAULT_ADMIN_EMAIL) {
+  if (DEFAULT_ADMIN_EMAIL && normalized === DEFAULT_ADMIN_EMAIL) {
     return 'ADMIN';
   }
   const mongooseConn = await connectToDatabase().catch(() => null);

@@ -1,5 +1,6 @@
 import type { DeliveryChannel } from '../stateMachine.js';
 import { pushChannelAdapter } from './pushAdapter.js';
+import { whatsappChannelAdapter } from './whatsappAdapter.js';
 import { smsChannelAdapter } from './smsAdapter.js';
 import { emailChannelAdapter } from './emailAdapter.js';
 import type { ChannelAdapter, ChannelSendResult, DeliveryJobRecord } from './types.js';
@@ -26,6 +27,7 @@ const inAppChannelAdapter: ChannelAdapter = {
 
 const ADAPTERS: Record<Exclude<DeliveryChannel, 'none'>, ChannelAdapter> = {
   push: pushChannelAdapter,
+  whatsapp: whatsappChannelAdapter,
   sms: smsChannelAdapter,
   email: emailChannelAdapter,
   in_app: inAppChannelAdapter,
@@ -34,6 +36,7 @@ const ADAPTERS: Record<Exclude<DeliveryChannel, 'none'>, ChannelAdapter> = {
 // Per-user hourly rate limiting per channel to prevent fallback spam
 const CHANNEL_HOURLY_LIMITS: Record<Exclude<DeliveryChannel, 'none'>, number> = {
   push: 60,
+  whatsapp: 20,
   sms: 10,
   email: 20,
   in_app: 500,

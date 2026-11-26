@@ -77,6 +77,8 @@ export async function runCustomDemoFaultJob(
     idempotencyKey: `demo:custom:${Date.now()}:${crypto.randomBytes(3).toString('hex')}`,
     recipientEmail: DEMO_EMAIL,
     recipientPhone: DEMO_PHONE,
+    recipientWhatsappPhone: DEMO_PHONE,
+    ...(faults.forceSlowAck ? { userPreferences: { optOutWhatsapp: true } } : {}),
     isDemoJob: true,
     demoFaults: { ...faults, shortTimeouts: true },
   });
@@ -174,6 +176,8 @@ export async function runSimulatorScenario(id: SimulatorScenarioId): Promise<Sce
         idempotencyKey: `sim:b:${Date.now()}:${crypto.randomBytes(3).toString('hex')}`,
         recipientEmail: DEMO_EMAIL,
         recipientPhone: DEMO_PHONE,
+        recipientWhatsappPhone: DEMO_PHONE,
+        userPreferences: { optOutWhatsapp: true },
         isDemoJob: true,
         demoFaults: { shortTimeouts: true },
       });
@@ -213,15 +217,21 @@ export async function runSimulatorScenario(id: SimulatorScenarioId): Promise<Sce
         idempotencyKey: `sim:c:${Date.now()}:${crypto.randomBytes(3).toString('hex')}`,
         recipientEmail: DEMO_EMAIL,
         recipientPhone: DEMO_PHONE,
+        recipientWhatsappPhone: DEMO_PHONE,
         isDemoJob: true,
-        demoFaults: { forcePushFail: true, forceSmsFail: true, shortTimeouts: true },
+        demoFaults: {
+          forcePushFail: true,
+          forceWhatsappFail: true,
+          forceSmsFail: true,
+          shortTimeouts: true,
+        },
       });
       const atEmail = await driveDemoJobUntil(
         job.id,
         (j) =>
           (j.state === 'AWAITING_ACK' && j.channel === 'email') ||
           j.state === 'FAILED_ALL_CHANNELS',
-        20
+        26
       );
       const acked =
         atEmail.state === 'AWAITING_ACK'
@@ -230,8 +240,8 @@ export async function runSimulatorScenario(id: SimulatorScenarioId): Promise<Sce
       const passed = acked.state === 'DELIVERED_ACKED' && acked.channel === 'email';
       return {
         id: 'c',
-        title: '(c) Push and SMS fail -> email used -> acked',
-        expectedOutcome: 'Retries/fails push and SMS, falls back to email, acked',
+        title: '(c) Push, WhatsApp & SMS fail -> email used -> acked',
+        expectedOutcome: 'Retries/fails push, WhatsApp, and SMS, falls back to email, acked',
         actualOutcome: `State=${acked.state}, channel=${acked.channel}, transitions=${acked.history.length}`,
         passed,
         durationMs: Date.now() - started,
@@ -376,11 +386,11 @@ export async function runSimulatorScenario(id: SimulatorScenarioId): Promise<Sce
       // Step 2: Simulate server restart (wipes ALL in-memory Maps & reloads from durable storage)
       const reloadInfo = simulateServerRestartReload();
 
-      // Step 3: Resume from durable state and complete on SMS
+      // Step 3: Resume from durable state and complete on fallback channel (WhatsApp/SMS)
       const resumed = await driveDemoJobUntil(
         job.id,
         (j) =>
-          (j.state === 'AWAITING_ACK' && j.channel === 'sms') ||
+          (j.state === 'AWAITING_ACK' && (j.channel === 'whatsapp' || j.channel === 'sms')) ||
           j.state === 'DELIVERED_ACKED',
         16
       );

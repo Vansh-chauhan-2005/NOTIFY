@@ -13,7 +13,7 @@ import {
   updateUserSecurityPreferences,
 } from '../../../../../../lib/auth/sessionSecurity.js';
 
-const DEFAULT_ADMIN_EMAIL = (process.env.DEFAULT_ADMIN_EMAIL || 'rajputvanshc@gmail.com').toLowerCase();
+const DEFAULT_ADMIN_EMAIL = (process.env.DEFAULT_ADMIN_EMAIL || '').trim().toLowerCase();
 
 const FirebaseSessionSchema = z.object({
   firebaseIdToken: z.string().min(20, 'Invalid Firebase ID token'),
@@ -27,7 +27,7 @@ const FirebaseSessionSchema = z.object({
 async function resolveRole(email?: string): Promise<'ADMIN' | 'USER'> {
   if (!email) return 'USER';
   const normalized = email.trim().toLowerCase();
-  if (normalized === DEFAULT_ADMIN_EMAIL) return 'ADMIN';
+  if (DEFAULT_ADMIN_EMAIL && normalized === DEFAULT_ADMIN_EMAIL) return 'ADMIN';
 
   const mongooseConn = await connectToDatabase().catch(() => null);
   if (mongooseConn) {

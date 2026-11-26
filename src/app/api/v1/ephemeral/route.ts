@@ -140,6 +140,11 @@ export async function POST(request: Request) {
         idempotencyKey: `eph:${created.record.id}`,
         recipientEmail: body?.recipientEmail ? String(body.recipientEmail) : auth.user.email,
         recipientPhone: body?.recipientPhone ? String(body.recipientPhone) : auth.user.phoneNumber,
+        recipientWhatsappPhone: body?.recipientWhatsappPhone
+          ? String(body.recipientWhatsappPhone)
+          : body?.recipientPhone
+          ? String(body.recipientPhone)
+          : auth.user.phoneNumber,
         userPreferences: body?.userPreferences || null,
         baseUrl: resolveRequestBaseUrl(request),
         isEphemeral: true,

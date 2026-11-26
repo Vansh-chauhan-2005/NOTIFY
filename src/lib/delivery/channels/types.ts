@@ -12,6 +12,7 @@ export interface DeliveryHistoryEntry {
 
 export interface DemoFaultConfig {
   forcePushFail?: boolean;
+  forceWhatsappFail?: boolean;
   forceSmsFail?: boolean;
   forceEmailFail?: boolean;
   forceNoAck?: boolean;
@@ -37,8 +38,11 @@ export interface DeliveryJobRecord {
   expiresAt: string;
   history: DeliveryHistoryEntry[];
   idempotencyKey: string;
+  title?: string;
+  sourceApp?: string;
   recipientEmail?: string;
   recipientPhone?: string;
+  recipientWhatsappPhone?: string;
   baseUrl?: string;
   isDemoJob?: boolean;
   demoFaults?: DemoFaultConfig;

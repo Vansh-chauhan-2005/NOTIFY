@@ -52,6 +52,7 @@ import {
   Download,
   ChevronDown,
   ChevronUp,
+  ExternalLink,
 } from 'lucide-react';
 import { ConnectedApp } from '../../lib/integrations/store.js';
 import { QuarantinedAlert } from '../../lib/quarantine/store.js';
@@ -245,11 +246,14 @@ export default function MinimalistAegisDashboard({
   const [dndEnabled, setDndEnabled] = useState(false);
   const [quietHoursStart, setQuietHoursStart] = useState('22:00');
   const [quietHoursEnd, setQuietHoursEnd] = useState('07:00');
-  const [preferredChannel, setPreferredChannel] = useState<'WEBSOCKET' | 'EMAIL' | 'SMS' | 'WEBPUSH'>('WEBSOCKET');
+  const [preferredChannel, setPreferredChannel] = useState<'WEBSOCKET' | 'EMAIL' | 'SMS' | 'WEBPUSH' | 'WHATSAPP'>('WEBSOCKET');
   const [allowCriticalBypassQuietHours, setAllowCriticalBypassQuietHours] = useState(true);
   const [optOutPush, setOptOutPush] = useState(false);
+  const [optOutWhatsapp, setOptOutWhatsapp] = useState(false);
   const [optOutSms, setOptOutSms] = useState(false);
   const [optOutEmail, setOptOutEmail] = useState(false);
+  const [whatsappPhone, setWhatsappPhone] = useState('');
+  const [whatsappPrefsError, setWhatsappPrefsError] = useState<string | null>(null);
   const [isSavingPrefs, setIsSavingPrefs] = useState(false);
   const [prefsFeedback, setPrefsFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
@@ -286,12 +290,13 @@ export default function MinimalistAegisDashboard({
   const [simResult, setSimResult] = useState<any>(null);
 
   // Fallback Channel Diagnostics & Instant Testing
-  const [channelTestTargetEmail, setChannelTestTargetEmail] = useState('rajputvanshc@gmail.com');
+  const [channelTestTargetEmail, setChannelTestTargetEmail] = useState('');
+  const [channelTestTargetWhatsapp, setChannelTestTargetWhatsapp] = useState('');
   const [channelTestTargetPhone, setChannelTestTargetPhone] = useState(user?.phoneNumber || '9876543210');
   const [activeTargetPhoneDisplay, setActiveTargetPhoneDisplay] = useState<string>(user?.phoneNumber || '');
   const [isSavingTargetPhone, setIsSavingTargetPhone] = useState(false);
   const [savePhoneFeedback, setSavePhoneFeedback] = useState<string | null>(null);
-  const [testingChannel, setTestingChannel] = useState<'EMAIL' | 'WEBPUSH' | 'FAST2SMS' | 'ALL' | null>(null);
+  const [testingChannel, setTestingChannel] = useState<'EMAIL' | 'WEBPUSH' | 'FAST2SMS' | 'WHATSAPP' | 'ALL' | null>(null);
   const [channelTestResult, setChannelTestResult] = useState<any>(null);
   const [webPushPermission, setWebPushPermission] = useState<NotificationPermission | 'unsupported'>('default');
   const [isSubscribedPush, setIsSubscribedPush] = useState(false);
@@ -311,7 +316,9 @@ export default function MinimalistAegisDashboard({
   const [channelGatewayStatus, setChannelGatewayStatus] = useState<{
     loaded: boolean;
     emailConfigured: boolean;
+    emailSmtpConfigured: boolean;
     emailVerified: boolean;
+    whatsappConfigured: boolean;
     fast2smsConfigured: boolean;
     firebasePhoneAuthConfigured: boolean;
     twilioConfigured: boolean;
@@ -321,7 +328,9 @@ export default function MinimalistAegisDashboard({
   }>({
     loaded: false,
     emailConfigured: false,
+    emailSmtpConfigured: false,
     emailVerified: false,
+    whatsappConfigured: false,
     fast2smsConfigured: false,
     firebasePhoneAuthConfigured: false,
     twilioConfigured: false,
@@ -766,7 +775,7 @@ export default function MinimalistAegisDashboard({
           if (typeof parsed.dndEnabled === 'boolean') setDndEnabled(parsed.dndEnabled);
           if (typeof parsed.quietHoursStart === 'string') setQuietHoursStart(parsed.quietHoursStart);
           if (typeof parsed.quietHoursEnd === 'string') setQuietHoursEnd(parsed.quietHoursEnd);
-          if (['WEBSOCKET', 'EMAIL', 'SMS', 'WEBPUSH'].includes(parsed.preferredChannel)) {
+          if (['WEBSOCKET', 'EMAIL', 'SMS', 'WEBPUSH', 'WHATSAPP'].includes(parsed.preferredChannel)) {
             setPreferredChannel(parsed.preferredChannel);
           }
           if (['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].includes(parsed.minPriorityThreshold)) {
@@ -776,8 +785,13 @@ export default function MinimalistAegisDashboard({
             setAllowCriticalBypassQuietHours(parsed.allowCriticalBypassQuietHours);
           }
           if (typeof parsed.optOutPush === 'boolean') setOptOutPush(parsed.optOutPush);
+          if (typeof parsed.optOutWhatsapp === 'boolean') setOptOutWhatsapp(parsed.optOutWhatsapp);
           if (typeof parsed.optOutSms === 'boolean') setOptOutSms(parsed.optOutSms);
           if (typeof parsed.optOutEmail === 'boolean') setOptOutEmail(parsed.optOutEmail);
+          if (typeof parsed.whatsappPhone === 'string') {
+            setWhatsappPhone(parsed.whatsappPhone);
+            setChannelTestTargetWhatsapp((prev) => prev || parsed.whatsappPhone);
+          }
         }
       } catch {
         // Ignore malformed localStorage preferences
@@ -801,8 +815,13 @@ export default function MinimalistAegisDashboard({
             setAllowCriticalBypassQuietHours(prefs.allowCriticalBypassQuietHours);
           }
           if (typeof prefs.optOutPush === 'boolean') setOptOutPush(prefs.optOutPush);
+          if (typeof prefs.optOutWhatsapp === 'boolean') setOptOutWhatsapp(prefs.optOutWhatsapp);
           if (typeof prefs.optOutSms === 'boolean') setOptOutSms(prefs.optOutSms);
           if (typeof prefs.optOutEmail === 'boolean') setOptOutEmail(prefs.optOutEmail);
+          if (typeof prefs.whatsappPhone === 'string') {
+            setWhatsappPhone(prefs.whatsappPhone);
+            setChannelTestTargetWhatsapp((prev) => prev || prefs.whatsappPhone || '');
+          }
         }
         const phoneStatus = await loadUserPhoneStatusFromFirestore(fbUser.uid);
         if (phoneStatus?.phoneVerified) {
@@ -865,7 +884,9 @@ export default function MinimalistAegisDashboard({
       setChannelGatewayStatus({
         loaded: true,
         emailConfigured: Boolean(otpData?.emailConfigured),
+        emailSmtpConfigured: Boolean(persistence.emailSmtpConfigured),
         emailVerified: Boolean(otpData?.emailVerified),
+        whatsappConfigured: Boolean(persistence.whatsappConfigured),
         fast2smsConfigured: Boolean(otpData?.fast2smsConfigured),
         firebasePhoneAuthConfigured: Boolean(otpData?.firebasePhoneAuthConfigured),
         twilioConfigured: Boolean(smsData?.data?.twilioConfigured),
@@ -877,6 +898,17 @@ export default function MinimalistAegisDashboard({
 
     return () => unsub();
   }, []);
+
+  useEffect(() => {
+    const resolvedEmail = user?.email || firebaseUser?.email || '';
+    if (resolvedEmail && !channelTestTargetEmail) {
+      setChannelTestTargetEmail(resolvedEmail);
+    }
+    const resolvedWa = whatsappPhone || user?.phoneNumber || '';
+    if (resolvedWa && !channelTestTargetWhatsapp) {
+      setChannelTestTargetWhatsapp(resolvedWa);
+    }
+  }, [user?.email, firebaseUser?.email, whatsappPhone, user?.phoneNumber]);
 
   useEffect(() => {
     if (phoneLinkCooldown <= 0) return;
@@ -913,6 +945,15 @@ export default function MinimalistAegisDashboard({
   }, [effectiveUserId]);
 
   const handleSavePreferences = async () => {
+    setWhatsappPrefsError(null);
+    const cleanWhatsappPhone = whatsappPhone.trim();
+    if (cleanWhatsappPhone && !/^\+[1-9]\d{6,14}$/.test(cleanWhatsappPhone)) {
+      const msg = 'WhatsApp number must use E.164 format (e.g. +919876543210).';
+      setWhatsappPrefsError(msg);
+      setPrefsFeedback({ type: 'error', message: msg });
+      return;
+    }
+
     setIsSavingPrefs(true);
     setPrefsFeedback(null);
     const snapshot = {
@@ -924,13 +965,32 @@ export default function MinimalistAegisDashboard({
       audioAlertsEnabled,
       allowCriticalBypassQuietHours,
       optOutPush,
+      optOutWhatsapp,
       optOutSms,
       optOutEmail,
+      whatsappPhone: cleanWhatsappPhone,
     };
 
     try {
       if (typeof window !== 'undefined') {
         localStorage.setItem('aegis_user_preferences', JSON.stringify(snapshot));
+      }
+
+      const authToken =
+        typeof window !== 'undefined' ? window.localStorage.getItem('aegis_auth_token') : null;
+      if (authToken) {
+        await fetch('/api/v1/users/preferences', {
+          method: 'PUT',
+          headers: getAegisAuthHeaders(true),
+          body: JSON.stringify({
+            dndEnabled,
+            quietHoursStart,
+            quietHoursEnd,
+            preferredChannel,
+            whatsappPhone: cleanWhatsappPhone,
+            optOutWhatsapp,
+          }),
+        }).catch(() => null);
       }
 
       if (firebaseUser) {
@@ -2076,12 +2136,16 @@ export default function MinimalistAegisDashboard({
             deliverAlert: trackInDeliveryPipeline,
             recipientEmail: user?.email || firebaseUser?.email || channelTestTargetEmail,
             recipientPhone: channelTestTargetPhone || activeTargetPhoneDisplay || user?.phoneNumber,
+            recipientWhatsappPhone:
+              channelTestTargetWhatsapp || whatsappPhone || user?.phoneNumber || undefined,
             userPreferences: {
               dndEnabled,
               quietHoursStart,
               quietHoursEnd,
+              preferredChannel,
               allowCriticalBypassQuietHours,
               optOutPush,
+              optOutWhatsapp,
               optOutSms,
               optOutEmail,
             },
@@ -2186,14 +2250,20 @@ export default function MinimalistAegisDashboard({
                 notificationId: data.notificationId || `notif_${Date.now()}`,
                 userId: effectiveUserId,
                 priority: simUrgency,
+                title: simTitle,
+                sourceApp: simApp,
                 recipientEmail: user?.email || firebaseUser?.email || channelTestTargetEmail,
                 recipientPhone: channelTestTargetPhone || activeTargetPhoneDisplay || user?.phoneNumber,
+                recipientWhatsappPhone:
+                  channelTestTargetWhatsapp || whatsappPhone || user?.phoneNumber || undefined,
                 userPreferences: {
                   dndEnabled,
                   quietHoursStart,
                   quietHoursEnd,
+                  preferredChannel,
                   allowCriticalBypassQuietHours,
                   optOutPush,
+                  optOutWhatsapp,
                   optOutSms,
                   optOutEmail,
                 },
@@ -2279,25 +2349,34 @@ export default function MinimalistAegisDashboard({
     }
   };
 
-  // Test Fallback Channels (Nodemailer, WebPush, Fast2SMS)
-  const handleTestFallbackChannel = async (channel: 'EMAIL' | 'WEBPUSH' | 'FAST2SMS' | 'ALL') => {
+  // Test Fallback Channels (Nodemailer, WebPush, WhatsApp Cloud API, Fast2SMS)
+  const handleTestFallbackChannel = async (
+    channel: 'EMAIL' | 'WEBPUSH' | 'FAST2SMS' | 'WHATSAPP' | 'ALL'
+  ) => {
     setTestingChannel(channel);
     setChannelTestResult(null);
     try {
+      const targetPhoneForTest =
+        channel === 'WHATSAPP'
+          ? channelTestTargetWhatsapp || whatsappPhone || channelTestTargetPhone
+          : channel === 'ALL'
+          ? channelTestTargetWhatsapp || whatsappPhone || channelTestTargetPhone
+          : channelTestTargetPhone;
       const res = await fetch('/api/v1/notifications/fallback/test', {
         method: 'POST',
         headers: getAegisAuthHeaders(true),
         body: JSON.stringify({
           channel,
           targetEmail: channelTestTargetEmail,
-          targetPhone: channelTestTargetPhone,
+          targetPhone: targetPhoneForTest,
           title: 'Aegis Sentinel Security Test',
-          message: 'Direct verification dispatch for Nodemailer, WebPush, and Fast2SMS channels.',
+          message:
+            'Direct verification dispatch for Nodemailer Email, WebPush, WhatsApp Cloud API, and Fast2SMS channels.',
         }),
       });
       const data = await res.json();
       setChannelTestResult(data);
-      if (data.targetPhone) {
+      if (data.targetPhone && channel !== 'WHATSAPP') {
         setActiveTargetPhoneDisplay(data.targetPhone);
       }
     } catch (err: any) {
@@ -3789,8 +3868,10 @@ export default function MinimalistAegisDashboard({
                       dndEnabled,
                       quietHoursStart,
                       quietHoursEnd,
+                      preferredChannel,
                       allowCriticalBypassQuietHours,
                       optOutPush,
+                      optOutWhatsapp,
                       optOutSms,
                       optOutEmail,
                     });
@@ -4774,9 +4855,10 @@ export default function MinimalistAegisDashboard({
                       className="w-full px-3 py-1.5 text-xs bg-[#FFFDF9] border border-[#D8CEC0] rounded-xl text-[#16161D]"
                     >
                       <option value="WEBSOCKET">WebSocket Live Stream</option>
-                      <option value="EMAIL">Nodemailer Email</option>
-                      <option value="SMS">Mobile SMS</option>
                       <option value="WEBPUSH">Browser WebPush</option>
+                      <option value="WHATSAPP">WhatsApp Business</option>
+                      <option value="SMS">Mobile SMS</option>
+                      <option value="EMAIL">Nodemailer Email</option>
                     </select>
                   </div>
 
@@ -4795,6 +4877,26 @@ export default function MinimalistAegisDashboard({
                       <option value="HIGH">HIGH &amp; CRITICAL only</option>
                       <option value="CRITICAL">CRITICAL only</option>
                     </select>
+                  </div>
+
+                  <div>
+                    <label htmlFor="pref-whatsapp-phone" className="text-xs font-semibold text-[#16161D] block mb-1">
+                      WhatsApp Business Number (E.164)
+                    </label>
+                    <input
+                      id="pref-whatsapp-phone"
+                      type="tel"
+                      value={whatsappPhone}
+                      onChange={(e) => {
+                        setWhatsappPhone(e.target.value);
+                        if (whatsappPrefsError) setWhatsappPrefsError(null);
+                      }}
+                      placeholder="+919876543210"
+                      className="w-full px-3 py-1.5 text-xs font-mono-tech bg-[#FFFDF9] border border-[#D8CEC0] rounded-xl text-[#16161D]"
+                    />
+                    {whatsappPrefsError && (
+                      <p className="text-[11px] text-[#B52A70] mt-1 font-medium">{whatsappPrefsError}</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -4839,6 +4941,15 @@ export default function MinimalistAegisDashboard({
                     <label className="flex items-center space-x-1.5 cursor-pointer">
                       <input
                         type="checkbox"
+                        checked={optOutWhatsapp}
+                        onChange={(e) => setOptOutWhatsapp(e.target.checked)}
+                        className="h-3.5 w-3.5 rounded border-[#D8CEC0] text-[#D9468F]"
+                      />
+                      <span>Mute WhatsApp</span>
+                    </label>
+                    <label className="flex items-center space-x-1.5 cursor-pointer">
+                      <input
+                        type="checkbox"
                         checked={optOutSms}
                         onChange={(e) => setOptOutSms(e.target.checked)}
                         className="h-3.5 w-3.5 rounded border-[#D8CEC0] text-[#D9468F]"
@@ -4872,7 +4983,7 @@ export default function MinimalistAegisDashboard({
                     </h2>
                   </div>
                   <p className="text-xs text-[#464451] leading-relaxed">
-                    Live backend configuration checks from OTP, SMS, and system health endpoints.
+                    Live backend configuration checks from OTP, WhatsApp, SMS, and system health endpoints.
                   </p>
                 </div>
                 <span className="text-[11px] font-mono-tech text-[#6F6C7A] whitespace-nowrap">
@@ -4880,12 +4991,24 @@ export default function MinimalistAegisDashboard({
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 {[
                   {
                     label: 'Email SMTP',
-                    isLive: channelGatewayStatus.emailConfigured && channelGatewayStatus.emailVerified,
-                    detail: channelGatewayStatus.emailConfigured ? 'SMTP verified' : 'Ethereal / console fallback',
+                    isLive:
+                      channelGatewayStatus.emailSmtpConfigured ||
+                      (channelGatewayStatus.emailConfigured && channelGatewayStatus.emailVerified),
+                    detail:
+                      channelGatewayStatus.emailSmtpConfigured || channelGatewayStatus.emailConfigured
+                        ? 'SMTP configured'
+                        : 'Ethereal / preview fallback',
+                  },
+                  {
+                    label: 'WhatsApp Cloud API',
+                    isLive: channelGatewayStatus.whatsappConfigured,
+                    detail: channelGatewayStatus.whatsappConfigured
+                      ? 'Meta Graph v21.0 live'
+                      : 'Dry-run / credentials unset',
                   },
                   {
                     label: 'SMS OTP',
@@ -5349,7 +5472,7 @@ export default function MinimalistAegisDashboard({
                   </div>
                   <div>
                     <h2 className="font-display text-base font-semibold text-[#16161D]">Delivery Gateways &amp; Secondary Fallback SLA</h2>
-                    <p className="text-xs text-[#464451]">Zero-Trust WebSocket → Nodemailer Email → WebPush API → Fast2SMS</p>
+                    <p className="text-xs text-[#464451]">Zero-Trust WebSocket → WebPush API → WhatsApp Business → Fast2SMS → Nodemailer Email</p>
                   </div>
                 </div>
               </div>
@@ -5367,11 +5490,17 @@ export default function MinimalistAegisDashboard({
             </div>
 
             {/* Gateway & Persistence Readiness Badges */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
               {[
                 {
                   label: 'Email SMTP',
-                  isLive: channelGatewayStatus.emailConfigured && channelGatewayStatus.emailVerified,
+                  isLive:
+                    channelGatewayStatus.emailSmtpConfigured ||
+                    (channelGatewayStatus.emailConfigured && channelGatewayStatus.emailVerified),
+                },
+                {
+                  label: 'WhatsApp Cloud API',
+                  isLive: channelGatewayStatus.whatsappConfigured,
                 },
                 {
                   label: 'SMS OTP',
@@ -5404,8 +5533,8 @@ export default function MinimalistAegisDashboard({
               ))}
             </div>
 
-            {/* 3 Grid Gateway Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {/* 4 Grid Gateway Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
               {/* Card 1: Nodemailer Email Service */}
               <div className="glass-panel border border-[#E5DDD0] rounded-3xl p-6 space-y-4 flex flex-col justify-between">
                 <div className="space-y-3">
@@ -5415,12 +5544,14 @@ export default function MinimalistAegisDashboard({
                     </div>
                     <span
                       className={`px-2 py-0.5 rounded-full text-[10px] font-mono-tech font-semibold border whitespace-nowrap ${
-                        channelGatewayStatus.emailConfigured && channelGatewayStatus.emailVerified
+                        channelGatewayStatus.emailSmtpConfigured ||
+                        (channelGatewayStatus.emailConfigured && channelGatewayStatus.emailVerified)
                           ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                           : 'bg-amber-50 text-amber-800 border-amber-200'
                       }`}
                     >
-                      {channelGatewayStatus.emailConfigured && channelGatewayStatus.emailVerified
+                      {channelGatewayStatus.emailSmtpConfigured ||
+                      (channelGatewayStatus.emailConfigured && channelGatewayStatus.emailVerified)
                         ? 'LIVE'
                         : 'DEMO / UNCONFIGURED'}
                     </span>
@@ -5429,7 +5560,7 @@ export default function MinimalistAegisDashboard({
                   <div>
                     <h3 className="text-[#16161D] text-sm font-bold">Email Dispatch</h3>
                     <p className="text-xs text-[#464451] leading-relaxed pt-1">
-                      HTML formatted alerts delivered via Nodemailer with automated Ethereal / SMTP test inbox fallbacks.
+                      HTML formatted alerts with metadata and signed ACK link via SMTP or Ethereal sandbox preview.
                     </p>
                   </div>
 
@@ -5507,7 +5638,58 @@ export default function MinimalistAegisDashboard({
                 </div>
               </div>
 
-              {/* Card 3: Fast2SMS Gateway */}
+              {/* Card 3: Meta WhatsApp Business Cloud API */}
+              <div className="glass-panel border border-[#E5DDD0] rounded-3xl p-6 space-y-4 flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="w-9 h-9 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center">
+                      <MessageSquare className="w-4 h-4" />
+                    </div>
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-mono-tech font-semibold border whitespace-nowrap ${
+                        channelGatewayStatus.whatsappConfigured
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : 'bg-amber-50 text-amber-800 border-amber-200'
+                      }`}
+                    >
+                      {channelGatewayStatus.whatsappConfigured ? 'LIVE' : 'DRY-RUN / UNSET'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-[#16161D] text-sm font-bold">WhatsApp Cloud API</h3>
+                    <p className="text-xs text-[#464451] leading-relaxed pt-1">
+                      Meta Graph API v21.0 fallback immediately after Push with strict zero-plaintext ephemeral protection.
+                    </p>
+                  </div>
+
+                  <div className="space-y-1.5 pt-1">
+                    <label className="text-[11px] font-medium text-[#464451] block">
+                      Recipient WhatsApp (E.164)
+                    </label>
+                    <input
+                      type="tel"
+                      value={channelTestTargetWhatsapp}
+                      onChange={(e) => setChannelTestTargetWhatsapp(e.target.value)}
+                      className="w-full px-3 py-2 text-xs font-mono-tech bg-[#FAF6F0] border border-[#D8CEC0] rounded-xl text-[#16161D] focus:outline-none focus:ring-2 focus:ring-[#D9468F]/35"
+                      placeholder="+919876543210"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-[#E5DDD0]">
+                  <button
+                    onClick={() => handleTestFallbackChannel('WHATSAPP')}
+                    disabled={testingChannel !== null}
+                    className="w-full py-2.5 rounded-xl text-xs font-semibold bg-[#16161D] hover:bg-[#2A2935] text-[#FAF6F0] transition-all flex items-center justify-center space-x-1.5 shadow-xs active:scale-95"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>{testingChannel === 'WHATSAPP' ? 'Sending...' : 'Send Test WhatsApp Alert'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Card 4: Fast2SMS Gateway */}
               <div className="glass-panel border border-[#E5DDD0] rounded-3xl p-6 space-y-4 flex flex-col justify-between">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-2">
@@ -5600,10 +5782,31 @@ export default function MinimalistAegisDashboard({
                       Dispatch Diagnostics Result ({channelTestResult.testedChannel || 'Response'})
                     </h4>
                   </div>
-                  <span className="text-[11px] text-[#6F6C7A] font-mono-tech">
-                    {new Date(channelTestResult.timestamp).toLocaleTimeString()}
-                  </span>
+                  {channelTestResult.timestamp && (
+                    <span className="text-[11px] text-[#6F6C7A] font-mono-tech">
+                      {new Date(channelTestResult.timestamp).toLocaleTimeString()}
+                    </span>
+                  )}
                 </div>
+
+                {typeof channelTestResult?.results?.email?.previewUrl === 'string' &&
+                  channelTestResult.results.email.previewUrl.startsWith('http') && (
+                    <div className="rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="text-xs text-emerald-950">
+                        <span className="font-semibold">Ethereal Test Inbox Preview Ready:</span>{' '}
+                        Open the captured HTML email in Nodemailer&apos;s sandbox inbox.
+                      </div>
+                      <a
+                        href={channelTestResult.results.email.previewUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold whitespace-nowrap"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>View Email Preview</span>
+                      </a>
+                    </div>
+                  )}
 
                 <div className="text-xs font-mono-tech bg-[#16161D] p-3.5 rounded-xl text-[#FAF6F0] overflow-x-auto border border-[#2A2935]">
                   <pre>{JSON.stringify(channelTestResult.results || channelTestResult, null, 2)}</pre>

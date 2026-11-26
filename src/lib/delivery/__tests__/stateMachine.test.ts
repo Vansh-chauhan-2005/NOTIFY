@@ -214,11 +214,11 @@ describe('Delivery Policies, Backoff Jitter & Quiet Hours', () => {
   });
 
   it('selects exact delivery policies per priority level', () => {
-    expect(DELIVERY_POLICIES.CRITICAL.channels).toEqual(['push', 'sms', 'email']);
+    expect(DELIVERY_POLICIES.CRITICAL.channels).toEqual(['push', 'whatsapp', 'sms', 'email']);
     expect(DELIVERY_POLICIES.CRITICAL.ackTimeoutMs).toBe(30_000);
     expect(DELIVERY_POLICIES.CRITICAL.maxRetriesPerChannel).toBe(2);
 
-    expect(DELIVERY_POLICIES.HIGH.channels).toEqual(['push', 'email']);
+    expect(DELIVERY_POLICIES.HIGH.channels).toEqual(['push', 'whatsapp', 'email']);
     expect(DELIVERY_POLICIES.HIGH.ackTimeoutMs).toBe(120_000);
     expect(DELIVERY_POLICIES.HIGH.maxRetriesPerChannel).toBe(1);
 
@@ -249,7 +249,19 @@ describe('Delivery Policies, Backoff Jitter & Quiet Hours', () => {
 
     const criticalBypassPlan = resolveEffectiveDeliveryPlan('CRITICAL', prefs, { now: nightTime });
     expect(criticalBypassPlan.quietHoursBypassed).toBe(true);
-    expect(criticalBypassPlan.channels).toEqual(['push', 'email']);
+    expect(criticalBypassPlan.channels).toEqual(['push', 'whatsapp', 'email']);
+
+    const criticalWithWhatsappOptOut = resolveEffectiveDeliveryPlan(
+      'CRITICAL',
+      { ...prefs, optOutWhatsapp: true },
+      { now: nightTime }
+    );
+    expect(criticalWithWhatsappOptOut.channels).toEqual(['push', 'email']);
+
+    const whatsappPreferred = resolveEffectiveDeliveryPlan('HIGH', {
+      preferredChannel: 'WHATSAPP',
+    });
+    expect(whatsappPreferred.channels).toEqual(['whatsapp', 'push', 'email']);
 
     const criticalNoBypass = resolveEffectiveDeliveryPlan(
       'CRITICAL',

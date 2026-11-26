@@ -251,24 +251,28 @@ export async function processFallbackJob(data: FallbackJobData) {
       const targetEmail =
         process.env.ADMIN_FALLBACK_EMAIL?.trim() ||
         process.env.NOTIFICATION_TARGET_EMAIL?.trim() ||
-        'rajputvanshc@gmail.com';
+        '';
 
-      const emailHtml = buildFallbackAlertEmailHtml({
-        eventType: data.eventType,
-        rawText: data.rawText,
-        dispatchScore: data.dispatchScore,
-        notificationId: data.notificationId,
-        timestamp: nowIso,
-      });
+      if (!targetEmail) {
+        console.log('[Fallback Nodemailer] Skipped email fallback: no ADMIN_FALLBACK_EMAIL or NOTIFICATION_TARGET_EMAIL configured.');
+      } else {
+        const emailHtml = buildFallbackAlertEmailHtml({
+          eventType: data.eventType,
+          rawText: data.rawText,
+          dispatchScore: data.dispatchScore,
+          notificationId: data.notificationId,
+          timestamp: nowIso,
+        });
 
-      const emailResult = await sendEmailNotification({
-        to: targetEmail,
-        subject: `[Aegis Fallback Alert] ${data.eventType}: Critical Escalation (W=${data.dispatchScore})`,
-        text: `[Aegis Fallback Alert] Event: ${data.eventType}\nSeverity Weight: ${data.dispatchScore}\nMessage: ${data.rawText}\nNotification ID: ${data.notificationId}`,
-        html: emailHtml,
-      });
+        const emailResult = await sendEmailNotification({
+          to: targetEmail,
+          subject: `[Aegis Fallback Alert] ${data.eventType}: Critical Escalation (W=${data.dispatchScore})`,
+          text: `[Aegis Fallback Alert] Event: ${data.eventType}\nSeverity Weight: ${data.dispatchScore}\nMessage: ${data.rawText}\nNotification ID: ${data.notificationId}`,
+          html: emailHtml,
+        });
 
-      console.log(`[Fallback Nodemailer] Email dispatched to ${targetEmail}. Success=${emailResult.success}`);
+        console.log(`[Fallback Nodemailer] Email dispatched to ${targetEmail}. Success=${emailResult.success}`);
+      }
     } catch (emailErr: any) {
       console.log(`[Fallback Email Handled] Error sending fallback email: ${emailErr.message}`);
     }

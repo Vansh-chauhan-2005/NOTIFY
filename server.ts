@@ -307,6 +307,7 @@ async function startAegisPlatform() {
   app.get('/api/v1/connections', adaptNextRoute(ConnectionsRoute.GET));
   app.post('/api/v1/connections', adaptNextRoute(ConnectionsRoute.POST));
   app.delete('/api/v1/connections', adaptNextRoute(ConnectionsRoute.DELETE));
+  app.get('/api/v1/ingest/:connectionId', adaptNextRoute(ConnectionIngestRoute.GET));
   app.post('/api/v1/ingest/:connectionId', adaptNextRoute(ConnectionIngestRoute.POST));
 
   // Multi-Channel Fallback State Machine Delivery Routes

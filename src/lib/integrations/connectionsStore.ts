@@ -419,7 +419,7 @@ export function computeHmacSignature(secret: string, timestampRaw: string, rawBo
   return crypto.createHmac('sha256', secret).update(signedPayload, 'utf8').digest('hex');
 }
 
-function timingSafeHexOrStringEqual(expected: string, provided: string): boolean {
+export function timingSafeHexOrStringEqual(expected: string, provided: string): boolean {
   const a = Buffer.from(expected, 'utf8');
   const b = Buffer.from(provided, 'utf8');
   if (a.length !== b.length || a.length === 0) {
@@ -469,15 +469,20 @@ export function verifyIngestSignature(params: {
 
   if (githubSignature) {
     const cleanProvided = githubSignature.trim().replace(/^sha256=/i, '').toLowerCase();
+    const hmacSecret =
+      connectionType === 'whatsapp'
+        ? process.env.WHATSAPP_APP_SECRET?.trim() || secret
+        : secret;
+    const mode = connectionType === 'whatsapp' ? 'whatsapp-hmac-sha256' : 'github-hmac-sha256';
     const expectedHex = crypto
-      .createHmac('sha256', secret)
+      .createHmac('sha256', hmacSecret)
       .update(rawBody, 'utf8')
       .digest('hex')
       .toLowerCase();
     const ok = timingSafeHexOrStringEqual(expectedHex, cleanProvided);
     return ok
-      ? { valid: true, mode: 'github-hmac-sha256' }
-      : { valid: false, mode: 'github-hmac-sha256', reason: 'Invalid X-Hub-Signature-256 digest.' };
+      ? { valid: true, mode }
+      : { valid: false, mode, reason: 'Invalid X-Hub-Signature-256 digest.' };
   }
 
   if (!aegisSignature) {
@@ -499,6 +504,14 @@ export function verifyIngestSignature(params: {
 
 export function deriveTelegramSecretToken(signingSecret: string): string {
   return crypto.createHash('sha256').update(signingSecret, 'utf8').digest('hex').slice(0, 48);
+}
+
+export function deriveWhatsappVerifyToken(signingSecret: string): string {
+  return crypto
+    .createHash('sha256')
+    .update(`wa-verify:${signingSecret}`, 'utf8')
+    .digest('hex')
+    .slice(0, 48);
 }
 
 export function sanitizeNotificationText(input: string, maxLen = 500): string {

@@ -44,7 +44,7 @@ export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
   // OTP Login Flow States
   const [countryCode, setCountryCode] = useState('+91');
   const [rawPhone, setRawPhone] = useState('');
-  const [otpEmail, setOtpEmail] = useState('rajputvanshc@gmail.com');
+  const [otpEmail, setOtpEmail] = useState('');
   const [otpStep, setOtpStep] = useState<'enter_destination' | 'enter_otp'>('enter_destination');
   const [otpDigits, setOtpDigits] = useState<string[]>(['', '', '', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
@@ -57,8 +57,8 @@ export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
   const [smsAllowedCountries, setSmsAllowedCountries] = useState<string[]>(['+91']);
 
   // Admin Email & Key flow
-  const [adminEmail, setAdminEmail] = useState('rajputvanshc@gmail.com');
-  const [adminPassword, setAdminPassword] = useState('Admin@Aegis2026!');
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
 
   const otpInputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -309,6 +309,7 @@ export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
         body: JSON.stringify({
           email: adminEmail.trim(),
           password: adminPassword,
+          loginType: 'admin',
         }),
       });
 
@@ -702,7 +703,7 @@ export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
                   type="email"
                   value={adminEmail}
                   onChange={(e) => setAdminEmail(e.target.value)}
-                  placeholder="rajputvanshc@gmail.com"
+                  placeholder="admin@company.com"
                   required
                   className="w-full bg-[#FAF6F0] border border-[#D8CEC0] rounded-2xl px-4 py-3 text-xs text-[#16161D] placeholder-[#8A8794] focus:outline-none focus:ring-2 focus:ring-[#D9468F]/35 focus:border-[#D9468F] font-mono"
                 />

@@ -308,6 +308,27 @@ export default function MinimalistAegisDashboard({
     demoMode: true,
     allowedCountries: ['+91'],
   });
+  const [channelGatewayStatus, setChannelGatewayStatus] = useState<{
+    loaded: boolean;
+    emailConfigured: boolean;
+    emailVerified: boolean;
+    fast2smsConfigured: boolean;
+    firebasePhoneAuthConfigured: boolean;
+    twilioConfigured: boolean;
+    smsDemoMode: boolean;
+    dbLive: boolean;
+    dbMode: string;
+  }>({
+    loaded: false,
+    emailConfigured: false,
+    emailVerified: false,
+    fast2smsConfigured: false,
+    firebasePhoneAuthConfigured: false,
+    twilioConfigured: false,
+    smsDemoMode: true,
+    dbLive: false,
+    dbMode: 'local_json_fallback',
+  });
   const [phoneLinkCountry, setPhoneLinkCountry] = useState('+91');
   const [phoneLinkInput, setPhoneLinkInput] = useState('');
   const [phoneLinkStep, setPhoneLinkStep] = useState<'enter' | 'verify'>('enter');
@@ -394,6 +415,190 @@ export default function MinimalistAegisDashboard({
   useEffect(() => {
     globalClientDedupWindow.wipeEphemeralItem(vaultUserId);
   }, [ephemeralRefreshTick, vaultUserId]);
+
+  // Shared on-device dedup + metadata-only backend sync (idempotent across HTTP ingest + WS dispatch)
+  const processedDedupDecisionsRef = useRef<Map<string, DedupDecisionResult>>(new Map());
+  const inFlightDedupRef = useRef<Map<string, Promise<DedupDecisionResult | null>>>(new Map());
+
+  const runClientDedupAndSync = async (params: {
+    notificationId: string;
+    eventType: string;
+    rawText: string;
+    priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+    sourceId: string;
+    senderId: string;
+    timestamp?: string;
+    categoryHint?: string;
+    isEphemeral?: boolean;
+    isPriorityFloorAlert?: boolean;
+    trust: DedupProvenanceTrust;
+    provenanceFailed?: boolean;
+    verifiedForToast?: boolean;
+    appName?: string;
+    title?: string;
+    sendBrowserNotification?: boolean;
+  }): Promise<DedupDecisionResult | null> => {
+    const nid = String(params.notificationId || '').trim();
+    if (!nid) return null;
+
+    const cached = processedDedupDecisionsRef.current.get(nid);
+    if (cached) return cached;
+
+    const existingPromise = inFlightDedupRef.current.get(nid);
+    if (existingPromise) return existingPromise;
+
+    const task = (async (): Promise<DedupDecisionResult | null> => {
+      try {
+        const rawEventLower = `${params.eventType || ''} ${params.rawText || ''}`.toLowerCase();
+        const inferredCategory =
+          (params.categoryHint || '').toLowerCase() ||
+          (rawEventLower.includes('otp')
+            ? 'otp'
+            : rawEventLower.includes('login') || rawEventLower.includes('password')
+            ? 'auth'
+            : rawEventLower.includes('security') || rawEventLower.includes('breach')
+            ? 'security'
+            : rawEventLower.includes('payment') ||
+              rawEventLower.includes('debited') ||
+              rawEventLower.includes('rs ')
+            ? 'finance'
+            : 'work');
+
+        const isOtpLoginOrKey = /\b(otp|one[- ]time|2fa|verification code|login code|key[- ]?change|pin[- ]?mismatch)\b/i.test(
+          rawEventLower
+        );
+
+        const activeUser = vaultUserIdRef.current;
+        const activeCfg = userDedupSettingsRef.current;
+        const decision = await globalClientDedupWindow.processNotification({
+          incoming: {
+            notificationId: nid,
+            userId: activeUser,
+            sourceId: params.sourceId || params.eventType || 'direct',
+            senderId: params.senderId || params.sourceId || 'gateway',
+            category: inferredCategory,
+            priority: params.priority,
+            trust: params.trust,
+            timestampMs: (params.timestamp ? Date.parse(params.timestamp) : Date.now()) || Date.now(),
+            isEphemeral: Boolean(params.isEphemeral),
+            isOtpOrLoginOrKeyChange: isOtpLoginOrKey,
+            isPriorityFloorAlert: Boolean(
+              params.isPriorityFloorAlert || params.priority === 'CRITICAL'
+            ),
+            provenanceFailed: Boolean(params.provenanceFailed),
+          },
+          rawTextInMemory: String(params.rawText || ''),
+          embedder: embedTextInBrowser,
+          options: activeCfg
+            ? {
+                dedupEnabled: activeCfg.dedupEnabled,
+                mergeThreshold: activeCfg.effectiveMergeThreshold,
+                reviewThreshold: activeCfg.reviewThreshold,
+                windowMinutes: activeCfg.windowMinutes,
+                neverMergeCategories: activeCfg.neverMergeCategories,
+              }
+            : undefined,
+        });
+
+        processedDedupDecisionsRef.current.set(nid, decision);
+        if (processedDedupDecisionsRef.current.size > 500) {
+          const oldestKey = processedDedupDecisionsRef.current.keys().next().value;
+          if (oldestKey) processedDedupDecisionsRef.current.delete(oldestKey);
+        }
+
+        setDedupThreadsById((prev) => ({
+          ...prev,
+          [decision.threadId]: decision.threadMetadata,
+        }));
+        setNotifThreadMap((prev) => ({
+          ...prev,
+          [nid]: decision.threadId,
+        }));
+        setNotifDecisionMap((prev) => ({
+          ...prev,
+          [nid]: decision,
+        }));
+        setNotifications((prev) =>
+          prev.map((item) =>
+            item.notificationId === nid
+              ? { ...item, dedupThreadId: decision.threadId, dedupDecision: decision }
+              : item
+          )
+        );
+
+        if (params.priority === 'CRITICAL' && decision.shouldPlayAlert) {
+          playCriticalAlertSound();
+        }
+
+        if (
+          params.sendBrowserNotification &&
+          decision.shouldSendBrowserNotification &&
+          typeof window !== 'undefined' &&
+          'Notification' in window &&
+          Notification.permission === 'granted'
+        ) {
+          try {
+            const title =
+              params.title ||
+              (params.appName
+                ? `${params.appName} · ${params.priority}`
+                : `Aegis · ${params.eventType}`);
+            new Notification(title, {
+              body: params.verifiedForToast
+                ? String(params.rawText || '').slice(0, 180)
+                : 'Unverified security alert received — open AegisNotify to inspect provenance.',
+              tag: String(decision.threadId || nid),
+            });
+          } catch {
+            // Browser notification display error is non-fatal
+          }
+        }
+
+        const authToken =
+          typeof window !== 'undefined'
+            ? window.localStorage.getItem('aegis_auth_token')
+            : null;
+        if (authToken) {
+          await fetch('/api/v1/dedup/threads', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${authToken}`,
+            },
+            body: JSON.stringify({
+              notificationId: nid,
+              action: decision.action,
+              stageMatched: decision.stageMatched,
+              similarity: decision.similarity,
+              blockedByGuard: decision.blockedByGuard,
+              perSourceCapHit: decision.guards.some(
+                (g) => g.guard === 'PER_SOURCE_CAP' && !g.passed
+              ),
+              priorityEscalatedInThread: decision.priorityEscalatedInThread,
+              threadMetadata: decision.threadMetadata,
+            }),
+          }).catch(() => {});
+        }
+
+        if (firebaseUidRef.current && !params.isEphemeral) {
+          void syncDedupThreadToFirestore(
+            firebaseUidRef.current,
+            decision.threadMetadata
+          ).catch(() => {});
+        }
+
+        return decision;
+      } finally {
+        inFlightDedupRef.current.delete(nid);
+      }
+    })();
+
+    inFlightDedupRef.current.set(nid, task);
+    return task;
+  };
+
+  const runClientDedupAndSyncRef = useRef(runClientDedupAndSync);
+  runClientDedupAndSyncRef.current = runClientDedupAndSync;
 
   // Load user's Sigmoid Priority Model & Semantic Deduplication settings
   useEffect(() => {
@@ -624,26 +829,51 @@ export default function MinimalistAegisDashboard({
       }
     });
 
-    fetch('/api/v1/auth/sms/status')
-      .then((res) => safeReadJson(res))
-      .then((data) => {
-        if (data?.success && data?.data) {
-          const allowed =
-            Array.isArray(data.data.allowedCountries) && data.data.allowedCountries.length > 0
-              ? data.data.allowedCountries
-              : ['+91'];
-          setSmsStatus({
-            smsConfigured: Boolean(data.data.smsConfigured),
-            mode: data.data.mode === 'twilio' ? 'twilio' : 'mock',
-            demoMode: Boolean(data.data.demoMode ?? data.data.mode === 'mock'),
-            allowedCountries: allowed,
-          });
-          if (!allowed.includes(phoneLinkCountry)) {
-            setPhoneLinkCountry(allowed[0]);
-          }
+    void Promise.allSettled([
+      fetch('/api/v1/auth/sms/status').then((res) => safeReadJson(res)),
+      fetch('/api/v1/auth/otp/send').then((res) => safeReadJson(res)),
+      fetch('/api/v1/analytics/health').then((res) => safeReadJson(res)),
+    ]).then(([smsRes, otpRes, healthRes]) => {
+      const smsData = smsRes.status === 'fulfilled' ? smsRes.value : null;
+      const otpData = otpRes.status === 'fulfilled' ? otpRes.value : null;
+      const healthData = healthRes.status === 'fulfilled' ? healthRes.value : null;
+
+      if (smsData?.success && smsData?.data) {
+        const allowed =
+          Array.isArray(smsData.data.allowedCountries) && smsData.data.allowedCountries.length > 0
+            ? smsData.data.allowedCountries
+            : ['+91'];
+        setSmsStatus({
+          smsConfigured: Boolean(smsData.data.smsConfigured),
+          mode: smsData.data.mode === 'twilio' ? 'twilio' : 'mock',
+          demoMode: Boolean(smsData.data.demoMode ?? smsData.data.mode === 'mock'),
+          allowedCountries: allowed,
+        });
+        if (!allowed.includes(phoneLinkCountry)) {
+          setPhoneLinkCountry(allowed[0]);
         }
-      })
-      .catch(() => {});
+      }
+
+      const persistence = healthData?.persistence || {};
+      const dbLive = Boolean(
+        persistence.mongodbConnected ||
+          persistence.upstashConfigured ||
+          persistence.redisConnected ||
+          persistence.redisConfigured
+      );
+
+      setChannelGatewayStatus({
+        loaded: true,
+        emailConfigured: Boolean(otpData?.emailConfigured),
+        emailVerified: Boolean(otpData?.emailVerified),
+        fast2smsConfigured: Boolean(otpData?.fast2smsConfigured),
+        firebasePhoneAuthConfigured: Boolean(otpData?.firebasePhoneAuthConfigured),
+        twilioConfigured: Boolean(smsData?.data?.twilioConfigured),
+        smsDemoMode: Boolean(smsData?.data?.demoMode ?? true),
+        dbLive,
+        dbMode: String(persistence.mode || 'local_json_fallback'),
+      });
+    });
 
     return () => unsub();
   }, []);
@@ -1157,6 +1387,27 @@ export default function MinimalistAegisDashboard({
     const data = await safeReadJson(res);
     if (!res.ok || !data.success) {
       throw new Error(data.message || 'Unable to dispatch simulated alert.');
+    }
+    const provStatus = data?.provenance?.status;
+    const provTrust: DedupProvenanceTrust =
+      provStatus === 'VERIFIED'
+        ? 'VERIFIED'
+        : provStatus === 'GATEWAY_ATTESTED' || data?.provenance?.badgeVariant === 'gateway'
+        ? 'GATEWAY_ATTESTED'
+        : 'UNVERIFIED';
+    if (data?.notificationId) {
+      await runClientDedupAndSyncRef.current({
+        notificationId: String(data.notificationId),
+        eventType: `${app.id.toUpperCase()}_SIMULATED`,
+        rawText: `[${app.name} · Simulated] ${message}`,
+        priority: 'MEDIUM',
+        sourceId: app.id,
+        senderId: user?.id || 'usr_sec_admin_01',
+        trust: provTrust,
+        verifiedForToast: Boolean(data?.provenance?.verified),
+        appName: app.name,
+        title,
+      });
     }
     fetchTelemetry();
   };
@@ -1963,9 +2214,34 @@ export default function MinimalistAegisDashboard({
       }
 
       setSimResult({ ...data, pipelineJob: pipelineJobInfo });
-      if (simUrgency === 'CRITICAL' && data.status !== 'DEDUPLICATED') {
-        playCriticalAlertSound();
-      }
+      const ingestTrust: DedupProvenanceTrust =
+        data?.provenance?.badgeVariant === 'verified'
+          ? 'VERIFIED'
+          : data?.provenance?.badgeVariant === 'gateway' ||
+            data?.provenance?.status === 'GATEWAY_ATTESTED'
+          ? 'GATEWAY_ATTESTED'
+          : 'UNVERIFIED';
+      const resolvedPriority = (
+        ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].includes(String(data?.priority || simUrgency))
+          ? String(data?.priority || simUrgency)
+          : simUrgency
+      ) as 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+
+      await runClientDedupAndSyncRef.current({
+        notificationId: String(data?.notificationId || notifId),
+        eventType: payload.eventType,
+        rawText,
+        priority: resolvedPriority,
+        sourceId: simApp || 'direct',
+        senderId: targetUserId,
+        trust: ingestTrust,
+        isPriorityFloorAlert: Boolean(
+          data?.priorityEngine?.appliedRules?.some((r: any) => r.rule === 'SECURITY_FLOOR') ||
+            resolvedPriority === 'CRITICAL'
+        ),
+        verifiedForToast: Boolean(data?.provenance?.verified),
+      });
+
       fetchTelemetry();
       fetchIntegrations();
     } catch (err: any) {
@@ -2243,151 +2519,48 @@ export default function MinimalistAegisDashboard({
                     ? 'VERIFIED'
                     : 'UNVERIFIED';
 
-                const rawEventLower = `${data.eventType || ''} ${data.rawText || ''}`.toLowerCase();
-                const inferredCategory =
-                  String(data.sanitizedPayload?.metadata?.category || '').toLowerCase() ||
-                  (rawEventLower.includes('otp')
-                    ? 'otp'
-                    : rawEventLower.includes('login') || rawEventLower.includes('password')
-                    ? 'auth'
-                    : rawEventLower.includes('security') || rawEventLower.includes('breach')
-                    ? 'security'
-                    : rawEventLower.includes('payment') ||
-                      rawEventLower.includes('debited') ||
-                      rawEventLower.includes('rs ')
-                    ? 'finance'
-                    : 'work');
-
-                const isOtpLoginOrKey = /\b(otp|one[- ]time|2fa|verification code|login code|key[- ]?change|pin[- ]?mismatch)\b/i.test(
-                  rawEventLower
-                );
-
-                const activeUser = vaultUserIdRef.current;
-                const activeCfg = userDedupSettingsRef.current;
-                const decision = await globalClientDedupWindow.processNotification({
-                  incoming: {
-                    notificationId: newItem.notificationId,
-                    userId: activeUser,
-                    sourceId: String(
-                      newItem.metadata?.appId || newItem.eventType || 'direct'
-                    ),
-                    senderId: String(
-                      newItem.provenanceEnvelope?.payload?.senderId ||
-                        newItem.metadata?.appId ||
-                        'gateway'
-                    ),
-                    category: inferredCategory,
-                    priority: (['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].includes(determinedPriority)
-                      ? determinedPriority
-                      : 'MEDIUM') as 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL',
-                    trust: effectiveTrust,
-                    timestampMs: Date.parse(newItem.timestamp) || Date.now(),
-                    isEphemeral: Boolean(newItem.metadata?.isEphemeral),
-                    isOtpOrLoginOrKeyChange: isOtpLoginOrKey,
-                    isPriorityFloorAlert: Boolean(
-                      newItem.priorityEngine?.appliedRules?.some(
-                        (r) => r.rule === 'SECURITY_FLOOR'
-                      ) || determinedPriority === 'CRITICAL'
-                    ),
-                    provenanceFailed: clientReport.badgeVariant === 'rejected',
-                  },
-                  rawTextInMemory: String(data.rawText || ''),
-                  embedder: embedTextInBrowser,
-                  options: activeCfg
-                    ? {
-                        dedupEnabled: activeCfg.dedupEnabled,
-                        mergeThreshold: activeCfg.effectiveMergeThreshold,
-                        reviewThreshold: activeCfg.reviewThreshold,
-                        windowMinutes: activeCfg.windowMinutes,
-                        neverMergeCategories: activeCfg.neverMergeCategories,
-                      }
-                    : undefined,
+                const decision = await runClientDedupAndSyncRef.current({
+                  notificationId: newItem.notificationId,
+                  eventType: String(data.eventType || 'DIRECT'),
+                  rawText: String(data.rawText || ''),
+                  priority: (['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].includes(determinedPriority)
+                    ? determinedPriority
+                    : 'MEDIUM') as 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL',
+                  sourceId: String(
+                    newItem.metadata?.appId || newItem.eventType || 'direct'
+                  ),
+                  senderId: String(
+                    newItem.provenanceEnvelope?.payload?.senderId ||
+                      newItem.metadata?.appId ||
+                      'gateway'
+                  ),
+                  timestamp: newItem.timestamp,
+                  categoryHint: String(data.sanitizedPayload?.metadata?.category || ''),
+                  isEphemeral: Boolean(newItem.metadata?.isEphemeral),
+                  isPriorityFloorAlert: Boolean(
+                    newItem.priorityEngine?.appliedRules?.some(
+                      (r) => r.rule === 'SECURITY_FLOOR'
+                    ) || determinedPriority === 'CRITICAL'
+                  ),
+                  trust: effectiveTrust,
+                  provenanceFailed: clientReport.badgeVariant === 'rejected',
+                  verifiedForToast: clientReport.verified,
+                  appName: data.sanitizedPayload?.metadata?.appName,
+                  title: data.sanitizedPayload?.metadata?.title,
+                  sendBrowserNotification: true,
                 });
 
-                setDedupThreadsById((prev) => ({
-                  ...prev,
-                  [decision.threadId]: decision.threadMetadata,
-                }));
-                setNotifThreadMap((prev) => ({
-                  ...prev,
-                  [newItem.notificationId]: decision.threadId,
-                }));
-                setNotifDecisionMap((prev) => ({
-                  ...prev,
-                  [newItem.notificationId]: decision,
-                }));
-                setNotifications((prev) =>
-                  prev.map((item) =>
-                    item.notificationId === newItem.notificationId
-                      ? { ...item, dedupThreadId: decision.threadId, dedupDecision: decision }
-                      : item
-                  )
-                );
-
-                // Sound & native notification fire once per new thread OR on escalation inside existing thread
-                if (determinedPriority === 'CRITICAL' && decision.shouldPlayAlert) {
-                  playCriticalAlertSound();
+                if (decision) {
+                  setNotifications((prev) =>
+                    prev.map((item) =>
+                      item.notificationId === newItem.notificationId
+                        ? { ...item, dedupThreadId: decision.threadId, dedupDecision: decision }
+                        : item
+                    )
+                  );
                 }
 
-                if (
-                  decision.shouldSendBrowserNotification &&
-                  typeof window !== 'undefined' &&
-                  'Notification' in window &&
-                  Notification.permission === 'granted'
-                ) {
-                  try {
-                    const appName = data.sanitizedPayload?.metadata?.appName;
-                    const title =
-                      data.sanitizedPayload?.metadata?.title ||
-                      (appName ? `${appName} · ${determinedPriority}` : `Aegis · ${data.eventType}`);
-                    new Notification(title, {
-                      body: clientReport.verified
-                        ? String(data.rawText || '').slice(0, 180)
-                        : 'Unverified security alert received — open AegisNotify to inspect provenance.',
-                      tag: String(decision.threadId || data.notificationId),
-                    });
-                  } catch {
-                    // Browser notification display error is non-fatal
-                  }
-                }
-
-                // Sync strictly metadata-only summary to backend (zero plaintext, zero vectors)
-                const authToken =
-                  typeof window !== 'undefined'
-                    ? window.localStorage.getItem('aegis_auth_token')
-                    : null;
-                if (authToken) {
-                  void fetch('/api/v1/dedup/threads', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      Authorization: `Bearer ${authToken}`,
-                    },
-                    body: JSON.stringify({
-                      notificationId: newItem.notificationId,
-                      action: decision.action,
-                      stageMatched: decision.stageMatched,
-                      similarity: decision.similarity,
-                      blockedByGuard: decision.blockedByGuard,
-                      perSourceCapHit: decision.guards.some(
-                        (g) => g.guard === 'PER_SOURCE_CAP' && !g.passed
-                      ),
-                      priorityEscalatedInThread: decision.priorityEscalatedInThread,
-                      threadMetadata: decision.threadMetadata,
-                    }),
-                  })
-                    .then(() => fetchTelemetry())
-                    .catch(() => {});
-                } else {
-                  fetchTelemetry();
-                }
-
-                if (firebaseUidRef.current && !newItem.metadata?.isEphemeral) {
-                  void syncDedupThreadToFirestore(
-                    firebaseUidRef.current,
-                    decision.threadMetadata
-                  ).catch(() => {});
-                }
+                fetchTelemetry();
               });
 
               if (autoAck) {
@@ -4686,6 +4859,86 @@ export default function MinimalistAegisDashboard({
               </div>
             </div>
 
+            {/* Settings: Channel & Persistence Readiness + Firestore TTL Reminder */}
+            <div className="glass-panel border border-[#E5DDD0] rounded-3xl p-6 sm:p-8 space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="space-y-1">
+                  <div className="flex items-center space-x-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-[#16161D] text-[#F472B6] flex items-center justify-center">
+                      <Activity className="w-4 h-4" />
+                    </div>
+                    <h2 className="font-display text-base font-semibold text-[#16161D]">
+                      Gateway &amp; Persistence Readiness
+                    </h2>
+                  </div>
+                  <p className="text-xs text-[#464451] leading-relaxed">
+                    Live backend configuration checks from OTP, SMS, and system health endpoints.
+                  </p>
+                </div>
+                <span className="text-[11px] font-mono-tech text-[#6F6C7A] whitespace-nowrap">
+                  Store: {channelGatewayStatus.dbMode}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {[
+                  {
+                    label: 'Email SMTP',
+                    isLive: channelGatewayStatus.emailConfigured && channelGatewayStatus.emailVerified,
+                    detail: channelGatewayStatus.emailConfigured ? 'SMTP verified' : 'Ethereal / console fallback',
+                  },
+                  {
+                    label: 'SMS OTP',
+                    isLive: channelGatewayStatus.twilioConfigured || (!channelGatewayStatus.smsDemoMode && smsStatus.smsConfigured),
+                    detail: channelGatewayStatus.twilioConfigured ? 'Twilio Verify active' : 'Allowlist demo mode',
+                  },
+                  {
+                    label: 'Fast2SMS',
+                    isLive: channelGatewayStatus.fast2smsConfigured,
+                    detail: channelGatewayStatus.fast2smsConfigured ? 'API key configured' : 'Mock dispatch fallback',
+                  },
+                  {
+                    label: 'DB Persistence',
+                    isLive: channelGatewayStatus.dbLive,
+                    detail: channelGatewayStatus.dbLive ? 'External DB connected' : 'Local JSON fallback',
+                  },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-2xl bg-[#FAF6F0] border border-[#E5DDD0] p-3.5 space-y-2"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-semibold text-[#16161D]">{item.label}</span>
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-mono-tech font-semibold border whitespace-nowrap ${
+                          item.isLive
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            : 'bg-amber-50 text-amber-800 border-amber-200'
+                        }`}
+                      >
+                        {item.isLive ? 'LIVE' : 'DEMO / UNCONFIGURED'}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#6F6C7A]">{item.detail}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="rounded-2xl bg-amber-50/85 border border-amber-200 px-4 py-3 flex items-start gap-2.5 text-xs text-amber-950">
+                <Clock className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  <div className="font-semibold">
+                    Firestore Ephemeral TTL Policy Reminder
+                  </div>
+                  <p className="text-[11px] text-amber-900 leading-relaxed">
+                    While the server sweeper crypto-shreds expired vault records every 5s, remember to enable a{' '}
+                    <span className="font-mono-tech font-semibold">Firestore TTL policy on ephemeralMessages.expireAt</span>{' '}
+                    in the Firebase Console so any synced ephemeral metadata documents auto-delete at the database layer.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Settings: Verify & Link Your Phone (SMS OTP Login + 2FA) */}
             <div className="glass-panel border border-[#E5DDD0] rounded-3xl p-6 sm:p-8 space-y-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -5113,17 +5366,63 @@ export default function MinimalistAegisDashboard({
               </div>
             </div>
 
+            {/* Gateway & Persistence Readiness Badges */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              {[
+                {
+                  label: 'Email SMTP',
+                  isLive: channelGatewayStatus.emailConfigured && channelGatewayStatus.emailVerified,
+                },
+                {
+                  label: 'SMS OTP',
+                  isLive: channelGatewayStatus.twilioConfigured || (!channelGatewayStatus.smsDemoMode && smsStatus.smsConfigured),
+                },
+                {
+                  label: 'Fast2SMS',
+                  isLive: channelGatewayStatus.fast2smsConfigured,
+                },
+                {
+                  label: 'DB Persistence',
+                  isLive: channelGatewayStatus.dbLive,
+                },
+              ].map((ch) => (
+                <div
+                  key={ch.label}
+                  className="glass-panel border border-[#E5DDD0] rounded-2xl px-4 py-3 flex items-center justify-between gap-2"
+                >
+                  <span className="text-xs font-semibold text-[#16161D]">{ch.label}</span>
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-mono-tech font-semibold border whitespace-nowrap ${
+                      ch.isLive
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        : 'bg-amber-50 text-amber-800 border-amber-200'
+                    }`}
+                  >
+                    {ch.isLive ? 'LIVE' : 'DEMO / UNCONFIGURED'}
+                  </span>
+                </div>
+              ))}
+            </div>
+
             {/* 3 Grid Gateway Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               {/* Card 1: Nodemailer Email Service */}
               <div className="glass-panel border border-[#E5DDD0] rounded-3xl p-6 space-y-4 flex flex-col justify-between">
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-2">
                     <div className="w-9 h-9 rounded-2xl bg-[#FCECF4] border border-[#F2C4DC] text-[#B52A70] flex items-center justify-center">
                       <Mail className="w-4 h-4" />
                     </div>
-                    <span className="text-[11px] font-semibold text-[#B52A70]">
-                      Nodemailer
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-mono-tech font-semibold border whitespace-nowrap ${
+                        channelGatewayStatus.emailConfigured && channelGatewayStatus.emailVerified
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : 'bg-amber-50 text-amber-800 border-amber-200'
+                      }`}
+                    >
+                      {channelGatewayStatus.emailConfigured && channelGatewayStatus.emailVerified
+                        ? 'LIVE'
+                        : 'DEMO / UNCONFIGURED'}
                     </span>
                   </div>
 
@@ -5211,12 +5510,18 @@ export default function MinimalistAegisDashboard({
               {/* Card 3: Fast2SMS Gateway */}
               <div className="glass-panel border border-[#E5DDD0] rounded-3xl p-6 space-y-4 flex flex-col justify-between">
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-2">
                     <div className="w-9 h-9 rounded-2xl bg-[#F2ECE2] border border-[#E5DDD0] text-[#16161D] flex items-center justify-center">
                       <Smartphone className="w-4 h-4" />
                     </div>
-                    <span className="text-[11px] font-semibold text-[#464451]">
-                      Fast2SMS
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-mono-tech font-semibold border whitespace-nowrap ${
+                        channelGatewayStatus.fast2smsConfigured
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : 'bg-amber-50 text-amber-800 border-amber-200'
+                      }`}
+                    >
+                      {channelGatewayStatus.fast2smsConfigured ? 'LIVE' : 'DEMO / UNCONFIGURED'}
                     </span>
                   </div>
 

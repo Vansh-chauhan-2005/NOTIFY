@@ -2,8 +2,8 @@
   "version": "1.0.0",
   "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
   "similarity_metric": "cosine",
-  "recommended_threshold": 0.98,
-  "best_f1_threshold": 0.5,
+  "recommended_threshold": 0.88,
+  "best_f1_threshold": 0.78,
   "high_precision_threshold": 0.98,
   "dedup_window_seconds": 300,
   "guardrails": {

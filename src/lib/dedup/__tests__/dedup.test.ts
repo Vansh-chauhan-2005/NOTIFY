@@ -318,10 +318,10 @@ describe('Semantic Deduplication Engine — Preprocessing, Math, Guards, Pipelin
     expect(assertNoPlaintextOrVectors({ vec: new Array(384).fill(0.05) }).ok).toBe(false);
   });
 
-  it('loads imported dedupConfig.json thresholds (0.98 / 0.50 / 300s) and clamps user adaptation in [0.80, 0.98]', () => {
-    expect(DEFAULT_DEDUP_CONFIG.recommendedThreshold).toBe(0.98);
-    expect(DEFAULT_DEDUP_CONFIG.mergeThreshold).toBe(0.98);
-    expect(DEFAULT_DEDUP_CONFIG.bestF1Threshold).toBe(0.5);
+  it('loads imported dedupConfig.json thresholds (0.88 / 0.78 / 300s) and clamps user adaptation in [0.80, 0.98]', () => {
+    expect(DEFAULT_DEDUP_CONFIG.recommendedThreshold).toBe(0.88);
+    expect(DEFAULT_DEDUP_CONFIG.mergeThreshold).toBe(0.88);
+    expect(DEFAULT_DEDUP_CONFIG.bestF1Threshold).toBe(0.78);
     expect(DEFAULT_DEDUP_CONFIG.dedupWindowSeconds).toBe(300);
     expect(DEFAULT_DEDUP_CONFIG.windowMinutes).toBe(5);
     expect(DEFAULT_DEDUP_CONFIG.guardrails.oppositeStatePairs.length).toBeGreaterThanOrEqual(11);

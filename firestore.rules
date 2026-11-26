@@ -25,7 +25,8 @@ service cloud.firestore {
     function isVerifiedIdentity() {
       return isSignedIn() && (
         request.auth.token.email_verified == true ||
-        request.auth.token.firebase.sign_in_provider == 'phone'
+        request.auth.token.firebase.sign_in_provider == 'phone' ||
+        request.auth.token.firebase.sign_in_provider == 'google.com'
       );
     }
 

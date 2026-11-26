@@ -14,10 +14,7 @@ import { addQuarantinedAlert } from '../../../../../lib/quarantine/store.js';
 import { logSecurityEvent, extractRequestContext } from '../../../../../lib/telemetry/securityLogger.js';
 import { computeCiphertextHash } from '../../../../../lib/provenance/canonical.js';
 import { createServerAttestedEnvelope } from '../../../../../lib/provenance/serverCrypto.js';
-import {
-  recordProvenanceOutcome,
-  verifyEnvelopeOnServer,
-} from '../../../../../lib/provenance/store.js';
+import { verifyEnvelopeOnServer } from '../../../../../lib/provenance/store.js';
 import type {
   ProvenanceEnvelopeV1,
   ProvenanceVerificationReport,
@@ -208,11 +205,14 @@ export async function POST(request: Request) {
     }
 
     const isGatewayWebhook = isVerifiedInternalWebhook;
+    const hasForgedGatewayHeader =
+      Boolean(request.headers.get('x-aegis-gateway-webhook')) && !isVerifiedInternalWebhook;
     const hasClientEnvelope = Boolean(body?.provenanceEnvelope && typeof body.provenanceEnvelope === 'object');
-    const explicitUnsignedOrStrict =
-      body?.provenanceEnvelope === null ||
+    const strictClientEd25519Required =
+      body?.requireEd25519Provenance === true ||
       body?.requireProvenance === true ||
-      (!isGatewayWebhook && (priority === 'CRITICAL' || priority === 'HIGH') && body?.allowUnsignedLegacy !== true);
+      body?.provenanceEnvelope === null ||
+      hasForgedGatewayHeader;
 
     const notificationId =
       typeof body?.notificationId === 'string' && /^[a-zA-Z0-9_-]{4,128}$/.test(body.notificationId)
@@ -282,7 +282,7 @@ export async function POST(request: Request) {
         ...report,
         envelope: storedProvenanceEnvelope,
       };
-    } else if (!isGatewayWebhook && (priority === 'CRITICAL' || priority === 'HIGH') && explicitUnsignedOrStrict) {
+    } else if (strictClientEd25519Required || (!callerUser && !isGatewayWebhook)) {
       const unsignedReport = await verifyEnvelopeOnServer({
         envelope: null,
         expectedRecipientId: userId,
@@ -293,7 +293,9 @@ export async function POST(request: Request) {
 
       addQuarantinedAlert({
         reason: 'INVALID_SIGNATURE',
-        reasonLabel: 'Unsigned High-Priority Notification Blocked (Zero-Trust Policy)',
+        reasonLabel: hasForgedGatewayHeader
+          ? 'Forged Gateway Webhook Header Blocked (Zero-Trust Policy)'
+          : 'Unsigned Notification Blocked (Strict Ed25519 Provenance Policy)',
         description: unsignedReport.reason,
         sourceIp: reqCtx.ipAddress,
         sourceApp: (metadata?.sourceApp as string) || 'Unsigned Direct Ingest',
@@ -304,26 +306,35 @@ export async function POST(request: Request) {
           priority,
           status: 'UNSIGNED',
         },
-        riskLevel: 'HIGH',
+        riskLevel: priority === 'CRITICAL' || priority === 'HIGH' ? 'HIGH' : 'MEDIUM',
       });
 
       return Response.json(
         {
           success: false,
-          error: 'Unsigned High-Priority Notification Rejected',
+          error: 'Unsigned Notification Rejected',
           status: 'UNSIGNED',
-          message: `Zero-Trust Provenance requires an Ed25519 signature for ${priority} notifications.`,
+          message: hasForgedGatewayHeader
+            ? 'Forged gateway header rejected: strict Ed25519 origin provenance is required.'
+            : `Zero-Trust Provenance requires a client Ed25519 signature when requireEd25519Provenance is enabled.`,
           data: { provenance: unsignedReport },
         },
         { status: 403 }
       );
-    } else if (isGatewayWebhook) {
+    } else {
       const preTextAnalysis = computeTextImportanceScore(rawText);
+      const gatewaySenderId = isGatewayWebhook
+        ? (metadata?.appId as string) || 'webhook-gateway'
+        : callerUser?.userId || userId;
+      const gatewaySource = isGatewayWebhook
+        ? (metadata?.appId as string) || 'webhook'
+        : (metadata?.sourceApp as string) || (metadata?.appId as string) || 'direct';
+
       storedProvenanceEnvelope = await createServerAttestedEnvelope({
         messageId: notificationId,
-        senderId: (metadata?.appId as string) || 'webhook-gateway',
+        senderId: gatewaySenderId,
         recipientId: userId,
-        source: (metadata?.appId as string) || 'webhook',
+        source: gatewaySource,
         priority,
         ciphertextOrDigestInput: rawText,
         role: 'GATEWAY',
@@ -338,22 +349,10 @@ export async function POST(request: Request) {
         priority,
         enforceReplay: false,
       });
-    } else {
-      provenanceReport = {
-        status: 'UNSIGNED',
-        verified: false,
-        reason: 'Sender dispatched a LOW/MEDIUM notification without an Ed25519 signing key.',
-        alg: 'NONE',
-        badgeVariant: 'unverified',
-        chain: [],
-      };
-      await recordProvenanceOutcome({
-        report: provenanceReport,
-        messageId: notificationId,
-        senderId: userId,
-        recipientId: userId,
-        source: 'direct',
-      });
+      if (!isGatewayWebhook && provenanceReport.verified) {
+        provenanceReport.reason =
+          'Authenticated notification automatically gateway-attested with server Ed25519 key (no personal client key unlocked).';
+      }
     }
 
     // 3. Semantic Deduplication runs on-device in browser Web Worker + safety guards
@@ -548,7 +547,10 @@ export async function POST(request: Request) {
         },
         provenance: provenanceReport
           ? {
-              status: provenanceReport.status,
+              status:
+                provenanceReport.badgeVariant === 'gateway'
+                  ? 'GATEWAY_ATTESTED'
+                  : provenanceReport.status,
               verified: provenanceReport.verified,
               kid: provenanceReport.kid,
               badgeVariant: provenanceReport.badgeVariant,

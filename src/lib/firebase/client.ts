@@ -854,6 +854,17 @@ export async function saveOnboardingAndConsent(
   const userPath = `users/${userId}`;
   const consentPath = `users/${userId}/consents/privacy_v1`;
 
+  const providerIds = auth.currentUser.providerData?.map((p) => p.providerId) || [];
+  const detectedProvider: AuthProviderKind = providerIds.includes('google.com')
+    ? 'google'
+    : providerIds.includes('phone') || (auth.currentUser.phoneNumber && !auth.currentUser.email)
+    ? 'phone'
+    : 'password';
+  const cleanEmail = auth.currentUser.email ? auth.currentUser.email.trim().slice(0, 254) : '';
+  const cleanDisplayName = auth.currentUser.displayName
+    ? auth.currentUser.displayName.trim().slice(0, 120)
+    : '';
+
   try {
     const userRef = doc(db, 'users', userId);
     const userSnap = await getDocFromServer(userRef).catch(() => null);
@@ -867,20 +878,21 @@ export async function saveOnboardingAndConsent(
     } else {
       await setDoc(userRef, {
         uid: userId,
-        ...(auth.currentUser.email ? { email: auth.currentUser.email.trim().slice(0, 254) } : {}),
-        ...(auth.currentUser.displayName
-          ? { displayName: auth.currentUser.displayName.trim().slice(0, 120) }
-          : {}),
+        ...(cleanEmail.length >= 3 ? { email: cleanEmail } : {}),
+        ...(cleanDisplayName.length >= 1 ? { displayName: cleanDisplayName } : {}),
         role: 'USER',
-        authProvider:
-          auth.currentUser.phoneNumber && !auth.currentUser.email ? 'phone' : 'google',
+        authProvider: detectedProvider,
         onboardingCompleted: true,
         consentGranted,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
     }
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, userPath);
+  }
 
+  try {
     const consentRef = doc(db, 'users', userId, 'consents', 'privacy_v1');
     const consentSnap = await getDocFromServer(consentRef).catch(() => null);
 
@@ -907,7 +919,7 @@ export async function saveOnboardingAndConsent(
       });
     }
   } catch (error) {
-    handleFirestoreError(error, OperationType.WRITE, `${userPath} | ${consentPath}`);
+    handleFirestoreError(error, OperationType.WRITE, consentPath);
   }
 
   return state;
@@ -1354,9 +1366,9 @@ export async function loadDedupSettingsFromFirestore(
     const data = snap.data();
     return {
       dedupEnabled: typeof data.dedupEnabled === 'boolean' ? data.dedupEnabled : true,
-      mergeThreshold: Number(data.mergeThreshold ?? 0.98),
-      reviewThreshold: Number(data.reviewThreshold ?? 0.5),
-      effectiveMergeThreshold: Number(data.effectiveMergeThreshold ?? 0.98),
+      mergeThreshold: Number(data.mergeThreshold ?? 0.88),
+      reviewThreshold: Number(data.reviewThreshold ?? 0.78),
+      effectiveMergeThreshold: Number(data.effectiveMergeThreshold ?? 0.88),
       windowMinutes: Number(data.windowMinutes ?? 5),
       neverMergeCategories: Array.isArray(data.neverMergeCategories)
         ? data.neverMergeCategories.map((c: unknown) => String(c))
@@ -1396,11 +1408,11 @@ export async function saveDedupSettingsToFirestore(
 
     const payload = {
       dedupEnabled: Boolean(settings.dedupEnabled),
-      mergeThreshold: Math.max(0.5, Math.min(0.99, Number(settings.mergeThreshold) || 0.98)),
-      reviewThreshold: Math.max(0.5, Math.min(0.99, Number(settings.reviewThreshold) || 0.5)),
+      mergeThreshold: Math.max(0.5, Math.min(0.99, Number(settings.mergeThreshold) || 0.88)),
+      reviewThreshold: Math.max(0.5, Math.min(0.99, Number(settings.reviewThreshold) || 0.78)),
       effectiveMergeThreshold: Math.max(
         0.8,
-        Math.min(0.98, Number(settings.effectiveMergeThreshold) || 0.98)
+        Math.min(0.98, Number(settings.effectiveMergeThreshold) || 0.88)
       ),
       windowMinutes: Math.max(5, Math.min(180, Math.round(Number(settings.windowMinutes) || 5))),
       neverMergeCategories: categories,

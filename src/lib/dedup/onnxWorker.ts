@@ -43,15 +43,28 @@ async function ensureModelLoaded(modelId: string, preferWebGpu = false): Promise
 
   initPromise = (async () => {
     try {
-      const transformersCdnUrl: string =
-        'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.web.min.js';
-      const transformers = await import(/* @vite-ignore */ transformersCdnUrl);
+      const cdnUrls = [
+        'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.web.min.js',
+        'https://unpkg.com/@huggingface/transformers@4.3.2/dist/transformers.web.min.js',
+      ];
+      let transformers: any = null;
+      let lastLoadErr: any = null;
+      for (const cdnUrl of cdnUrls) {
+        try {
+          transformers = await import(/* @vite-ignore */ cdnUrl);
+          if (transformers?.pipeline) break;
+        } catch (err) {
+          lastLoadErr = err;
+        }
+      }
+      if (!transformers?.pipeline) {
+        throw lastLoadErr || new Error('Unable to load @huggingface/transformers Web runtime.');
+      }
       const { pipeline, env } = transformers as any;
 
       if (env) {
         env.useBrowserCache = true;
-        env.allowLocalModels = true;
-        env.localModelPath = '/models/';
+        env.allowLocalModels = false;
         env.allowRemoteModels = true;
         if (env.backends?.onnx?.wasm) {
           env.backends.onnx.wasm.numThreads = 1;

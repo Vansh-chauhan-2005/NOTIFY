@@ -24,8 +24,8 @@ interface RawImportedDedupConfig {
 }
 
 function hydrateDedupConfig(raw: RawImportedDedupConfig): DedupConfig {
-  const recommended = typeof raw.recommended_threshold === 'number' ? raw.recommended_threshold : 0.98;
-  const bestF1 = typeof raw.best_f1_threshold === 'number' ? raw.best_f1_threshold : 0.5;
+  const recommended = typeof raw.recommended_threshold === 'number' ? raw.recommended_threshold : 0.88;
+  const bestF1 = typeof raw.best_f1_threshold === 'number' ? raw.best_f1_threshold : 0.78;
   const highPrec =
     typeof raw.high_precision_threshold === 'number' ? raw.high_precision_threshold : recommended;
   const windowSeconds =
@@ -157,7 +157,7 @@ function hydrateDedupConfig(raw: RawImportedDedupConfig): DedupConfig {
       outOfScopeAndHonesty: [
         'Similarity heuristic only — paraphrases, abbreviations, or multilingual phrasing can still miss or collide.',
         'Never merges CRITICAL/security/OTP/login/provenance-failure alerts or notifications with differing numbers or opposite state pairs (e.g. down/recovered, debited/credited, cancelled/confirmed).',
-        'Evaluation figures come from the imported Colab benchmark & threshold sweep (PR-AUC 0.714, Tricky FP Rate 1.11% at threshold 0.98), NOT live production traffic.',
+        'Evaluation figures come from the imported Colab benchmark & threshold sweep (PR-AUC 0.714, Tricky FP Rate 1.11% at high-precision 0.98; live calibrated default 0.88 merge / 0.78 review), NOT live production traffic.',
         'Plaintext and embedding float vectors stay strictly in device volatile RAM and are never persisted or logged.',
       ],
     },

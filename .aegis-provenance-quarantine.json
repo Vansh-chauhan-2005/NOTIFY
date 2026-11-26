@@ -1,15 +1,5 @@
 [
   {
-    "id": "pq_mwt12r8p_8b68ea48",
-    "timestamp": "2026-11-23T08:52:52.201Z",
-    "messageId": "notif_1795423972199_qb7t4",
-    "senderId": "usr_root_admin",
-    "recipientId": "usr_root_admin",
-    "source": "direct",
-    "verificationResult": "UNSIGNED",
-    "reason": "Sender dispatched a LOW/MEDIUM notification without an Ed25519 signing key."
-  },
-  {
     "id": "pq_mwt10mxu_800ddc76",
     "timestamp": "2026-11-23T08:51:13.314Z",
     "messageId": "sim_k_mwt10mw5",
@@ -268,16 +258,6 @@
     "isDemo": true
   },
   {
-    "id": "pq_mwt0fi9n_7f4ac2b9",
-    "timestamp": "2026-11-23T08:34:47.483Z",
-    "messageId": "notif_1795422887483_zztkj",
-    "senderId": "usr_root_admin",
-    "recipientId": "usr_root_admin",
-    "source": "direct",
-    "verificationResult": "UNSIGNED",
-    "reason": "Sender dispatched a LOW/MEDIUM notification without an Ed25519 signing key."
-  },
-  {
     "id": "pq_mwt0ffzd_4c93fc0b",
     "timestamp": "2026-11-23T08:34:44.521Z",
     "messageId": "sim_k_mwt0ffxg",
@@ -405,41 +385,5 @@
     "verificationResult": "UNSIGNED",
     "reason": "Notification carries no Ed25519 provenance envelope.",
     "isDemo": true
-  },
-  {
-    "id": "pq_mwt0eod4_b785c57c",
-    "timestamp": "2026-11-23T08:34:08.728Z",
-    "messageId": "notif_1795422848728_fxvan",
-    "senderId": "usr_root_admin",
-    "recipientId": "usr_root_admin",
-    "source": "direct",
-    "verificationResult": "UNSIGNED",
-    "reason": "Sender dispatched a LOW/MEDIUM notification without an Ed25519 signing key."
-  },
-  {
-    "id": "pq_mwrkpw7f_1e8873a5",
-    "timestamp": "2026-11-22T08:27:12.076Z",
-    "messageId": "notif_1795336032075_txtzz",
-    "senderId": "verify-user-ingest",
-    "recipientId": "verify-user-ingest",
-    "source": "direct",
-    "verificationResult": "UNSIGNED",
-    "reason": "Sender dispatched a LOW/MEDIUM notification without an Ed25519 signing key."
-  },
-  {
-    "id": "pq_mwrkpdt8_9bd40543",
-    "timestamp": "2026-11-22T08:26:48.236Z",
-    "messageId": "notif_1795336008236_ttaef",
-    "recipientId": "usr_1795336007983",
-    "verificationResult": "UNSIGNED",
-    "reason": "Notification carries no Ed25519 provenance envelope."
-  },
-  {
-    "id": "pq_mwrko3bj_441be297",
-    "timestamp": "2026-11-22T08:25:47.983Z",
-    "messageId": "notif_1795335947975_8fk4v",
-    "recipientId": "verify-user-1",
-    "verificationResult": "UNSIGNED",
-    "reason": "Notification carries no Ed25519 provenance envelope."
   }
 ]

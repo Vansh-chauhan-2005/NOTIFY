@@ -1,11 +1,149 @@
 [
   {
+    "id": "dlv_mwx5chmn_c018420f",
+    "notificationId": "sim_dlv_1795673009470",
+    "userId": "sim_dedup_1795673009459",
+    "priority": "HIGH",
+    "state": "QUEUED",
+    "channel": "push",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 0,
+    "attempt": 0,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-26T06:03:29.470Z",
+    "expiresAt": "2026-11-26T07:03:29.470Z",
+    "history": [
+      {
+        "timestamp": "2026-11-26T06:03:29.470Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-26T06:03:29.473Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795673009473 merged into thr_sim_dlv_1795673009470, 94% sim)"
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795673009459:sim_dlv_1795673009470",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-26T06:03:29.470Z",
+    "updatedAt": "2026-11-26T06:03:29.473Z"
+  },
+  {
+    "id": "dlv_mwx3x0iy_9e39e506",
+    "notificationId": "sim_dlv_1795670607849",
+    "userId": "sim_dedup_1795670607838",
+    "priority": "HIGH",
+    "state": "FAILED_ALL_CHANNELS",
+    "channel": "none",
+    "channelChain": [
+      "push",
+      "email"
+    ],
+    "channelIndex": 1,
+    "attempt": 1,
+    "requiresAck": true,
+    "ackTimeoutMs": 120000,
+    "maxRetriesPerChannel": 1,
+    "nextAttemptAt": "2026-11-26T05:56:22.033Z",
+    "expiresAt": "2026-11-26T06:23:27.850Z",
+    "history": [
+      {
+        "timestamp": "2026-11-26T05:23:27.850Z",
+        "from": "QUEUED",
+        "event": "CREATE",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "Queued for push -> email"
+      },
+      {
+        "timestamp": "2026-11-26T05:23:27.852Z",
+        "from": "QUEUED",
+        "event": "DEDUP_SUPPRESSED",
+        "to": "QUEUED",
+        "channel": "push",
+        "result": "duplicate suppressed (sim_dlv_dup_1795670607852 merged into thr_sim_dlv_1795670607849, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-26T05:52:22.022Z",
+        "from": "QUEUED",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "push",
+        "result": "Starting primary delivery on push."
+      },
+      {
+        "timestamp": "2026-11-26T05:52:22.024Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "push",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-26T05:54:22.034Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FALLBACK",
+        "channel": "email",
+        "result": "push timed out after 2m -> falling back to email"
+      },
+      {
+        "timestamp": "2026-11-26T05:54:22.035Z",
+        "from": "FALLBACK",
+        "event": "START",
+        "to": "ATTEMPTING",
+        "channel": "email",
+        "result": "Fallback attempt #1 initiated on email."
+      },
+      {
+        "timestamp": "2026-11-26T05:54:22.037Z",
+        "from": "ATTEMPTING",
+        "event": "SEND_OK",
+        "to": "AWAITING_ACK",
+        "channel": "email",
+        "result": "mock-delivered"
+      },
+      {
+        "timestamp": "2026-11-26T05:56:22.053Z",
+        "from": "AWAITING_ACK",
+        "event": "ACK_TIMEOUT",
+        "to": "FAILED_ALL_CHANNELS",
+        "channel": "email",
+        "result": "email timed out after 2m with no remaining fallback channels."
+      }
+    ],
+    "idempotencyKey": "notif:sim_dedup_1795670607838:sim_dlv_1795670607849",
+    "isDemoJob": true,
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "acknowledgedAt": null,
+    "acknowledgedVia": null,
+    "createdAt": "2026-11-26T05:23:27.850Z",
+    "updatedAt": "2026-11-26T05:56:22.053Z"
+  },
+  {
     "id": "dlv_mwulepjf_4c233b90",
     "notificationId": "sim_dlv_1795518588363",
     "userId": "sim_dedup_1795518588353",
     "priority": "HIGH",
-    "state": "QUEUED",
-    "channel": "push",
+    "state": "EXPIRED",
+    "channel": "none",
     "channelChain": [
       "push",
       "email"
@@ -33,6 +171,14 @@
         "to": "QUEUED",
         "channel": "push",
         "result": "duplicate suppressed (sim_dlv_dup_1795518588365 merged into thr_sim_dlv_1795518588363, 94% sim)"
+      },
+      {
+        "timestamp": "2026-11-26T05:20:39.247Z",
+        "from": "QUEUED",
+        "event": "EXPIRE",
+        "to": "EXPIRED",
+        "channel": "push",
+        "result": "Delivery job TTL expired before acknowledgement."
       }
     ],
     "idempotencyKey": "notif:sim_dedup_1795518588353:sim_dlv_1795518588363",
@@ -42,7 +188,7 @@
     "acknowledgedAt": null,
     "acknowledgedVia": null,
     "createdAt": "2026-11-24T11:09:48.363Z",
-    "updatedAt": "2026-11-24T11:09:48.365Z"
+    "updatedAt": "2026-11-26T05:20:39.247Z"
   },
   {
     "id": "dlv_mwukkify_0bd0ab70",

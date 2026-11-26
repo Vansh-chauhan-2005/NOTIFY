@@ -3,10 +3,10 @@
     "guest": {
       "userId": "guest",
       "dedupEnabled": true,
-      "mergeThreshold": 0.98,
-      "reviewThreshold": 0.5,
+      "mergeThreshold": 0.88,
+      "reviewThreshold": 0.78,
       "personalThresholdOffset": 0,
-      "effectiveMergeThreshold": 0.98,
+      "effectiveMergeThreshold": 0.88,
       "windowMinutes": 5,
       "neverMergeCategories": [
         "security",
@@ -20,10 +20,10 @@
     "sim_dedup_1795422884417": {
       "userId": "sim_dedup_1795422884417",
       "dedupEnabled": true,
-      "mergeThreshold": 0.98,
-      "reviewThreshold": 0.5,
+      "mergeThreshold": 0.88,
+      "reviewThreshold": 0.78,
       "personalThresholdOffset": 0,
-      "effectiveMergeThreshold": 0.98,
+      "effectiveMergeThreshold": 0.88,
       "windowMinutes": 5,
       "neverMergeCategories": [
         "security",
@@ -37,10 +37,10 @@
     "sim_dedup_1795423838798": {
       "userId": "sim_dedup_1795423838798",
       "dedupEnabled": true,
-      "mergeThreshold": 0.98,
-      "reviewThreshold": 0.5,
+      "mergeThreshold": 0.88,
+      "reviewThreshold": 0.78,
       "personalThresholdOffset": 0,
-      "effectiveMergeThreshold": 0.98,
+      "effectiveMergeThreshold": 0.88,
       "windowMinutes": 5,
       "neverMergeCategories": [
         "security",
@@ -54,10 +54,10 @@
     "sim_dedup_1795423876369": {
       "userId": "sim_dedup_1795423876369",
       "dedupEnabled": true,
-      "mergeThreshold": 0.98,
-      "reviewThreshold": 0.5,
+      "mergeThreshold": 0.88,
+      "reviewThreshold": 0.78,
       "personalThresholdOffset": 0,
-      "effectiveMergeThreshold": 0.98,
+      "effectiveMergeThreshold": 0.88,
       "windowMinutes": 5,
       "neverMergeCategories": [
         "security",

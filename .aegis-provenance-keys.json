@@ -1,18 +1,18 @@
 [
   {
-    "kid": "c7aaba53aaabafd2",
+    "kid": "418fa56ff50413b1",
     "userId": "aegis-server-gateway",
-    "publicKey": "UqOcuXyYcgVU9zz9Q1Tid/FrQt1GjUQ5qQHTudO1nfE=",
+    "publicKey": "s7ULsOmuZDTOdoEti35UaCzJXxJjuYLcKjYw/Srf2jE=",
     "status": "ACTIVE",
-    "createdAt": "2026-11-22T08:24:47.978Z",
-    "fingerprintHex": "C7AA-BA53-AAAB-AFD2-25A9-1D7C-90BA-B80C",
+    "createdAt": "2026-11-26T05:59:06.365Z",
+    "fingerprintHex": "418F-A56F-F504-13B1-3EB4-A930-D00A-2697",
     "fingerprintWords": [
-      "helm",
-      "geyser",
-      "griffin",
-      "core",
-      "geyser",
-      "glacier"
+      "cipher",
+      "finch",
+      "gate",
+      "diamond",
+      "arrow",
+      "arch"
     ]
   },
   {
@@ -29,22 +29,6 @@
       "banner",
       "carbon",
       "draft"
-    ]
-  },
-  {
-    "kid": "9badcd2c04959264",
-    "userId": "aegis-server-gateway",
-    "publicKey": "zL0XB8dTSCmA+WtrnRqPPKw93yecR2UlmnocYY4bHoI=",
-    "status": "ACTIVE",
-    "createdAt": "2026-11-23T08:33:44.482Z",
-    "fingerprintHex": "9BAD-CD2C-0495-9264-8AC9-4498-3B2E-DE7C",
-    "fingerprintWords": [
-      "fountain",
-      "glass",
-      "hound",
-      "canon",
-      "arch",
-      "flora"
     ]
   },
   {
@@ -133,22 +117,6 @@
     ]
   },
   {
-    "kid": "80b4ef4fabda49e4",
-    "userId": "aegis-server-gateway",
-    "publicKey": "XEDpqi7X63tvXuM/z5jqqOI6zNgbMgsqxVvRmS3yMgU=",
-    "status": "ACTIVE",
-    "createdAt": "2026-11-23T08:49:35.743Z",
-    "fingerprintHex": "80B4-EF4F-ABDA-49E4-1F5B-CE6A-C7AC-9AB7",
-    "fingerprintWords": [
-      "elder",
-      "gorge",
-      "knot",
-      "compass",
-      "glacier",
-      "iron"
-    ]
-  },
-  {
     "kid": "e58942871375e666",
     "userId": "prov_sim_sender_mwt0ztxl_rev",
     "publicKey": "4hqx7Rone+ZD8y74iHXqCfvArEvJX7Z4Szlmcnd/1MA=",
@@ -231,22 +199,6 @@
       "kiln",
       "fable",
       "charm"
-    ]
-  },
-  {
-    "kid": "49f0533ff5cce994",
-    "userId": "aegis-server-gateway",
-    "publicKey": "l16B7PlayRpFIaARbVYTWLYkEha0vJDK51mXdqGuxAE=",
-    "status": "ACTIVE",
-    "createdAt": "2026-11-23T08:50:13.276Z",
-    "fingerprintHex": "49F0-533F-F5CC-E994-9763-292E-0650-FCD8",
-    "fingerprintWords": [
-      "clover",
-      "amber",
-      "core",
-      "chord",
-      "arrow",
-      "horn"
     ]
   },
   {

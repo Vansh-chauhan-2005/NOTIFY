@@ -313,7 +313,7 @@ export async function embedTextInBrowser(
     const timer = setTimeout(() => {
       pendingRequests.delete(requestId);
       resolve({ embedding: null, mode: 'tfidf_lightweight' });
-    }, 16000);
+    }, 17000);
 
     pendingRequests.set(requestId, { resolve, timer });
     worker.postMessage({

@@ -1,4 +1,6 @@
 import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
 import {
   base64ToBytes,
   buildAttestationSigningBytes,
@@ -27,7 +29,7 @@ export interface ServerProvenanceKeyInfo {
   fingerprintWords: string[];
   validFrom: string;
   validUntil: string;
-  source: 'env' | 'ephemeral-dev';
+  source: 'env' | 'local-persisted' | 'ephemeral-dev';
 }
 
 interface InternalServerKeyHolder {
@@ -66,6 +68,65 @@ export function rawSeedToPrivateKeyObject(seedBytes: Uint8Array): crypto.KeyObje
   return crypto.createPrivateKey({ key: pkcs8Der, format: 'der', type: 'pkcs8' });
 }
 
+function getLocalServerKeyFilePath(): string {
+  return path.resolve(process.cwd(), '.aegis-provenance-server-key.json');
+}
+
+function loadOrCreateLocalServerKey(): {
+  privateKey: crypto.KeyObject;
+  source: 'local-persisted' | 'ephemeral-dev';
+  createdAtMs?: number;
+} {
+  if (process.env.VITEST) {
+    return {
+      privateKey: crypto.generateKeyPairSync('ed25519').privateKey,
+      source: 'ephemeral-dev',
+    };
+  }
+
+  const keyFile = getLocalServerKeyFilePath();
+  try {
+    if (fs.existsSync(keyFile)) {
+      const parsed = JSON.parse(fs.readFileSync(keyFile, 'utf8'));
+      const pem = typeof parsed?.pkcs8Pem === 'string' ? parsed.pkcs8Pem : '';
+      if (pem.includes('BEGIN PRIVATE KEY')) {
+        const priv = crypto.createPrivateKey(pem);
+        if (priv.asymmetricKeyType === 'ed25519') {
+          const createdAtMs =
+            typeof parsed?.createdAt === 'string' && !Number.isNaN(Date.parse(parsed.createdAt))
+              ? Date.parse(parsed.createdAt)
+              : undefined;
+          return { privateKey: priv, source: 'local-persisted', createdAtMs };
+        }
+      }
+    }
+  } catch {
+    // Regenerate below if local key file is corrupt/unreadable
+  }
+
+  const generated = crypto.generateKeyPairSync('ed25519').privateKey;
+  const createdAtIso = new Date().toISOString();
+  try {
+    const pkcs8Pem = generated.export({ type: 'pkcs8', format: 'pem' }).toString();
+    const pubDer = crypto.createPublicKey(generated).export({ type: 'spki', format: 'der' }) as Buffer;
+    const kid = crypto.createHash('sha256').update(pubDer.subarray(pubDer.length - 32)).digest('hex').slice(0, 16);
+    const tmpFile = `${keyFile}.tmp`;
+    fs.writeFileSync(
+      tmpFile,
+      JSON.stringify({ v: 1, kid, pkcs8Pem, createdAt: createdAtIso }, null, 2),
+      { encoding: 'utf8', mode: 0o600 }
+    );
+    fs.renameSync(tmpFile, keyFile);
+    return {
+      privateKey: generated,
+      source: 'local-persisted',
+      createdAtMs: Date.parse(createdAtIso),
+    };
+  } catch {
+    return { privateKey: generated, source: 'ephemeral-dev' };
+  }
+}
+
 function loadServerKeyFromEnvOrGenerate(): InternalServerKeyHolder {
   if (global.__aegisProvenanceServerKey) {
     return global.__aegisProvenanceServerKey;
@@ -73,7 +134,8 @@ function loadServerKeyFromEnvOrGenerate(): InternalServerKeyHolder {
 
   const rawEnv = process.env.PROVENANCE_SERVER_SIGNING_KEY?.trim();
   let privateKey: crypto.KeyObject;
-  let source: 'env' | 'ephemeral-dev' = 'ephemeral-dev';
+  let source: 'env' | 'local-persisted' | 'ephemeral-dev' = 'ephemeral-dev';
+  let persistedCreatedAtMs: number | undefined;
 
   if (rawEnv) {
     try {
@@ -95,15 +157,19 @@ function loadServerKeyFromEnvOrGenerate(): InternalServerKeyHolder {
       source = 'env';
     } catch (err: any) {
       console.warn(
-        '[Provenance] Invalid PROVENANCE_SERVER_SIGNING_KEY env value, generating ephemeral runtime Ed25519 key:',
+        '[Provenance] Invalid PROVENANCE_SERVER_SIGNING_KEY env value, falling back to local persisted/ephemeral Ed25519 key:',
         err?.message
       );
-      privateKey = crypto.generateKeyPairSync('ed25519').privateKey;
-      source = 'ephemeral-dev';
+      const loaded = loadOrCreateLocalServerKey();
+      privateKey = loaded.privateKey;
+      source = loaded.source;
+      persistedCreatedAtMs = loaded.createdAtMs;
     }
   } else {
-    privateKey = crypto.generateKeyPairSync('ed25519').privateKey;
-    source = 'ephemeral-dev';
+    const loaded = loadOrCreateLocalServerKey();
+    privateKey = loaded.privateKey;
+    source = loaded.source;
+    persistedCreatedAtMs = loaded.createdAtMs;
   }
 
   const publicKeyObj = crypto.createPublicKey(privateKey);
@@ -119,7 +185,7 @@ function loadServerKeyFromEnvOrGenerate(): InternalServerKeyHolder {
     .map((idx) => first32.slice(idx, idx + 4))
     .join('-');
 
-  const nowMs = Date.now();
+  const baseMs = persistedCreatedAtMs ?? Date.now();
   const holder: InternalServerKeyHolder = {
     privateKey,
     publicKeyObj,
@@ -129,8 +195,8 @@ function loadServerKeyFromEnvOrGenerate(): InternalServerKeyHolder {
       spkiPem,
       fingerprintHex,
       fingerprintWords: [],
-      validFrom: new Date(nowMs - 60_000).toISOString(),
-      validUntil: new Date(nowMs + 90 * 24 * 60 * 60 * 1000).toISOString(),
+      validFrom: new Date(baseMs - 60_000).toISOString(),
+      validUntil: new Date(baseMs + 90 * 24 * 60 * 60 * 1000).toISOString(),
       source,
     },
   };

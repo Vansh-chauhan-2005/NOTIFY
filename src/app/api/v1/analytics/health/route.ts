@@ -31,6 +31,23 @@ export async function GET() {
     cryptoStatus = 'error';
   }
 
+  const hasEnv = (name: string): boolean => Boolean(process.env[name]?.trim());
+
+  const mongodbConfigured = hasEnv('MONGODB_URI');
+  const mongodbConnected = mongoStatus === 'healthy_connected';
+  const redisConfigured = hasEnv('REDIS_URL') || process.env.USE_REAL_REDIS === 'true';
+  const upstashConfigured =
+    hasEnv('UPSTASH_REDIS_REST_URL') && hasEnv('UPSTASH_REDIS_REST_TOKEN');
+  const redisConnected = redisStatus === 'healthy';
+
+  const provenanceServerSigningKeySet = hasEnv('PROVENANCE_SERVER_SIGNING_KEY');
+  const aegisKeypairConfigured = hasEnv('AEGIS_PUBLIC_KEY') && hasEnv('AEGIS_PRIVATE_KEY');
+  const jwtSecretSet = hasEnv('JWT_SECRET');
+  const vapidConfigured = hasEnv('VAPID_PUBLIC_KEY') && hasEnv('VAPID_PRIVATE_KEY');
+  const connectionEncryptionKeySet = hasEnv('CONNECTION_ENCRYPTION_KEY');
+  const deliveryAckSecretSet = hasEnv('DELIVERY_ACK_SECRET');
+  const gatewayIpSaltSet = hasEnv('GATEWAY_IP_SALT');
+
   const latency = Date.now() - startTime;
 
   return Response.json({
@@ -45,6 +62,29 @@ export async function GET() {
       security: { status: cryptoStatus, algorithm: 'Ed25519 Asymmetric Zero-Trust' },
       mlEngine: { status: 'healthy', model: 'all-MiniLM-L6-v2', dimensions: 384 },
       queueState: { status: 'healthy', mode: 'BullMQ Async Worker & Fallback Engine' },
+    },
+    persistence: {
+      mode: mongodbConnected || upstashConfigured || redisConfigured ? 'hybrid' : 'local_json_fallback',
+      mongodbConfigured,
+      mongodbConnected,
+      redisConfigured,
+      upstashConfigured,
+      redisConnected,
+      provenanceServerSigningKeySet,
+      aegisKeypairConfigured,
+      jwtSecretSet,
+      vapidConfigured,
+      connectionEncryptionKeySet,
+      deliveryAckSecretSet,
+      gatewayIpSaltSet,
+      allCryptoEnvConfigured:
+        provenanceServerSigningKeySet &&
+        aegisKeypairConfigured &&
+        jwtSecretSet &&
+        vapidConfigured &&
+        connectionEncryptionKeySet &&
+        deliveryAckSecretSet &&
+        gatewayIpSaltSet,
     },
     latencyMs: latency,
   });
